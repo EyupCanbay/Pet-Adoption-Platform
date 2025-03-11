@@ -1,0 +1,53 @@
+AUTH (kimlik doğrulama)
+-GET        /auth-google        -oturum açma (google)
+- POST      /auth/signup - Yeni kullanıcı oluşturma
+- POST      /auth/login - Oturum açma
+- POST      /auth/logout - Oturum kapatma
+
+USERS (kullanıcı işlemleri)
+-GET        /users              -paltformun kullanıcılarını getir(süper admin)
+-GET        /users/:id          -belirli kullanıcıyı getir (kullanıcılar)
+-PUT         /users/:id             -kullanıcıyı banlamak(süper admin ,admin)
+-GET        /users/me       -kullanıcı bilgilerini göster (süper admin, admin,  kendisi)
+-PUT        /users/me       -kullanıcı bilgilerini güncelle (kendisi)
+-GET        /users/me/bookmarks                   -bookmarkları görüntüle (kendisi)  
+-DELETE      /users/me/bookmarks/:listing_id     -ilanı booklmarkalrdan sil (kendisi)
+-GET       /users/me/listing/       -belirli kullanıcının bütün ilanlarını getir (user)
+-POST       /users/me/notifications/:notification_id   -kullanıcının bildirimini sil
+-DELETE     /users/report/:user_id          engeli kaldır
+
+LİSTİNG( kayıp ve sahiplendirme ilanları {TRUE = petListing, FALSE = lostPetListing})
+LOST_PET_LİSTİNG
+-GET       /listing       -tüm kayıp ilanları getir (admin, süper admin, user)
+-POST      /listing       -kayıp ilan oluştur (admin, süper admin , user)
+-GET       /listing/:lisitng_id   -belirli kayıp ilanı getir (admin, süper admin, user)
+-PUT       /listing/:lisitng_id   -belirli ilani güncelle (kendisi)
+-DELETE    /listing/:lisitng_id    -belirli ilanı sil (kendisi)
+-POST      /listing/:listing_id/bookmarks     ilanı bookmarklara ekle ekleyen kullanıcya (admin, süper admin, user)
+-DELETE    /listing/:listing_id/bookmarks     ilanı bookmarklara ekle ekleyen kullanıcya(admin, süper admin, user)
+-GET       /listing/:lisitng_id/comment        kayıp ilanın yorumlarını getir  (admin, süper admin, user)
+-GET       /listing/:lisitng_id/comment/:comment_id        -kayıp ilanın belirli yorumunu getir (admin, süper admin, user)
+-PUT       /listing/:lisitng_id/comment/:comment_id            -kayıp ilanın belirli yorumunu güncelle  (sadece yorum atan)
+-DELETE    /listing/:lisitng_id/comment/:comment_id                    -kayıp ilanın belirli yorumunu sil  (sadece yorum atan ve ilan sahibi)
+-GET       /listing/:lisitng_id/comment/:comment_id/reply_comment     -kayıp ilanın belirli yorumunun yorumlarını getir (admin, süper admin, user)
+-PUT       /listing/:lisitng_id/comment/:comment_id/reply_comment/:reply_id    -kayıp ilalnın belirli yorumunun belirli yorumunu güncelle (yorum ve ilan sahibi)
+-DELETE    /listing/:lisitng_id/comment/:comment_id/reply_comment/:reply_id -kayıp ilalnın belirli yorumunun belirli yorumunu güncelle (yorum ve ilan sahibi)
+-POST      /listing/:lisitng_id/comment/                    -kayıp ilana yorum yap
+-POST      /listing/:lisitng_id/comment/:comment_id/reply_comment/         -kayıp ilanın yorumuna yorum yap
+-POST      /listing/:listing_id/bookmarks                              -bookmarka ekle
+
+Categories (Kategoriler): (admin, süper admin)
+- GET /categories - Tüm kategorileri listele
+- POST /categories - Yeni kategori oluştur
+- GET /categories/:id - Kategori bilgisi getir
+- PUT /categories/:id - Kategori güncelle
+- DELETE /categories/:id - Kategori sil
+- GET /categories/:id/subcategories - Kategorinin alt kategorilerini listele
+
+Subcategories (Alt Kategoriler): (admin, süper admin)
+- GET /subcategories -Tüm alt kategorileri listele
+- POST /subcategories - Yeni alt kategori oluştur
+- GET /subcategories/:id - Alt kategori bilgisi getir
+- PUT /subcategories/:id - Alt kategori güncelle
+- DELETE /subcategories/:id - Alt kategori sil
+
