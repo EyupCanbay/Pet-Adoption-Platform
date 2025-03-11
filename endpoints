@@ -1,5 +1,4 @@
 AUTH (kimlik doğrulama)
--GET        /auth-google        -oturum açma (google)
 - POST      /auth/signup - Yeni kullanıcı oluşturma
 - POST      /auth/login - Oturum açma
 - POST      /auth/logout - Oturum kapatma
@@ -13,7 +12,7 @@ USERS (kullanıcı işlemleri)
 -GET        /users/me/bookmarks                   -bookmarkları görüntüle (kendisi)  
 -DELETE      /users/me/bookmarks/:listing_id     -ilanı booklmarkalrdan sil (kendisi)
 -GET       /users/me/listing/       -belirli kullanıcının bütün ilanlarını getir (user)
--POST       /users/me/notifications/:notification_id   -kullanıcının bildirimini sil
+-DELETE       /users/me/notifications/:notification_id   -kullanıcının bildirimini sil
 -DELETE     /users/report/:user_id          engeli kaldır
 
 LİSTİNG( kayıp ve sahiplendirme ilanları {TRUE = petListing, FALSE = lostPetListing})
