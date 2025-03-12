@@ -52,7 +52,7 @@ async function login(req, res) {
       maxAge: 24 * 60 * 60 * 1000,
       sameSite: 'lax'
     })
-    
+
     return responseHandler.success({res, statusCode:200, message:"Kullanıcı başarıyla giriş yaptı", data:user});
   } catch (error) {
     return responseHandler.error({res, statusCode:500, message:"Kullanıcı giriş işlemi sırasında hata oluştu", error}); 
@@ -60,8 +60,18 @@ async function login(req, res) {
 
 }
 
+async function logout(req, res) {
+  try {
+    req.cookies.token = ""
+    return responseHandler.success({res, statusCode:200, message:"Kullanıcı başarıyla çıkış yaptı"});
+  } catch (error) {
+    return responseHandler.error({res, statusCode:500, message:"Kullanıcı çıkış işlemi sırasında hata oluştu", error});
+  }
+}
+
 
 module.exports = {
     register,
-    login
+    login,
+    logout
 }
