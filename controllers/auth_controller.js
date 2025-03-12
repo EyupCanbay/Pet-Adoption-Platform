@@ -36,8 +36,32 @@ async function register(req, res) {
   }
 }
 
+async function login(req, res) {
+  try {
+
+    const user = await User.findOne({ email: req.body.email }).select("-password");
+
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    )
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: 'lax'
+    })
+    
+    return responseHandler.success({res, statusCode:200, message:"Kullanıcı başarıyla giriş yaptı", data:user});
+  } catch (error) {
+    return responseHandler.error({res, statusCode:500, message:"Kullanıcı giriş işlemi sırasında hata oluştu", error}); 
+  }
+
+}
 
 
 module.exports = {
-    register
+    register,
+    login
 }
