@@ -11,5 +11,5 @@ const ReportSchema = new mongoose.Schema({
 });
 
 ReportSchema.index({ reporter: 1, reportedUser: 1, reason: "text", createdAt: -1}, { unique: true });
-module.exports = mongoose.model('Report', ReportSchema);4
+module.exports = mongoose.model('Report', ReportSchema);
 

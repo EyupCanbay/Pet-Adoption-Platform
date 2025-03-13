@@ -23,7 +23,7 @@ async function checkUser(req, res, next) {
 
         req.user = user;
         req.role = user.role
-
+        console.log(user)
         next();
     } catch (error) {
         return ResponseHandler.error({ res, statusCode: 500, message: "kullanıcı doğrulanamadı", error});
@@ -36,11 +36,11 @@ function checkRole(requiredRole){
             const userRole = req.role
             if(!userRole) ResponseHandler.error({res, statusCode:500, message: "User role not found" })
 
-            if (!requiredRole.some(role => userRole.includes(role))) return ResponseHandler.error({ res, statusCode: 403, message: "Not permission" });
+            if (!requiredRole.some(role => userRole.includes(role))) return ResponseHandler.error({ res, statusCode: 403, message: "Not permission you are admin" });
                 
             next()
         }catch (error){
-            return ResponseHandler.error({res, statusCode:500, message: "User  not found" })
+            return ResponseHandler.error({res, statusCode:500, message: "Role middleware error" })
             }
         }
 }

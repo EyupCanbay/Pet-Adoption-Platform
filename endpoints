@@ -5,7 +5,7 @@ AUTH (kimlik doğrulama)
 
 USERS (kullanıcı işlemleri)
 + GET        /users              -paltformun kullanıcılarını getir(süper admin)
--GET        /users/:user_id          -belirli kullanıcıyı getir (kullanıcılar)
++ GET        /users/:user_id          -belirli kullanıcıyı getir (kullanıcılar)
 -POST       /users/:user_id          -kullanıcı engelleme (kullanıcı)
 -PUT         /admin/users/:user_id         -kullanıcıyı banlamak(süper admin ,admin)
 -GET        /users/me       -kullanıcı bilgilerini göster (süper admin, admin,  kendisi)
