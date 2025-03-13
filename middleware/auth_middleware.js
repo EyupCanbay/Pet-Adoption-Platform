@@ -22,13 +22,32 @@ async function checkUser(req, res, next) {
         if (!user) return ResponseHandler.error({ res, statusCode: 401, message: "Kullanıcı bulunamadı" });
 
         req.user = user;
+        req.role = user.role
+
         next();
     } catch (error) {
         return ResponseHandler.error({ res, statusCode: 500, message: "kullanıcı doğrulanamadı", error});
     }
 }
 
+function checkRole(requiredRole){
+    return (req,res,next) => {
+        try {
+            const userRole = req.role
+            if(!userRole) ResponseHandler.error({res, statusCode:500, message: "User role not found" })
+
+            if (!requiredRole.some(role => userRole.includes(role))) return ResponseHandler.error({ res, statusCode: 403, message: "Not permission" });
+                
+            next()
+        }catch (error){
+            return ResponseHandler.error({res, statusCode:500, message: "User  not found" })
+            }
+        }
+}
+
+
 
 module.exports = {
-    checkUser
+    checkUser,
+    checkRole
 }

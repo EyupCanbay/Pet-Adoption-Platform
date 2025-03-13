@@ -53,7 +53,7 @@ async function login(req, res) {
       sameSite: 'lax'
     })
 
-    return responseHandler.success({res, statusCode:200, message:"Kullanıcı başarıyla giriş yaptı", data:user});
+    return responseHandler.success({res, statusCode:200, message:"Kullanıcı başarıyla giriş yaptı", data:{user,token}});
   } catch (error) {
     return responseHandler.error({res, statusCode:500, message:"Kullanıcı giriş işlemi sırasında hata oluştu", error}); 
   }
@@ -63,7 +63,7 @@ async function login(req, res) {
 async function logout(req, res) {
   try {
     req.cookies.token = ""
-    return responseHandler.success({res, statusCode:200, message:"Kullanıcı başarıyla çıkış yaptı"});
+    return responseHandler.success({res, statusCode:200, message:"Kullanıcı çıkışı başarıyla yapıldı"});
   } catch (error) {
     return responseHandler.error({res, statusCode:500, message:"Kullanıcı çıkış işlemi sırasında hata oluştu", error});
   }

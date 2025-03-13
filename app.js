@@ -1,11 +1,12 @@
+if(process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 const express = require('express');
-const dotenv = require('dotenv');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors')
 
-dotenv.config();
 
 const app = express();
 const corsOptions = {
@@ -13,6 +14,7 @@ const corsOptions = {
     credentials: true, 
     methods: ['GET', 'POST', 'PUT', 'DELETE']
 };
+
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -22,6 +24,7 @@ app.use(cors(corsOptions));
 
 
 app.use('/auth', require('./routes/auth_routes.js'));
+app.use('/users', require('./routes/users_routes.js'))
 
 
 module.exports =  app;
