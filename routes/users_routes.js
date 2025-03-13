@@ -3,6 +3,7 @@ const userController = require('../controllers/users_controller')
 const { checkUser, checkRole } = require('../middleware/auth_middleware')
 const router = express.Router()
 
-router.get('/', checkUser, checkRole(["ADMIN"]), userController.getAllUsers)
+router.get('/', checkUser, checkRole(["ADMIN","USER"]), userController.getAllUsers)
+router.get('/:user_id',checkUser, checkRole(["ADMIN","USER"]), userController.getUser)
 
 module.exports = router;

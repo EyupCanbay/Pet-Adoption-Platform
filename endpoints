@@ -1,12 +1,13 @@
 AUTH (kimlik doğrulama)
-- POST      /auth/signup - Yeni kullanıcı oluşturma
-- POST      /auth/login - Oturum açma
-- POST      /auth/logout - Oturum kapatma
++ POST      /auth/signup - Yeni kullanıcı oluşturma
++ POST      /auth/login - Oturum açma
++ POST      /auth/logout - Oturum kapatma
 
 USERS (kullanıcı işlemleri)
--GET        /users              -paltformun kullanıcılarını getir(süper admin)
--GET        /users/:id          -belirli kullanıcıyı getir (kullanıcılar)
--PUT         /users/:id             -kullanıcıyı banlamak(süper admin ,admin)
++ GET        /users              -paltformun kullanıcılarını getir(süper admin)
+-GET        /users/:user_id          -belirli kullanıcıyı getir (kullanıcılar)
+-POST       /users/:user_id          -kullanıcı engelleme (kullanıcı)
+-PUT         /admin/users/:user_id         -kullanıcıyı banlamak(süper admin ,admin)
 -GET        /users/me       -kullanıcı bilgilerini göster (süper admin, admin,  kendisi)
 -PUT        /users/me       -kullanıcı bilgilerini güncelle (kendisi)
 -GET        /users/me/bookmarks                   -bookmarkları görüntüle (kendisi)  
