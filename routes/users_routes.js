@@ -12,5 +12,6 @@ router.get('/me',checkUser , userController.getUserMe)
 router.get('/:user_id',checkUser, checkRole(["ADMIN","USER"]), userController.getUser)
 router.put('/:user_id', checkUser, checkRole(["USER"]), userController.blockedUser)
 router.post('/report/:user_id',checkUser, validateReportData, reportController.reportUser)
+router.get('/report/admin',checkUser, reportController.getAllReport)
 
 module.exports = router;
