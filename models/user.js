@@ -19,8 +19,8 @@ const  UserSchema = new mongoose.Schema({
     blockedUser: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}], // engellediği kullanıcılar
     bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: "PetListing" }], // kaydettikleri ilanlar
     rates: [{
-        user: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // kullanıcının puanı
-        rate: [{ type: Number }] // puan
+        user: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // kullanıcının puanı
+        rate: { type: Number } // puan
     }],
     is_active: { type: Boolean, default: true }, // aktif mi
     role: { type: String, enum: ['USER', 'ADMIN'] }, // rolü

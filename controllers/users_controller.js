@@ -100,9 +100,29 @@ async function putUserMe(req,res,next) {
     }
 }
 
+async function getUserMe(req,res,next) {
+    try {
+        const userId = req.user._id
+
+        const user = await User.findById(userId).select("-password");
+        const [blockUsers, ratesByUser, location] = await Promise.all([
+            User.find({ _id: { $in: user.blockedUser } }).select("name surname userName"),
+            User.find({ _id: { $in: user.rates.user}}).select("name surname userName"),
+            Address.findOne({ user_id: userId })
+        ]);
+
+        data = {user, blockUsers, ratesByUser, location}
+
+        return responseHandler.success({res, statusCode:200, message: "Successfuly fetch user data", data: data})
+    } catch (error) {
+        return responseHandler.error({res, statusCode: 500, message: "User data do not fetch", error})
+    }
+}
+
 module.exports = {
     getAllUsers,
     getUser,
     blockedUser,
-    putUserMe
+    putUserMe,
+    getUserMe
 }
