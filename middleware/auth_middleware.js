@@ -17,13 +17,13 @@ async function checkUser(req, res, next) {
         if (!token) return ResponseHandler.error({ res, statusCode: 401, message: "Token bulunamadı" });
         const decodedToken = await verifyToken(token);
 
-        const user = await User.findById(decodedToken.id).select("name surname userName email role ");
+        const user = await User.findById(decodedToken.id).select("_id name surname userName email role ");
 
         if (!user) return ResponseHandler.error({ res, statusCode: 401, message: "Kullanıcı bulunamadı" });
 
         req.user = user;
         req.role = user.role
-        console.log(user)
+        console.log(req.user)
         next();
     } catch (error) {
         return ResponseHandler.error({ res, statusCode: 500, message: "kullanıcı doğrulanamadı", error});

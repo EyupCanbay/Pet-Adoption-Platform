@@ -1,5 +1,7 @@
 const responseHandler = require("../utils/responseHandler")
-const { User } = require('../models/index')
+const { User, Address } = require('../models/index')
+const bcrypt = require('bcrypt')
+const mongoose = require('mongoose')
 
 async function getAllUsers(req,res,next) {
     try{
@@ -54,11 +56,53 @@ async function blockedUser(req,res,next) {
     } catch (error) {
         return responseHandler.error({res, statusCode:500, message:"user do not forbidden", error})
     }
+}
 
+async function putUserMe(req,res,next) {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try{
+        const userId  = req.user._id
+        const { userData, addressData } = req.body
+
+
+        console.log(req.user._id)
+      
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { ...userData, updatedAt: new Date() },
+            { new: true, runValidators: true }
+        );
+        
+        let updatedAddress;
+        console.log(userId)
+
+        if (addressData) {
+            updatedAddress = await Address.findOneAndUpdate(
+                { user_id: userId },
+                { ...addressData, updatedAt: new Date() },
+                { new: true, upsert: true, runValidators: true } 
+            );
+        }
+
+        const data = {updatedUser, updatedAddress}
+        await session.commitTransaction();
+        session.endSession();
+
+        return responseHandler.success({res, statusCode: 201, message: "Successfuly update users's data ", data: data})
+
+    } catch (error){
+        await session.abortTransaction();
+        session.endSession();
+        return responseHandler.error({res, statusCode: 500, message: "Could not update user data"})
+
+    }
 }
 
 module.exports = {
     getAllUsers,
     getUser,
-    blockedUser
+    blockedUser,
+    putUserMe
 }
