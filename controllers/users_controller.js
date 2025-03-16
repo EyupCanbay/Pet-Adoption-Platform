@@ -32,6 +32,7 @@ async function getUser(req,res,next) {
     try{    
         const user = await User.findOne({ _id: req.params.user_id }).select("-password")
 
+        if(!user) return responseHandler.error({res, statusCode: 500, message:"User not found"})
         return responseHandler.success({res, statusCode: 200, message:"User successfuly fetched", data: user})
     } catch(error){
         return responseHandler.error({res, statusCode: 500, message:"User do not fetch", error})
@@ -118,6 +119,7 @@ async function getUserMe(req,res,next) {
         return responseHandler.error({res, statusCode: 500, message: "User data do not fetch", error})
     }
 }
+
 
 module.exports = {
     getAllUsers,
