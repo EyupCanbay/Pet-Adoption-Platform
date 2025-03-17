@@ -20,7 +20,7 @@ USERS (kullanıcı işlemleri)
 
 + POST         /users/report/:user_id    -kullanıcıların kullanıcıları adminlere şikayet etmesi(kullanıcılar)
 + GET        /usres/report/admin        - kullanıcıların şikayetlerini getir
-- PUT         /users/report/admin/:user_id         -kullanıcıyı banlamak(admin)
++ PUT         /users/report/admin/:user_id         -kullanıcıyı banlamak(admin)
 
 - GET       /users/me/listing/       -belirli kullanıcının bütün ilanlarını getir (user)
 - DELETE      /users/me/bookmarks/:listing_id     -ilanı booklmarkalrdan sil (kendisi)

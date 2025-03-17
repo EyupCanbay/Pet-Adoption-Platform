@@ -1,5 +1,5 @@
 const cron = require("node-cron");
-const { User } = require("./models/index"); // Kullanıcı modelini içe aktar
+const { User } = require("../models/index"); // Kullanıcı modelini içe aktar
 
 // 5 dakikada bir yasak süresi kontrolü
 cron.schedule("*/10 * * * *", async () => {

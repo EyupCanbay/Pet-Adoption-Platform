@@ -6,7 +6,7 @@ const { checkBanStatus } =  require('../middleware/limit_middleware')
 const router = express.Router();
 
 router.post('/register', validateRegister, authController.register);
-router.get('/login', validateLogin, checkBanStatus, authController.login);
+router.get('/login', validateLogin, authController.login);
 router.get('/logout', checkUser, authController.logout)
 
 
