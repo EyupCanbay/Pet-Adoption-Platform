@@ -9,6 +9,7 @@ const router = express.Router()
 router.get('/', checkUser, checkRole(["ADMIN","USER"]), userController.getAllUsers)
 router.get('/me',checkUser , userController.getUserMe)
 router.put('/me', checkUser, validateUserData, validateAddressData ,userController.putUserMe)
+router.get('/me/block',checkUser, userController.getBlockUsers)
 router.get('/:user_id',checkUser, checkRole(["ADMIN","USER"]), userController.getUser)
 
 

@@ -145,6 +145,37 @@ async function deleteUserBlock(req,res,next) {
     }
 }
 
+async function getBlockUsers(req,res,next) {
+    try{
+        const userId = req.user._id
+
+        const blockedUsers = await User.aggregate([
+            { $match: { _id: new mongoose.Types.ObjectId(userId) } }, // Kullanıcıyı bulur
+            { $lookup: { 
+                from: "users",      // "users" koleksiyonunda (tablosunda) arar
+                localField: "blockedUser",  // Kullanıcının "blockedUser" listesindeki ID’leri alır
+                foreignField: "_id",    // Bu ID’lerle eşleşen kullanıcıları bulur
+                as: "blockedUsers"      // Sonucu "blockedUsers" olarak kaydeter    
+            }},
+            { $project: { 
+                blockedUsers: { name: 1, surname: 1, userName: 1, role: 1, phoneNumber: 1, email: 1 } 
+            }}
+        ]);
+
+        if (!blockedUsers.length) {
+            return responseHandler.error({ res, statusCode: 404, message: "User not found" });
+        }
+
+        return responseHandler.success({
+            res,
+            statusCode: 200,
+            message: "Blocked users fetched successfully",
+            data: blockedUsers[0].blockedUsers || []  // agregate pipline returned a array
+        });    
+    } catch (error) {
+        return responseHandler.error({res, statusCode:500, message:"Did not fetch block user", error})
+    }
+}
 
 module.exports = {
     getAllUsers,
@@ -152,5 +183,6 @@ module.exports = {
     putUserMe,
     getUserMe,
     deleteUserBlock,
-    blockedUser
+    blockedUser,
+    getBlockUsers
 }
