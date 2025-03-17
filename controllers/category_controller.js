@@ -43,9 +43,25 @@ async function updateCategory(req, res, next) {
     }
 }
 
+async function deleteCategory(req, res, next) {
+    try {
+        const categoryId = req.params.category_id;
+        const category = await Category.findByIdAndDelete(categoryId);
+
+        if (!category) return responseHandler.error({ res, statusCode: 404, message: "Category not found" });
+
+        return responseHandler.success({ res, statusCode: 200, message: "Category deleted successfully"});
+    } catch (error) {
+        return responseHandler.error({ res, statusCode: 500, message: "Failed to delete category", error });
+    }
+}
+
 module.exports = {
     createCategory,
     getCategories,
-    updateCategory
+    updateCategory,
+    deleteCategory
 }
+
+
 
