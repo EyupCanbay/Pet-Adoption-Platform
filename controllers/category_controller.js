@@ -25,8 +25,27 @@ async function getCategories(req, res, next) {
     }
 }
 
+async function updateCategory(req, res, next) {
+    try {
+        const categoryId = req.params.category_id;
+        const updatedData = {
+            name: req.body.name,
+            description: req.body.description,
+        };
+
+        const category = await Category.findByIdAndUpdate(categoryId, updatedData, { new: true });
+
+        if (!category) return responseHandler.error({ res, statusCode: 404, message: "Category not found" });
+
+        return responseHandler.success({ res, statusCode: 200, message: "Category updated successfully", data: category });
+    } catch (error) {
+        return responseHandler.error({ res, statusCode: 500, message: "Failed to update category", error });
+    }
+}
+
 module.exports = {
     createCategory,
-    getCategories
+    getCategories,
+    updateCategory
 }
 

@@ -8,6 +8,7 @@ const { checkUser } = require('../middleware/auth_middleware')
 
 router.get('/', categoryController.getCategories)
 router.post('/', checkUser, validateCategory, categoryController.createCategory)
+router.put('/:category_id', categoryController.updateCategory)
 
 
 
