@@ -15,7 +15,18 @@ async function createCategory(req,res,next) {
     }
 }
 
+async function getCategories(req, res, next) {
+    try {
+        const categories = await Category.find()
+        if(!categories) return responseHandler.error({res, statusCode: 404, message: "Category not found"})
+        return responseHandler.success({res, statusCode: 200, message: "Categories retrieved successfully", data: categories})
+    } catch (error) {
+        return responseHandler.error({res, statusCode: 500, message: "Failed to retrieve categories", error})
+    }
+}
 
 module.exports = {
-    createCategory
+    createCategory,
+    getCategories
 }
+
