@@ -52,17 +52,15 @@ LOST_PET_LİSTİNG
 
 
 Categories (Kategoriler): (admin)
-- GET /categories - Tüm kategorileri listele
-- POST /categories - Yeni kategori oluştur
-- GET /categories/:id - Kategori bilgisi getir
-- PUT /categories/:id - Kategori güncelle
-- DELETE /categories/:id - Kategori sil
-- GET /categories/:id/subcategories - Kategorinin alt kategorilerini listele
++ GET /categories - Tüm kategorileri listele
++ POST /categories - Yeni kategori oluştur
++ PUT /categories/:category_id - Kategori güncelle
++ DELETE /categories/:category_id - Kategori sil
+- POST /categories/:category_id/subcategories - yeni alt kategorinin oluştur
 
 
 Subcategories (Alt Kategoriler): (admin)
 - GET /subcategories -Tüm alt kategorileri listele
-- POST /subcategories - Yeni alt kategori oluştur
 - GET /subcategories/:id - Alt kategori bilgisi getir
 - PUT /subcategories/:id - Alt kategori güncelle
 - DELETE /subcategories/:id - Alt kategori sil

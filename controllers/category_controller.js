@@ -1,5 +1,6 @@
 const responseHandler = require("../utils/responseHandler")
 const { Category } = require('../models/index')
+const {SubCategory} = require("../models/index")
 
 async function createCategory(req,res,next) {
     try {
@@ -56,11 +57,31 @@ async function deleteCategory(req, res, next) {
     }
 }
 
+async function createSubcategory(req, res, next) {
+    try {
+        const { category_id } = req.params;
+        const { breed, description } = req.body;
+        const created_by = req.user.userName;
+
+       const subCategory = await SubCategory.create({
+        breed: breed,
+        description: description,
+        created_by: created_by,
+        category_id: category_id
+       }) 
+
+        return responseHandler.success({ res, statusCode: 201, message: "Successfully added subcategory", data: subCategory });
+    } catch (error) {
+        return responseHandler.error({ res, statusCode: 500, message: "Failed to create subcategory", error });
+    }
+}
+
 module.exports = {
     createCategory,
     getCategories,
     updateCategory,
-    deleteCategory
+    deleteCategory,
+    createSubcategory
 }
 
 
