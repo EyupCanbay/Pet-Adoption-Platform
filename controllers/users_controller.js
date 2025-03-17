@@ -15,12 +15,18 @@ async function getAllUsers(req,res,next) {
         const blockedByOthers = await User.find({ blockedUser: userId }).select('_id');
 
         const excludedUsers = [...user.blockedUser, ...blockedByOthers.map(u => u._id)];
-
-        const users = await User.find({
-            _id: { $nin: excludedUsers }, 
-            role: { $ne: 'ADMIN' }
-        }).select("-password");
         
+        let users
+        if(user.role === "USER"){
+            users = await User.find({
+                _id: { $nin: excludedUsers }, 
+                role: { $ne: 'ADMIN' }
+            }).select("name surname userName email phoneNumber");
+        } else {
+            users = await User.find({
+                _id: { $nin: excludedUsers }, 
+            }).select("name surname userName email phoneNumber role");
+        }
 
         return responseHandler.success({res, statusCode:200, message:"User successfuly fetched",data:users})
     }catch ( error){
@@ -39,30 +45,26 @@ async function getUser(req,res,next) {
     }
 }
 
-async function blockedUser(req,res,next) {
-    try{
-        const blockedUserId  = req.params.user_id;
-        const userId = req.user.id; 
+async function getUserMe(req,res,next) {
+    try {
+        const userId = req.user._id
 
-        if (userId === blockedUserId) {
-            return responseHandler({ res, statusCode:500, message:"Do not ban yourself" })
-        }
+        const user = await User.findById({_id: userId}).select("-password");
+        console.log(userId)
+        const location = await Address.find({user_id: userId})
+        
+        if(!location) return responseHandler.error({res, statusCode: 404, message: "User not found"})
 
-        await User.findByIdAndUpdate(userId, { 
-            $addToSet: { blockedUser: blockedUserId } 
-        });
-
-
-        return responseHandler.success({res, statusCode: 201, message:"User was forbidden"})
+        return responseHandler.success({res, statusCode:200, message: "Successfuly fetch user data", data: {user, location}})
     } catch (error) {
-        return responseHandler.error({res, statusCode:500, message:"user do not forbidden", error})
+        return responseHandler.error({res, statusCode: 500, message: "User data do not fetch", error})
     }
 }
 
 async function putUserMe(req,res,next) {
     const session = await mongoose.startSession();
     session.startTransaction();
-
+    
     try{
         const userId  = req.user._id
         const { userData, addressData } = req.body
@@ -101,22 +103,45 @@ async function putUserMe(req,res,next) {
     }
 }
 
-async function getUserMe(req,res,next) {
-    try {
-        const userId = req.user._id
+async function blockedUser(req,res,next) {
+    try{
+        const blockedUserId  = req.params.user_id;
+        const userId = req.user.id; 
 
-        const user = await User.findById(userId).select("-password");
-        const [blockUsers, ratesByUser, location] = await Promise.all([
-            User.find({ _id: { $in: user.blockedUser } }).select("name surname userName"),
-            User.find({ _id: { $in: user.rates.user}}).select("name surname userName"),
-            Address.findOne({ user_id: userId })
-        ]);
+        if (userId === blockedUserId) {
+            return responseHandler({ res, statusCode:500, message:"Do not ban yourself" })
+        }
 
-        data = {user, blockUsers, ratesByUser, location}
+        await User.findByIdAndUpdate(userId, { 
+            $addToSet: { blockedUser: blockedUserId } 
+        });
 
-        return responseHandler.success({res, statusCode:200, message: "Successfuly fetch user data", data: data})
+
+        return responseHandler.success({res, statusCode: 201, message:"User was forbidden"})
     } catch (error) {
-        return responseHandler.error({res, statusCode: 500, message: "User data do not fetch", error})
+        return responseHandler.error({res, statusCode:500, message:"user do not forbidden", error})
+    }
+}
+
+async function deleteUserBlock(req,res,next) {
+    try{
+
+        const userId = req.user._id
+        const blockedUserId = req.params.user_id
+ 
+        const user = await User.findById(userId).select("blockedUser")
+        
+        if (!user) {
+            return responseHandler.error({ res, statusCode: 404, message: "User not found" });
+        }
+
+        user.blockedUser = user.blockedUser.filter(bu => bu.toString() !== blockedUserId);
+
+        await user.save();
+
+        return responseHandler.success({res, statusCode: 201, message:"Remove user block"})
+    } catch (error) {
+        return responseHandler.error({res, statusCode:500, message:"Did not remove user block", error})
     }
 }
 
@@ -124,7 +149,8 @@ async function getUserMe(req,res,next) {
 module.exports = {
     getAllUsers,
     getUser,
-    blockedUser,
     putUserMe,
-    getUserMe
+    getUserMe,
+    deleteUserBlock,
+    blockedUser
 }
