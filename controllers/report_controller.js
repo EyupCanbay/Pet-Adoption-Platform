@@ -29,11 +29,30 @@ async function getAllReport(req,res,next) {
     } catch (error) {
         return responseHandler.error({res, statusCode: 500, message: "Reports did not fetch", error})
     }
-
 }
 
+async function forbiddenUser(req,res,next) {
+    try {
+        const { user_id } = req.params;
+        const { banDuration } = req.body; 
+
+        const forbiddenUntil = new Date();
+        forbiddenUntil.setDate(forbiddenUntil.getDate() + banDuration); // Gün ekleyerek yasak bitiş süresini belirlenir
+
+        await User.findByIdAndUpdate(user_id, {
+            is_active: false,
+            forbiddenTime: forbiddenUntil
+        });
+        
+        return responseHandler.success({res, statusCode:200, message: `Until ${forbiddenUntil} forbiden user `, data: forbiddenUntil})
+    } catch (error) {
+        return responseHandler.error({res, statusCode: 500, message: "User do not ban the system", error})
+    }
+}
 
 module.exports = {
     reportUser,
-    getAllReport
+    getAllReport,
+    forbiddenUser
 }
+

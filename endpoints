@@ -15,8 +15,8 @@ USERS (kullanıcı işlemleri)
 - DELETE       /users/me/notifications/:notification_id   -kullanıcının bildirimini sil
 
 + PUT       /users/block/:user_id          -kullanıcı engelleme (kullanıcı)
-- DELETE     /users/block/:user_id          engeli kaldır(user)  --engellediği kullanıcının id'sini bana paramsta döndür
-- GET       /users/me/block                 -engellediği kullanıcılar
++ DELETE     /users/block/:user_id          engeli kaldır(user)  --engellediği kullanıcının id'sini bana paramsta döndür
++  GET       /users/me/block                 -engellediği kullanıcılar
 
 + POST         /users/report/:user_id    -kullanıcıların kullanıcıları adminlere şikayet etmesi(kullanıcılar)
 + GET        /usres/report/admin        - kullanıcıların şikayetlerini getir
