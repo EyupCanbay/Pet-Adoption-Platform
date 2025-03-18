@@ -7,7 +7,7 @@ const router = express.Router()
 
 
 router.get('/', subCategoryController.getAllSubCategories)
-router.
+router.get('/:subcategory_id', subCategoryController.getSubCategory)
 
 
 

@@ -14,17 +14,23 @@ const getAllSubCategories = async (req, res) => {
     }
 };
 
+const getSubCategory = async (req, res) => {
+    try {
+        const id = req.params.subcategory_id;
+        const subcategory = await SubCategory.findById(id);
 
+        if (!subcategory) return responseHandler.error({ res, statusCode: 404, message: "Sub category not found" });
 
-
-
-
-
-
-
-
-
+        return responseHandler.success({ res, statusCode: 200, message: "Successfully fetched sub category", data: subcategory });
+    } catch (error) {
+        return responseHandler.error({ res, statusCode: 500, message: "Did not fetch sub category", error });
+    }
+};
 
 module.exports = {
-    getAllSubCategories
+    getAllSubCategories,
+    getSubCategory
 }
+
+
+
