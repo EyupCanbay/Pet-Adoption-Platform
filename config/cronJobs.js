@@ -1,15 +1,16 @@
 const cron = require("node-cron");
 const { User } = require("../models/index"); // Kullanıcı modelini içe aktar
 
-// 5 dakikada bir yasak süresi kontrolü
+// dakikada bir yasak süresi kontrolü
 cron.schedule("* * * * *", async () => {
     try {
         const now = new Date();
-       const users = await User.updateMany(
+        const users = await User.find({ forbiddenTime: { $lte: now } }); // Önce güncellenecekleri al
+        await User.updateMany(
             { forbiddenTime: { $lte: now } },
-            { is_active: true, forbiddenUntil: null }, {new: true}
+            { is_active: true, forbiddenTime: null}
         );
-        console.log(users.userName, "Users who have expired the ban period have been activated.");
+        console.log(users.map(user => user.userName), "Users who have expired the ban period have been activated.");
     } catch (error) {
        console.log("Cron job error:", error);
     }

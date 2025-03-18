@@ -23,7 +23,8 @@ const  UserSchema = new mongoose.Schema({
         rate: { type: Number } // puan
     }],
     is_active: { type: Boolean, default: true }, // aktif mi
-    forbiddenTime: { type: Date, default: Date.now},
+    forbiddenTime: { type: Date },
+    banCount: { type: Number, default: 0 },
     role: { type: String, enum: ['USER', 'ADMIN'] }, // rolü
     notifications: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Notification' }], // bildirimleri
     location: { type: mongoose.Schema.Types.ObjectId, ref: 'Location'}, // konumu

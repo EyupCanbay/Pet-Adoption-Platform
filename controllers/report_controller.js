@@ -41,7 +41,8 @@ async function forbiddenUser(req,res,next) {
 
         await User.findByIdAndUpdate(user_id, {
             is_active: false,
-            forbiddenTime: forbiddenUntil
+            forbiddenTime: forbiddenUntil,
+            banCount: banCount + 1
         });
         
         return responseHandler.success({res, statusCode:200, message: `Until ${forbiddenUntil} forbiden user `, data: forbiddenUntil})
