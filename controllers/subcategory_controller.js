@@ -44,11 +44,28 @@ const updateSubCategory = async (req, res) => {
         return responseHandler.error({ res, statusCode: 500, message: "Did not update sub category", error });
     }
 };
+
+
+const deleteSubCategory = async (req, res) => {
+    try {
+        const id = req.params.subcategory_id;
+        const deletedSubCategory = await SubCategory.findByIdAndDelete(id);
+
+        if (!deletedSubCategory) return responseHandler.error({ res, statusCode: 404, message: "Sub category not found" });
+
+        return responseHandler.success({ res, statusCode: 200, message: "Successfully deleted sub category", data: deletedSubCategory });
+    } catch (error) {
+        return responseHandler.error({ res, statusCode: 500, message: "Did not delete sub category", error });
+    }
+};
+
 module.exports = {
     getAllSubCategories,
     getSubCategory,
-    updateSubCategory
-}
+    updateSubCategory,
+    deleteSubCategory
+};
+
 
 
 

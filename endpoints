@@ -61,8 +61,8 @@ Categories (Kategoriler): (admin)
 
 Subcategories (Alt Kategoriler): (admin)
 + GET /subcategories -Tüm alt kategorileri listele
-- GET /subcategories/:id - Alt kategori bilgisi getir
-- PUT /subcategories/:id - Alt kategori güncelle
-- DELETE /subcategories/:id - Alt kategori sil
++ GET /subcategories/:id - Alt kategori bilgisi getir
++ PUT /subcategories/:id - Alt kategori güncelle
++ DELETE /subcategories/:id - Alt kategori sil
 
 
