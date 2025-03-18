@@ -26,10 +26,6 @@ USERS (kullanıcı işlemleri)
 - DELETE      /users/me/bookmarks/:listing_id     -ilanı booklmarkalrdan sil (kendisi)
 - GET        /users/me/bookmarks                   -bookmarkları görüntüle (kendisi)  
 
-
-
-
-
 LİSTİNG( kayıp ve sahiplendirme ilanları {TRUE = petListing, FALSE = lostPetListing})
 LOST_PET_LİSTİNG
 -GET       /listing       -tüm kayıp ilanları getir (admin, user)

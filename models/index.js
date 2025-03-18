@@ -8,7 +8,7 @@ const PetListing = require('./petListing');
 const Report = require('./report');
 const SubCategory = require('./subCategory');
 const User = require('./user');
-
+const Auditlogs = require('./auditlog')
 
 module.exports = {
     Address,
@@ -20,5 +20,6 @@ module.exports = {
     PetListing,
     Report,
     SubCategory,
-    User
+    User,
+    Auditlogs
 };
