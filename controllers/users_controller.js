@@ -2,6 +2,8 @@ const responseHandler = require("../utils/responseHandler")
 const { User, Address } = require('../models/index')
 const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
+const Auditlog = require("../utils/auditlog_save")
+
 
 async function getAllUsers(req,res,next) {
     try{
@@ -28,6 +30,7 @@ async function getAllUsers(req,res,next) {
             }).select("name surname userName email phoneNumber role");
         }
 
+        Auditlog.info(req.user?.userName,"Users","Get","Fetch all users") 
         return responseHandler.success({res, statusCode:200, message:"User successfuly fetched",data:users})
     }catch ( error){
         return responseHandler.error({res, statusCode:500, message:"Could not fecth users", error})
@@ -38,6 +41,7 @@ async function getUser(req,res,next) {
     try{    
         const user = await User.findOne({ _id: req.params.user_id }).select("-password")
 
+        Auditlog.info(req.user?.userName,"Users","Get","Fetch a user") 
         if(!user) return responseHandler.error({res, statusCode: 500, message:"User not found"})
         return responseHandler.success({res, statusCode: 200, message:"User successfuly fetched", data: user})
     } catch(error){
@@ -55,6 +59,7 @@ async function getUserMe(req,res,next) {
         
         if(!location) return responseHandler.error({res, statusCode: 404, message: "User not found"})
 
+        Auditlog.info(req.user?.userName,"Users","Get","Fetch user me page") 
         return responseHandler.success({res, statusCode:200, message: "Successfuly fetch user data", data: {user, location}})
     } catch (error) {
         return responseHandler.error({res, statusCode: 500, message: "User data do not fetch", error})
@@ -93,6 +98,7 @@ async function putUserMe(req,res,next) {
         await session.commitTransaction();
         session.endSession();
 
+        Auditlog.info(req.user?.userName,"Users","Update","Update user me page") 
         return responseHandler.success({res, statusCode: 201, message: "Successfuly update users's data ", data: data})
 
     } catch (error){
@@ -116,7 +122,7 @@ async function blockedUser(req,res,next) {
             $addToSet: { blockedUser: blockedUserId } 
         });
 
-
+        Auditlog.info(req.user?.userName,"Users","Put","Added user block") 
         return responseHandler.success({res, statusCode: 201, message:"User was forbidden"})
     } catch (error) {
         return responseHandler.error({res, statusCode:500, message:"user do not forbidden", error})
@@ -139,6 +145,7 @@ async function deleteUserBlock(req,res,next) {
 
         await user.save();
 
+        Auditlog.info(req.user?.userName,"Users","Put","Remove user block") 
         return responseHandler.success({res, statusCode: 201, message:"Remove user block"})
     } catch (error) {
         return responseHandler.error({res, statusCode:500, message:"Did not remove user block", error})
@@ -166,6 +173,7 @@ async function getBlockUsers(req,res,next) {
             return responseHandler.error({ res, statusCode: 404, message: "User not found" });
         }
 
+        Auditlog.info(req.user?.userName,"Users","Get","Fetch blocked user") 
         return responseHandler.success({
             res,
             statusCode: 200,

@@ -1,6 +1,7 @@
 const { SubCategory } = require('../models/index');
 const subCategory = require('../models/subCategory');
 const responseHandler = require('../utils/responseHandler');
+const Auditlog  = require('../utils/auditlog_save.js');
 
 const getAllSubCategories = async (req, res) => {
     try {
@@ -8,6 +9,7 @@ const getAllSubCategories = async (req, res) => {
 
         if(!subCategory) return responseHandler.error({res, statusCode: 404, message: "Was not created any sub category "})
 
+        Auditlog.info(req.user?.userName,"SubCategory","Get","Fetch sub categories")
         return responseHandler.success({res, statusCode: 201, message: "Successfuly fetched sub categories", data:subcategories})
     } catch (error) {
         return responseHandler.error({res, statusCode: 500, message: "Did not fetch sub categories", error})
@@ -21,6 +23,7 @@ const getSubCategory = async (req, res) => {
 
         if (!subcategory) return responseHandler.error({ res, statusCode: 404, message: "Sub category not found" });
 
+        Auditlog.info(req.user?.userName,"SubCategory","Get","Fetch sub category")
         return responseHandler.success({ res, statusCode: 200, message: "Successfully fetched sub category", data: subcategory });
     } catch (error) {
         return responseHandler.error({ res, statusCode: 500, message: "Did not fetch sub category", error });
@@ -39,6 +42,7 @@ const updateSubCategory = async (req, res) => {
 
         if (!updatedSubCategory) return responseHandler.error({ res, statusCode: 404, message: "Sub category not found" });
 
+        Auditlog.info(req.user?.userName,"SubCategory","Update","Update sub category")
         return responseHandler.success({ res, statusCode: 200, message: "Successfully updated sub category", data: updatedSubCategory });
     } catch (error) {
         return responseHandler.error({ res, statusCode: 500, message: "Did not update sub category", error });
@@ -52,6 +56,7 @@ const deleteSubCategory = async (req, res) => {
         const deletedSubCategory = await SubCategory.findByIdAndDelete(id);
 
         if (!deletedSubCategory) return responseHandler.error({ res, statusCode: 404, message: "Sub category not found" });
+        Auditlog.info(req.user?.userName,"SubCategory","Delete","Delete sub category")
 
         return responseHandler.success({ res, statusCode: 200, message: "Successfully deleted sub category", data: deletedSubCategory });
     } catch (error) {

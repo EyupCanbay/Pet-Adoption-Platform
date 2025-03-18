@@ -30,6 +30,7 @@ async function register(req, res) {
       sameSite: 'lax'
     })
     
+    Auditlog.info(req.user?.userName,"Auth","Post","Create a user")
     return responseHandler.success({res, statusCode:201, message:"Kullanıcı başarıyla kaydedildi", data:{user, token}});
   } catch(error) {
     return responseHandler.error({res, statusCode:500, message:"Kullanıcı kayıt işlemi sırasında hata oluştu", error});
@@ -53,6 +54,7 @@ async function login(req, res) {
       sameSite: 'lax'
     })
 
+    Auditlog.info(req.user?.userName,"Auth","Get","Fetch a user")
     return responseHandler.success({res, statusCode:200, message:"Kullanıcı başarıyla giriş yaptı", data:{user,token}});
   } catch (error) {
     return responseHandler.error({res, statusCode:500, message:"Kullanıcı giriş işlemi sırasında hata oluştu", error}); 
@@ -63,6 +65,8 @@ async function login(req, res) {
 async function logout(req, res) {
   try {
     req.cookies.token = ""
+
+    Auditlog.info(req.user?.userName,"Auth","Delete","Log out the system and delete")
     return responseHandler.success({res, statusCode:200, message:"Kullanıcı çıkışı başarıyla yapıldı"});
   } catch (error) {
     return responseHandler.error({res, statusCode:500, message:"Kullanıcı çıkış işlemi sırasında hata oluştu", error});

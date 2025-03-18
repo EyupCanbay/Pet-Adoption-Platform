@@ -11,6 +11,7 @@ async function reportUser(req,res,next) {
             reason: req.body.reason,
             status: false
         })
+        Auditlog.info(req.user?.userName,"Report","Post","Create user report") 
         return responseHandler.success({res, statusCode:200, message:"User successfuly is reported", data: report})
     } catch (error) {
         return responseHandler.error({res, statusCode: 500,message: "User do not report", error})
@@ -25,6 +26,7 @@ async function getAllReport(req,res,next) {
 
         if(!report) return responseHandler.error({res, statusCode:400, message:"Reports not found"})
             
+        Auditlog.info(req.user?.userName,"Report","Get","Fetch all report user")
         return responseHandler.success({res, statusCode:200, message: "Successfuly fetch all reports", data: report})
     } catch (error) {
         return responseHandler.error({res, statusCode: 500, message: "Reports did not fetch", error})
@@ -45,6 +47,7 @@ async function forbiddenUser(req,res,next) {
             banCount: banCount + 1
         });
         
+        Auditlog.info(req.user?.userName,"Report","Put","Foebidden the user on system")
         return responseHandler.success({res, statusCode:200, message: `Until ${forbiddenUntil} forbiden user `, data: forbiddenUntil})
     } catch (error) {
         return responseHandler.error({res, statusCode: 500, message: "User do not ban the system", error})
