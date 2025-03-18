@@ -14,6 +14,18 @@ async function validateCategory(req,res,next) {
 
 }
 
+async function validateSubCategory(req,res,next) {
+    try{
+        if(!req.body.breed) return responseHandler.error({res, statusCode: 500, message: "Must be breed feild required"})
+        if(!req.body.description) return responseHandler.error({res, statusCode: 500, message: "Must be description feild required"})
+        if(!req.user) return responseHandler.error({res, statusCode: 500, message: "Firstly have to login"})
+        next()
+    }catch (error) {
+        return responseHandler.error({res, statusCode:500, message: "Subcategory validate error", error})
+    }
+}
+
 module.exports = {
-    validateCategory
+    validateCategory,
+    validateSubCategory
 }

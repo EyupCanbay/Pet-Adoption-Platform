@@ -27,9 +27,27 @@ const getSubCategory = async (req, res) => {
     }
 };
 
+const updateSubCategory = async (req, res) => {
+    try {
+        const id = req.params.subcategory_id;
+        const updatedSubCategory = await SubCategory.findByIdAndUpdate(id, {
+            breed: req.body.breed,
+            description: req.body.description,
+            created_by: req.user.userName
+          },{ new: true }
+        );
+
+        if (!updatedSubCategory) return responseHandler.error({ res, statusCode: 404, message: "Sub category not found" });
+
+        return responseHandler.success({ res, statusCode: 200, message: "Successfully updated sub category", data: updatedSubCategory });
+    } catch (error) {
+        return responseHandler.error({ res, statusCode: 500, message: "Did not update sub category", error });
+    }
+};
 module.exports = {
     getAllSubCategories,
-    getSubCategory
+    getSubCategory,
+    updateSubCategory
 }
 
 
