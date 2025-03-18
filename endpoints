@@ -56,11 +56,11 @@ Categories (Kategoriler): (admin)
 + POST /categories - Yeni kategori oluştur
 + PUT /categories/:category_id - Kategori güncelle
 + DELETE /categories/:category_id - Kategori sil
-- POST /categories/:category_id/subcategories - yeni alt kategorinin oluştur
++ POST /categories/:category_id/subcategories - yeni alt kategorinin oluştur
 
 
 Subcategories (Alt Kategoriler): (admin)
-- GET /subcategories -Tüm alt kategorileri listele
++ GET /subcategories -Tüm alt kategorileri listele
 - GET /subcategories/:id - Alt kategori bilgisi getir
 - PUT /subcategories/:id - Alt kategori güncelle
 - DELETE /subcategories/:id - Alt kategori sil

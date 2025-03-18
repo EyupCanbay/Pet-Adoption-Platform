@@ -1,6 +1,5 @@
 const responseHandler = require("../utils/responseHandler")
-const { Category } = require('../models/index')
-const {SubCategory} = require("../models/index")
+const { Category, SubCategory } = require('../models/index')
 
 async function createCategory(req,res,next) {
     try {

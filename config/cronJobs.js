@@ -5,11 +5,11 @@ const { User } = require("../models/index"); // Kullanıcı modelini içe aktar
 cron.schedule("*/10 * * * *", async () => {
     try {
         const now = new Date();
-        await User.updateMany(
+       const users = await User.updateMany(
             { forbiddenTime: { $lte: now } },
             { is_active: true, forbiddenUntil: null }
         );
-        console.log("Users who have expired the ban period have been activated.");
+        console.log(users.userName, "Users who have expired the ban period have been activated.");
     } catch (error) {
        console.log("Cron job error:", error);
     }

@@ -27,6 +27,7 @@ app.use(cors(corsOptions));
 app.use('/auth', require('./routes/auth_routes.js'));
 app.use('/users', require('./routes/users_routes.js'));
 app.use('/category',require('./routes/category_routes.js'));
+app.use('/subcategory', require('./routes/subcategory_routes.js'))
 
 
 module.exports =  app;
