@@ -1,5 +1,6 @@
 const { User, Report, } = require('../models/index')
 const responseHandler = require('../utils/responseHandler')
+const Auditlog = require('../utils/auditlog_save')
 
 async function reportUser(req,res,next) {
     try {

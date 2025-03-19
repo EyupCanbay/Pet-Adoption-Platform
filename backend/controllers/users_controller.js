@@ -54,7 +54,7 @@ async function getUserMe(req,res,next) {
         const userId = req.user._id
 
         const user = await User.findById({_id: userId}).select("-password");
-        console.log(userId)
+
         const location = await Address.find({user_id: userId})
         
         if(!location) return responseHandler.error({res, statusCode: 404, message: "User not found"})
