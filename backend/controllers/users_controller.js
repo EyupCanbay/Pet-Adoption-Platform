@@ -3,7 +3,8 @@ const { User, Address } = require('../models/index')
 const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 const Auditlog = require("../utils/auditlog_save")
-
+const { validateObjectId } = require('../validators/object_validate')
+ 
 
 async function getAllUsers(req,res,next) {
     try{
@@ -152,12 +153,13 @@ async function deleteUserBlock(req,res,next) {
     }
 }
 
+
 async function getBlockUsers(req,res,next) {
     try{
-        const userId = req.user._id
-
+        const userId = validateObjectId(req.user._id)
+        
         const blockedUsers = await User.aggregate([
-            { $match: { _id: new mongoose.Types.ObjectId(userId) } }, // Kullanıcıyı bulur
+            { $match: { _id: userId } }, // Kullanıcıyı bulur
             { $lookup: { 
                 from: "users",      // "users" koleksiyonunda (tablosunda) arar
                 localField: "blockedUser",  // Kullanıcının "blockedUser" listesindeki ID’leri alır
@@ -169,7 +171,7 @@ async function getBlockUsers(req,res,next) {
             }}
         ]);
 
-        if (!blockedUsers.length) {
+        if (!blockedUsers || !blockedUsers.length) {
             return responseHandler.error({ res, statusCode: 404, message: "User not found" });
         }
 
