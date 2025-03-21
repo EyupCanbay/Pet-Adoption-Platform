@@ -74,9 +74,6 @@ async function putUserMe(req,res,next) {
     try{
         const userId  = req.user._id
         const { userData, addressData } = req.body
-
-
-        console.log(req.user._id)
       
         const updatedUser = await User.findByIdAndUpdate(
             userId,
@@ -85,7 +82,6 @@ async function putUserMe(req,res,next) {
         );
         
         let updatedAddress;
-        console.log(userId)
 
         if (addressData) {
             updatedAddress = await Address.findOneAndUpdate(

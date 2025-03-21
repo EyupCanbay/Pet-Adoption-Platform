@@ -2,7 +2,7 @@ const { User, Address } = require('../models/index');
 const responseHandler = require('../utils/responseHandler');
 const { body } = require('express-validator');
 
-const validateUserData = (user) => {
+const validateUserData = (user, res, req, next) => {
     if (!user) return { valid: false, message: 'User data is required' };
 
     const requiredFields = ['email', 'name', 'surname', 'phoneNumber'];
@@ -23,7 +23,7 @@ const validateUserData = (user) => {
    next()
 }
 
-const validateAddressData = async (address) => {
+const validateAddressData = async (address,res,req,next) => {
     if (!address) return responseHandler.error({res, statusCode:400,message: `Address data is required`});
 
     const requiredFields = ['country', 'city', 'state', 'neighborhood'];
