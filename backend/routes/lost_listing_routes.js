@@ -5,6 +5,7 @@ const { checkUser } = require('../middleware/auth_middleware')
 
 router.post('/',checkUser , listingController.createLostListing)
 router.get('/',checkUser , listingController.getAllLostListing)
+router.get('/:listing_id', checkUser, listingController.getLostListing)
 
 
 

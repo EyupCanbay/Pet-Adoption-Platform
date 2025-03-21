@@ -32,7 +32,7 @@ USERS (kullanıcı işlemleri)
 LOST_PET_LISTING
 + GET       /lost_listing       -tüm kayıp ilanları getir (admin, user)
 + POST      /lost_listing       -kayıp ilan oluştur (admin, , user)
--GET       /lost_listing/:lisitng_id   -belirli kayıp ilanı getir (admin,, user)
++ GET       /lost_listing/:lisitng_id   -belirli kayıp ilanı getir (admin,, user)
 -PUT       /lost_listing/:lisitng_id   -belirli ilani güncelle (kendisi)
 -DELETE    /lost_listing/:lisitng_id    -belirli ilanı sil (kendisi)
 -POST      /lost_listing/:listing_id/bookmarks     ilanı bookmarklara ekle ekleyen kullanıcya (admin,  user)

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 function validateObjectId(id) {
-    if(!id) throw new Error("Id is required ")
+    if(!id) throw new Error("Id is empty")
     try {
         objectId = new mongoose.Types.ObjectId(id)
         return objectId
