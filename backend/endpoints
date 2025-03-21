@@ -28,23 +28,41 @@ USERS (kullanıcı işlemleri)
 - GET        /users/me/bookmarks                   -bookmarkları görüntüle (kendisi)  
 
 
-LİSTİNG( kayıp ve sahiplendirme ilanları {TRUE = petListing, FALSE = lostPetListing})
-LOST_PET_LİSTİNG
-+ GET       /listing       -tüm kayıp ilanları getir (admin, user)
-+ POST      /listing       -kayıp ilan oluştur (admin, , user)
--GET       /listing/:lisitng_id   -belirli kayıp ilanı getir (admin,, user)
+
+LOST_PET_LISTING
++ GET       /lost_listing       -tüm kayıp ilanları getir (admin, user)
++ POST      /lost_listing       -kayıp ilan oluştur (admin, , user)
+-GET       /lost_listing/:lisitng_id   -belirli kayıp ilanı getir (admin,, user)
+-PUT       /lost_listing/:lisitng_id   -belirli ilani güncelle (kendisi)
+-DELETE    /lost_listing/:lisitng_id    -belirli ilanı sil (kendisi)
+-POST      /lost_listing/:listing_id/bookmarks     ilanı bookmarklara ekle ekleyen kullanıcya (admin,  user)
+-GET       /lost_listing/:lisitng_id/comment        kayıp ilanın yorumlarını getir  (admin, süper admin, user)
+-POST      /lost_listing/:lisitng_id/comment/                    -kayıp ilana yorum yap
+-GET       /lost_listing/:lisitng_id/comment/:comment_id        -kayıp ilanın belirli yorumunu getir (admin,user)
+-PUT       /lost_listing/:lisitng_id/comment/:comment_id            -kayıp ilanın belirli yorumunu güncelle  (sadece yorum atan)
+-DELETE    /lost_listing/:lisitng_id/comment/:comment_id                    -kayıp ilanın belirli yorumunu sil  (sadece yorum atan ve ilan sahibi)
+-GET       /lost_listing/:lisitng_id/comment/:comment_id/reply_comment     -kayıp ilanın belirli yorumunun yorumlarını getir (admin, user)
+-PUT       /lost_listing/:lisitng_id/comment/:comment_id/reply_comment/:reply_id    -kayıp ilalnın belirli yorumunun belirli yorumunu güncelle (yorum ve ilan sahibi)
+-DELETE    /lost_listing/:lisitng_id/comment/:comment_id/reply_comment/:reply_id -kayıp ilalnın belirli yorumunun belirli yorumunu güncelle (yorum ve ilan sahibi)
+-POST      /lost_listing/:lisitng_id/comment/:comment_id/reply_comment/         -kayıp ilanın yorumuna yorum yap
+
+
+ADOPTION_LISTING
+- GET       /listing       -tüm ilanları getir (admin, user)
+- POST      /listing       - ilan oluştur (admin, , user)
+-GET       /listing/:lisitng_id   -belirli ilanı getir (admin,, user)
 -PUT       /listing/:lisitng_id   -belirli ilani güncelle (kendisi)
 -DELETE    /listing/:lisitng_id    -belirli ilanı sil (kendisi)
 -POST      /listing/:listing_id/bookmarks     ilanı bookmarklara ekle ekleyen kullanıcya (admin,  user)
--GET       /listing/:lisitng_id/comment        kayıp ilanın yorumlarını getir  (admin, süper admin, user)
--POST      /listing/:lisitng_id/comment/                    -kayıp ilana yorum yap
--GET       /listing/:lisitng_id/comment/:comment_id        -kayıp ilanın belirli yorumunu getir (admin,user)
--PUT       /listing/:lisitng_id/comment/:comment_id            -kayıp ilanın belirli yorumunu güncelle  (sadece yorum atan)
--DELETE    /listing/:lisitng_id/comment/:comment_id                    -kayıp ilanın belirli yorumunu sil  (sadece yorum atan ve ilan sahibi)
--GET       /listing/:lisitng_id/comment/:comment_id/reply_comment     -kayıp ilanın belirli yorumunun yorumlarını getir (admin, user)
--PUT       /listing/:lisitng_id/comment/:comment_id/reply_comment/:reply_id    -kayıp ilalnın belirli yorumunun belirli yorumunu güncelle (yorum ve ilan sahibi)
--DELETE    /listing/:lisitng_id/comment/:comment_id/reply_comment/:reply_id -kayıp ilalnın belirli yorumunun belirli yorumunu güncelle (yorum ve ilan sahibi)
--POST      /listing/:lisitng_id/comment/:comment_id/reply_comment/         -kayıp ilanın yorumuna yorum yap
+-GET       /listing/:lisitng_id/comment        ilanın yorumlarını getir  (admin, süper admin, user)
+-POST      /listing/:lisitng_id/comment/                    -ilana yorum yap
+-GET       /listing/:lisitng_id/comment/:comment_id         ilanın belirli yorumunu getir (admin,user)
+-PUT       /listing/:lisitng_id/comment/:comment_id            -ilanın belirli yorumunu güncelle  (sadece yorum atan)
+-DELETE    /listing/:lisitng_id/comment/:comment_id                     ilanın belirli yorumunu sil  (sadece yorum atan ve ilan sahibi)
+-GET       /listing/:lisitng_id/comment/:comment_id/reply_comment     -ilanın belirli yorumunun yorumlarını getir (admin, user)
+-PUT       /listing/:lisitng_id/comment/:comment_id/reply_comment/:reply_id    -ilalnın belirli yorumunun belirli yorumunu güncelle (yorum ve ilan sahibi)
+-DELETE    /listing/:lisitng_id/comment/:comment_id/reply_comment/:reply_id -ilalnın belirli yorumunun belirli yorumunu güncelle (yorum ve ilan sahibi)
+-POST      /listing/:lisitng_id/comment/:comment_id/reply_comment/         -ilanın yorumuna yorum yap
 
 
 Categories (Kategoriler): (admin)
