@@ -2,7 +2,7 @@ const cron = require("node-cron");
 const { User } = require("../models/index"); // Kullanıcı modelini içe aktar
 
 // dakikada bir yasak süresi kontrolü
-cron.schedule("* * * * *", async () => {
+cron.schedule("*-10 * * * *", async () => {
     try {
         const now = new Date();
         const users = await User.find({ forbiddenTime: { $lte: now } }); // Önce güncellenecekleri al

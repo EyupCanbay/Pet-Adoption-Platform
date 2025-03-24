@@ -196,10 +196,25 @@ async function getLostListing(req,res,next) {
     }
 }
 
+async function deleteLostListing(req,res,next) {
+    try {
+        const listingId = req.params.listing_id;
 
+        if(!listingId) return responseHandler.error({res, statusCode: Enum.HTTP_CODES.BAD_REQUEST, message: "Id is required"})
+
+        const lostListing = await LostPetListing.findByIdAndDelete({ _id: listingId })
+
+        if(!lostListing) return responseHandler.error({res, statusCode: Enum.HTTP_CODES.NOT_FOUND, message: "The listing not found"})
+
+        return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly fetched the listing" })
+    } catch (error) {
+        return responseHandler.error({res, statusCode: Enum.HTTP_CODES.BAD_REQUEST, message: "Was not deleted the listing", error})
+    }
+}
 module.exports = {
     createLostListing,
     getAllLostListing,
-    getLostListing
+    getLostListing,
+    deleteLostListing
 }
 
