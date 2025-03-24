@@ -24,7 +24,7 @@ USERS (kullanıcı işlemleri)
 + PUT         /users/report/admin/:user_id         -kullanıcıyı banlamak(admin)
 
 - GET       /users/me/listing/       -belirli kullanıcının bütün ilanlarını getir (user)
-- DELETE      /users/me/bookmarks/:listing_id     -ilanı booklmarkalrdan sil (kendisi)
++ DELETE      /users/me/bookmarks/:listing_id     -ilanı booklmarkalrdan sil (kendisi)
 + GET        /users/me/bookmarks                   -bookmarkları görüntüle (kendisi)  
 
 

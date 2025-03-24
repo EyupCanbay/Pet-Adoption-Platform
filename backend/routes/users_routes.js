@@ -10,6 +10,7 @@ router.get('/', checkUser, checkRole(["ADMIN","USER"]), userController.getAllUse
 router.get('/me',checkUser, userController.getUserMe)
 router.put('/me', checkUser, validateUserData, validateAddressData ,userController.putUserMe)
 router.get('/me/bookmarks', checkUser, userController.getUserBookmarks )
+router.delete('/me/bookmarks/:listing_id', checkUser, userController.deleteUserBookmarks)
 router.get('/me/block',checkUser, userController.getBlockUsers)
 router.get('/:user_id',checkUser, checkRole(["ADMIN","USER"]), userController.getUser)
 

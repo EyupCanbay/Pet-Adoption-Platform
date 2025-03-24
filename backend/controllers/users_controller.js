@@ -185,8 +185,7 @@ async function getBlockUsers(req,res,next) {
 }
 
 async function getUserBookmarks(req,res,next){
-    const  user_id  = req.user._id;
-
+    const  user_id = validateObjectId(req.user._id)
     try {
         const bookmarks = await User.aggregate([
             { $match: { _id: user_id } }, 
@@ -214,12 +213,34 @@ async function getUserBookmarks(req,res,next){
         if (!bookmarks.length) {
             return responseHandler.error({res, statusCode:Enum.HTTP_CODES.INT_SERVER_ERROR, message: "User did not have bookmarks"})
         }
+        console.log(bookmarks)
     
-        res.status(200).json({ bookmarks: bookmarks[0].bookmarks });
+        return responseHandler.success({res,statusCode:Enum.HTTP_CODES.OK, message:"Successfuly fetched the listing in bookmarks", data:bookmarks})
     } catch (err) {
         return responseHandler.error({res, statusCode:Enum.HTTP_CODES.INT_SERVER_ERROR,message: "Bookmarks was not fetched"});
     }
     
+}
+
+async function deleteUserBookmarks(req,res,next) {
+    try{
+        const userId = validateObjectId(req.user._id)
+        const listingId = validateObjectId(req.params.listing_id)
+        
+        const user = await User.findByIdAndUpdate(
+            userId,
+            { $pull: { bookmarks: listingId } },  
+            { new: true } 
+        );
+
+        if (!user) {
+            return responseHandler.error({ res, statusCode: Enum.HTTP_CODES.NOT_FOUND, message: "User not found" });
+        }
+
+        return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly removing the listing in bookmarks"})
+    }catch(error) {
+        return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message:"hes occured removing the listing in bookmarks"})
+    }
 }
 module.exports = {
     getAllUsers,
@@ -229,5 +250,6 @@ module.exports = {
     deleteUserBlock,
     blockedUser,
     getBlockUsers,
-    getUserBookmarks
+    getUserBookmarks,
+    deleteUserBookmarks
 }
