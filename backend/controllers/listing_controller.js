@@ -181,6 +181,9 @@ async function getLostListing(req,res,next) {
                 } 
             }
         ]);
+
+        console.log(listing)
+    if(!listing[0]) return responseHandler.error({res, statusCode: Enum.HTTP_CODES.NOT_FOUND, message: "Listing not found"})
    
     return responseHandler.success({res, 
         statusCode: Enum.HTTP_CODES.OK,
@@ -211,10 +214,46 @@ async function deleteLostListing(req,res,next) {
         return responseHandler.error({res, statusCode: Enum.HTTP_CODES.BAD_REQUEST, message: "Was not deleted the listing", error})
     }
 }
+
+async function addBookmarks(req,res,next) {
+    
+    const { listing_id } = req.params;
+    const userId = req.user._id;
+    console.log(userId)
+    console.log(listing_id)
+    
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        const [user, listing] = await Promise.all([
+            User.findById(userId).session(session),
+            LostPetListing.findById(listing_id).lean(), //ilan silinmiş mi diye kontrol etmek için
+        ]);
+
+        if (!user || !listing) return res.status(404).json({ message: "Kullanıcı veya ilan bulunamadı" });
+        
+        if (user.bookmarks.includes(listing_id)) return res.status(400).json({ message: "Bu ilan zaten favorilerde" });
+        
+        user.bookmarks.push(listing_id);
+        await user.save({ session });
+
+        await session.commitTransaction();
+        return responseHandler.success({res, statusCode:Enum.HTTP_CODES.OK, message: "Successfuly added your bookmarks"})
+
+    }catch (error) {
+        await session.abortTransaction();
+        return responseHandler.error({res, statusCode: Enum.HTTP_CODES.BAD_REQUEST, message: "Was not added your bookmark", error})
+    } finally {
+        session.endSession();
+    }
+}
+
 module.exports = {
     createLostListing,
     getAllLostListing,
     getLostListing,
-    deleteLostListing
+    deleteLostListing,
+    addBookmarks
 }
 

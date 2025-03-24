@@ -7,6 +7,7 @@ router.post('/',checkUser , listingController.createLostListing)
 router.get('/',checkUser , listingController.getAllLostListing)
 router.get('/:listing_id', checkUser, listingController.getLostListing)
 router.delete('/:listing_id', checkUser, listingController.deleteLostListing)
+router.post('/:listing_id/bookmarks', checkUser, listingController.addBookmarks)
 
 
 
