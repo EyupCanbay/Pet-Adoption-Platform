@@ -25,7 +25,7 @@ USERS (kullanıcı işlemleri)
 
 - GET       /users/me/listing/       -belirli kullanıcının bütün ilanlarını getir (user)
 - DELETE      /users/me/bookmarks/:listing_id     -ilanı booklmarkalrdan sil (kendisi)
-- GET        /users/me/bookmarks                   -bookmarkları görüntüle (kendisi)  
++ GET        /users/me/bookmarks                   -bookmarkları görüntüle (kendisi)  
 
 
 

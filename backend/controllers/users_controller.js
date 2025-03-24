@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 const Auditlog = require("../utils/auditlog_save")
 const { validateObjectId } = require('../validators/object_validate')
+const Enum = require("../config/enum")
  
 
 async function getAllUsers(req,res,next) {
@@ -183,6 +184,43 @@ async function getBlockUsers(req,res,next) {
     }
 }
 
+async function getUserBookmarks(req,res,next){
+    const  user_id  = req.user._id;
+
+    try {
+        const bookmarks = await User.aggregate([
+            { $match: { _id: user_id } }, 
+            {
+                $lookup: {
+                    from: "lostpetlistings", 
+                    localField: "bookmarks",
+                    foreignField: "_id",
+                    as: "bookmarks",
+                },
+            },
+            {
+                $project: {
+                    _id: 0, 
+                    bookmarks: {
+                        _id: 1,
+                        title: 1,
+                        description: 1,
+                        imageUrl: 1,
+                    },
+                },
+            },
+        ]);
+    
+        if (!bookmarks.length) {
+            return responseHandler.error({res, statusCode:Enum.HTTP_CODES.INT_SERVER_ERROR, message: "User did not have bookmarks"})
+        }
+    
+        res.status(200).json({ bookmarks: bookmarks[0].bookmarks });
+    } catch (err) {
+        return responseHandler.error({res, statusCode:Enum.HTTP_CODES.INT_SERVER_ERROR,message: "Bookmarks was not fetched"});
+    }
+    
+}
 module.exports = {
     getAllUsers,
     getUser,
@@ -190,5 +228,6 @@ module.exports = {
     getUserMe,
     deleteUserBlock,
     blockedUser,
-    getBlockUsers
+    getBlockUsers,
+    getUserBookmarks
 }
