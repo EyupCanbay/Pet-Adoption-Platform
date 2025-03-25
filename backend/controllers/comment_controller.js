@@ -101,7 +101,6 @@ async function getAllComments(req,res,next) {
             { $skip: skip },
             { $limit: limit }
         ])
-console.log(comments)
 
         return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly fetched comments ", data: comments})
     } catch (error) {
@@ -109,9 +108,60 @@ console.log(comments)
     }
 }
 
+async function deleteComment(req,res,next) {
+    try {
+        const userId = validateObjectId(req.user._id)
+        const listingId = validateObjectId(req.params.listing_id)
+        const commentId = validateObjectId(req.params.comment_id)
+
+
+        const comment = await Comment.aggregate([
+            { $match: {_id: commentId}},
+            { 
+                $lookup: {
+                    from: "lostpetlistings",
+                    localField: "lost_listing_id",
+                    foreignField: "_id",
+                    as: "lostListings"
+                }
+            },
+            { $unwind: "$lostListings" },
+            {
+                $project: {
+                    user_id:1,
+                    "lostListings.user_id": 1,
+
+                }
+            }
+        ])
+
+        if(comment.user_id.toString() === userId.toString()  ){
+            await Comment.findByIdAndDelete({_id: commentId})
+
+            return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly updated comments "})      
+          }
+        else if(comment.lostListings.user_id.toString() !== userId.toString()){
+            await Comment.findByIdAndDelete({_id: commentId})
+            return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly updated comments "}) 
+        }
+        else if("ADMIN" !== req.user.role){
+            await Comment.findByIdAndDelete({_id: commentId})
+
+            return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly updated comments "})       
+         }
+        else {
+            return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "Was not updated comments", error})
+
+        }
+    }catch (error) {
+
+        return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "Was not updated comments", error})
+    }
+}
 
 
 module.exports = {
     createComment,
-    getAllComments
+    getAllComments,
+    deleteComment
 }

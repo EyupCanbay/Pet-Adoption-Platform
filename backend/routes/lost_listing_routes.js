@@ -11,6 +11,7 @@ router.delete('/:listing_id', checkUser, listingController.deleteLostListing)
 router.post('/:listing_id/bookmarks', checkUser, listingController.addBookmarks)
 router.post('/:listing_id/comment', checkUser, commentController.createComment)
 router.get('/:listing_id/comment', checkUser, commentController.getAllComments)
+router.delete('/:listing_id/comment/:comment_id', checkUser, commentController.deleteComment)
 
 
 module.exports = router
