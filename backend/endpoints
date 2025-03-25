@@ -36,8 +36,8 @@ LOST_PET_LISTING
 -PUT       /lost_listing/:lisitng_id   -belirli ilani güncelle (kendisi)
 + DELETE    /lost_listing/:lisitng_id    -belirli ilanı sil (kendisi)
 + POST      /lost_listing/:listing_id/bookmarks     ilanı bookmarklara ekle ekleyen kullanıcya (admin,  user)
--GET       /lost_listing/:lisitng_id/comment        kayıp ilanın yorumlarını getir  (admin, süper admin, user)
--POST      /lost_listing/:lisitng_id/comment/                    -kayıp ilana yorum yap
+- GET       /lost_listing/:lisitng_id/comment        kayıp ilanın yorumlarını getir  (admin, süper admin, user)
++ POST      /lost_listing/:lisitng_id/comment/                    -kayıp ilana yorum yap
 -GET       /lost_listing/:lisitng_id/comment/:comment_id        -kayıp ilanın belirli yorumunu getir (admin,user)
 -PUT       /lost_listing/:lisitng_id/comment/:comment_id            -kayıp ilanın belirli yorumunu güncelle  (sadece yorum atan)
 -DELETE    /lost_listing/:lisitng_id/comment/:comment_id                    -kayıp ilanın belirli yorumunu sil  (sadece yorum atan ve ilan sahibi)

@@ -144,7 +144,16 @@ async function getLostListing(req,res,next) {
                     as: "address"
                 }
             },
-            { $unwind: { path: "$address", preserveNullAndEmptyArrays: false } },   
+            { $unwind: { path: "$address", preserveNullAndEmptyArrays: false } },
+            {
+                $lookup: {
+                    from: "comments",
+                    localField: "comment_id",
+                    foreignField: "_id",
+                    as: "comments" 
+                }
+            },
+          //  { $unwind: { path: "$comments", preserveNullAndEmptyArrays: false } },   
             
             {
                 $project: 
@@ -160,6 +169,7 @@ async function getLostListing(req,res,next) {
                 category_name: 1, 
                 sub_category_name: 1, 
                 createdAt: 1, 
+                "comments": 1,
                 "additionalInfo.color": 1, 
                 "additionalInfo.eyeColor": 1, 
                 "additionalInfo.furType": 1, 
@@ -239,6 +249,7 @@ async function addBookmarks(req,res,next) {
         await user.save({ session });
 
         await session.commitTransaction();
+        
         return responseHandler.success({res, statusCode:Enum.HTTP_CODES.OK, message: "Successfuly added your bookmarks"})
 
     }catch (error) {
