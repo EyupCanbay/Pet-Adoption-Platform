@@ -1,9 +1,12 @@
 import React from 'react'
+import HomePageContainer from '../containers/HomePageContainer'
 
 function Page() {
-  return (
-    <div>Page</div>
-  )
+    return (
+        <div>
+            <HomePageContainer />
+        </div>
+    )
 }
 
 export default Page
