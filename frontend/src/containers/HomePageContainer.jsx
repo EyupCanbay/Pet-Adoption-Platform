@@ -10,9 +10,8 @@ function HomePageContainer() {
         <div className="flex">
             <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
-            {/* Content area */}
             <div
-                className="transition-all duration-300 ease-in-out flex-1" // Adjust margin left based on sidebar state
+                className="transition-all duration-300 ease-in-out flex-1" 
             >
                 <HomeComponent />
             </div>
