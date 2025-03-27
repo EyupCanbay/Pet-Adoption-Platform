@@ -15,14 +15,14 @@ function RootLayout({ children }) {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" sizes="32x32" type="image/png" />
             </head>
-            <body>
+            <body className='flex flex-col h-screen'>
                 <div className='top-0'>
                     <Header />
                 </div>
-                <main>
+                <main className='flex-1'>
                     {children}
                 </main>
-                <div className='bottom-0'>
+                <div className='bottom-0 border-t border-gray-200'>
                     <Footer />
                 </div>
             </body>
