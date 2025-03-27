@@ -7,7 +7,7 @@ function Header() {
     return (
         <header>
             <div className='px-10 py-6 border-b border-gray-200'>
-                <div className='flex justify-between items-center'>
+                <div className='flex gap-6 justify-between items-center'>
                     <Logo />
                     <SearchBar />
                     <ProfileSection />
