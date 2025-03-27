@@ -24,7 +24,7 @@ function ProfileSection() {
     };
 
     useEffect(() => {
-        setUser(Users[0]);
+        //* setUser(Users[0]);
         fetchNotifications();
     }, []);
 
@@ -51,13 +51,13 @@ function ProfileSection() {
             {user === null ? (
                 <div className="flex gap-4">
                     <button
-                        className="px-6 py-2 bg-blue-500 text-white cursor-pointer rounded-lg hover:bg-blue-600 focus:outline-none"
+                        className="md:px-6 md:py-2 px-3 py-2 text-sm md:text-md bg-blue-500 text-white cursor-pointer rounded-lg hover:bg-blue-600 focus:outline-none"
                         onClick={() => router.push('/login')}
                     >
                         Login
                     </button>
                     <button
-                        className="px-6 py-2 bg-green-500 text-white cursor-pointer rounded-lg hover:bg-green-600 focus:outline-none"
+                        className="md:px-6 md:py-2 px-3 py-2 text-sm md:text-md bg-green-500 text-white cursor-pointer rounded-lg hover:bg-green-600 focus:outline-none"
                         onClick={() => router.push('/register')}
                     >
                         Register
