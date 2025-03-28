@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const LostPetListingSchema = new mongoose.Schema({
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true }, //hangi kullanıcının kayıp ilanı
-    category_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true, index: true }, //hangi kategoriye ait
-    subCategory_id: { type: mongoose.Schema.Types.ObjectId, ref: 'SubCategory', required: true, index: true }, // hangi alt kategoriye ait
+    category_name: { type: mongoose.Schema.Types.String, ref: 'Category', required: true, index: true }, //hangi kategoriye ait
+    sub_category_name: { type: mongoose.Schema.Types.String, ref: 'SubCategory', required: true, index: true }, // hangi alt kategoriye ait
     comment_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }], // yorumlar
     petName: { type: String, required: true }, // adı
     age: { type: Number, required: true }, // yaşı

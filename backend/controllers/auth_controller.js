@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookie = require('cookie');
 const responseHandler = require('../utils/responseHandler');
+const Auditlog = require('../utils/auditlog_save.js')
 
 async function register(req, res) {
   try{
@@ -54,7 +55,7 @@ async function login(req, res) {
       sameSite: 'lax'
     })
 
-    Auditlog.info(req.user?.userName,"Auth","Get","Fetch a user")
+    Auditlog.info(null,"Auth","Get","Fetch a user")
     return responseHandler.success({res, statusCode:200, message:"Kullanıcı başarıyla giriş yaptı", data:{user,token}});
   } catch (error) {
     return responseHandler.error({res, statusCode:500, message:"Kullanıcı giriş işlemi sırasında hata oluştu", error}); 

@@ -3,7 +3,9 @@ const { User, Address } = require('../models/index')
 const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 const Auditlog = require("../utils/auditlog_save")
-
+const { validateObjectId } = require('../validators/object_validate')
+const Enum = require("../config/enum")
+ 
 
 async function getAllUsers(req,res,next) {
     try{
@@ -54,7 +56,7 @@ async function getUserMe(req,res,next) {
         const userId = req.user._id
 
         const user = await User.findById({_id: userId}).select("-password");
-        console.log(userId)
+
         const location = await Address.find({user_id: userId})
         
         if(!location) return responseHandler.error({res, statusCode: 404, message: "User not found"})
@@ -73,9 +75,6 @@ async function putUserMe(req,res,next) {
     try{
         const userId  = req.user._id
         const { userData, addressData } = req.body
-
-
-        console.log(req.user._id)
       
         const updatedUser = await User.findByIdAndUpdate(
             userId,
@@ -84,7 +83,6 @@ async function putUserMe(req,res,next) {
         );
         
         let updatedAddress;
-        console.log(userId)
 
         if (addressData) {
             updatedAddress = await Address.findOneAndUpdate(
@@ -152,12 +150,13 @@ async function deleteUserBlock(req,res,next) {
     }
 }
 
+
 async function getBlockUsers(req,res,next) {
     try{
-        const userId = req.user._id
-
+        const userId = validateObjectId(req.user._id)
+        
         const blockedUsers = await User.aggregate([
-            { $match: { _id: new mongoose.Types.ObjectId(userId) } }, // Kullanıcıyı bulur
+            { $match: { _id: userId } }, // Kullanıcıyı bulur
             { $lookup: { 
                 from: "users",      // "users" koleksiyonunda (tablosunda) arar
                 localField: "blockedUser",  // Kullanıcının "blockedUser" listesindeki ID’leri alır
@@ -169,7 +168,7 @@ async function getBlockUsers(req,res,next) {
             }}
         ]);
 
-        if (!blockedUsers.length) {
+        if (!blockedUsers || !blockedUsers.length) {
             return responseHandler.error({ res, statusCode: 404, message: "User not found" });
         }
 
@@ -185,6 +184,64 @@ async function getBlockUsers(req,res,next) {
     }
 }
 
+async function getUserBookmarks(req,res,next){
+    const  user_id = validateObjectId(req.user._id)
+    try {
+        const bookmarks = await User.aggregate([
+            { $match: { _id: user_id } }, 
+            {
+                $lookup: {
+                    from: "lostpetlistings", 
+                    localField: "bookmarks",
+                    foreignField: "_id",
+                    as: "bookmarks",
+                },
+            },
+            {
+                $project: {
+                    _id: 0, 
+                    bookmarks: {
+                        _id: 1,
+                        title: 1,
+                        description: 1,
+                        imageUrl: 1,
+                    },
+                },
+            },
+        ]);
+    
+        if (!bookmarks.length) {
+            return responseHandler.error({res, statusCode:Enum.HTTP_CODES.INT_SERVER_ERROR, message: "User did not have bookmarks"})
+        }
+        console.log(bookmarks)
+    
+        return responseHandler.success({res,statusCode:Enum.HTTP_CODES.OK, message:"Successfuly fetched the listing in bookmarks", data:bookmarks})
+    } catch (err) {
+        return responseHandler.error({res, statusCode:Enum.HTTP_CODES.INT_SERVER_ERROR,message: "Bookmarks was not fetched"});
+    }
+    
+}
+
+async function deleteUserBookmarks(req,res,next) {
+    try{
+        const userId = validateObjectId(req.user._id)
+        const listingId = validateObjectId(req.params.listing_id)
+        
+        const user = await User.findByIdAndUpdate(
+            userId,
+            { $pull: { bookmarks: listingId } },  
+            { new: true } 
+        );
+
+        if (!user) {
+            return responseHandler.error({ res, statusCode: Enum.HTTP_CODES.NOT_FOUND, message: "User not found" });
+        }
+
+        return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly removing the listing in bookmarks"})
+    }catch(error) {
+        return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message:"hes occured removing the listing in bookmarks"})
+    }
+}
 module.exports = {
     getAllUsers,
     getUser,
@@ -192,5 +249,7 @@ module.exports = {
     getUserMe,
     deleteUserBlock,
     blockedUser,
-    getBlockUsers
+    getBlockUsers,
+    getUserBookmarks,
+    deleteUserBookmarks
 }
