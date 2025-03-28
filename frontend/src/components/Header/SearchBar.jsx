@@ -4,7 +4,7 @@ import { IoMdSearch } from "react-icons/io";
 
 function SearchBar() {
     return (
-        <div className='md:flex hidden gap-2 items-center border border-gray-300 rounded-full justify-center'>
+        <div className='md:hidden lg:flex hidden gap-2 items-center border border-gray-300 rounded-full justify-center'>
             <input
                 type='text'
                 placeholder='Search'

@@ -24,7 +24,7 @@ function ProfileSection() {
     };
 
     useEffect(() => {
-        //* setUser(Users[0]);
+        setUser(Users[0]);
         fetchNotifications();
     }, []);
 
@@ -65,6 +65,16 @@ function ProfileSection() {
                 </div>
             ) : (
                 <div className="flex gap-4 items-center">
+                    <div>
+                        {/*HEMEN İLAN OLUŞTUR BUTTON */}
+                        <Link
+                            className='md:px-6 md:py-2 px-3 hidden md:block text-sm md:text-md lg:text-md lg:block py-2 text-sm md:text-md bg-indigo-600 text-white cursor-pointer rounded-lg hover:bg-indigo-800 focus:outline-none'
+                            href="/create-advert"
+                        >
+                            <span className='mr-0.5'>İlan</span>
+                            <span>Oluştur</span>
+                        </Link>
+                    </div>
                     <div className="relative">
                         <Link
                             className="text-xl text-gray-600 hover:text-blue-500 focus:outline-none"
@@ -91,7 +101,7 @@ function ProfileSection() {
                             <IoMdArrowDropdown className="text-lg" />
                         </button>
                         {isDropdownOpen && (
-                            <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-lg shadow-lg">
+                            <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-lg shadow-lg z-50">
                                 <ul className="py-2">
                                     <li>
                                         <Link
