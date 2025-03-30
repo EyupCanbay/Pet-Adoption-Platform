@@ -14,21 +14,19 @@ export default function Register() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false); // Şifre görünürlük durumu
-    const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false); // Confirm şifre görünürlük durumu
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
 
     const handleRegister = async (e) => {
         e.preventDefault();
         setError("");
         setSuccessMessage("");
 
-        // Form doğrulaması
         if (!firstName || !lastName || !email || !password || !confirmPassword) {
             setError("Lütfen tüm alanları doldurun.");
             return;
         }
 
-        // Şifreler eşleşiyor mu kontrolü
         if (password !== confirmPassword) {
             setError("Şifreler uyuşmuyor, lütfen tekrar deneyin.");
             return;
@@ -37,14 +35,12 @@ export default function Register() {
         try {
             setLoading(true);
 
-            // Backend API'ye istek atıyormuş gibi simüle edelim
             await new Promise((resolve) => setTimeout(resolve, 1500));
 
-            // Başarılı kayıt sonrası yönlendirme
             setSuccessMessage("Kayıt başarılı, giriş yapabilirsiniz.");
             setTimeout(() => {
                 router.push("/login");
-            }, 2000); // 2 saniye sonra login sayfasına yönlendir
+            }, 2000);
         } catch (error) {
             setError("Kayıt başarısız, lütfen tekrar deneyin.");
         } finally {
@@ -63,7 +59,6 @@ export default function Register() {
                 {successMessage && <p className="text-green-500 text-sm text-center mb-4">{successMessage}</p>}
 
                 <form onSubmit={handleRegister} className="space-y-4">
-                    {/* First Name Input */}
                     <div className="relative">
                         <FaUserAlt className="absolute left-3 top-4 text-gray-400" />
                         <input
@@ -75,7 +70,6 @@ export default function Register() {
                         />
                     </div>
 
-                    {/* Last Name Input */}
                     <div className="relative">
                         <FaUserAlt className="absolute left-3 top-4 text-gray-400" />
                         <input
@@ -87,7 +81,6 @@ export default function Register() {
                         />
                     </div>
 
-                    {/* Email Input */}
                     <div className="relative">
                         <FaEnvelope className="absolute left-3 top-4 text-gray-400" />
                         <input
@@ -99,11 +92,10 @@ export default function Register() {
                         />
                     </div>
 
-                    {/* Password Input */}
                     <div className="relative">
                         <FaLock className="absolute left-3 top-4 text-gray-400" />
                         <input
-                            type={isPasswordVisible ? "text" : "password"} // Şifre görünürlük durumu
+                            type={isPasswordVisible ? "text" : "password"}
                             placeholder="Şifreniz"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -118,11 +110,10 @@ export default function Register() {
                         </button>
                     </div>
 
-                    {/* Confirm Password Input */}
                     <div className="relative">
                         <FaLock className="absolute left-3 top-4 text-gray-400" />
                         <input
-                            type={isConfirmPasswordVisible ? "text" : "password"} // Confirm şifre görünürlük durumu
+                            type={isConfirmPasswordVisible ? "text" : "password"}
                             placeholder="Şifrenizi Tekrar Girin"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
@@ -137,7 +128,6 @@ export default function Register() {
                         </button>
                     </div>
 
-                    {/* Register Button */}
                     <button
                         type="submit"
                         className="w-full bg-blue-500 text-white p-3 rounded-lg font-semibold hover:bg-blue-600 transition duration-300 disabled:bg-gray-400"
@@ -147,7 +137,6 @@ export default function Register() {
                     </button>
                 </form>
 
-                {/* Login Link */}
                 <p className="text-center text-gray-600 mt-4">
                     Zaten bir hesabın var mı?{" "}
                     <a href="/login" className="text-blue-500 font-semibold hover:underline">
