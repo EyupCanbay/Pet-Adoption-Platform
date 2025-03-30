@@ -10,7 +10,7 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [isVisible, setIsVisible] = useState(false); // Şifre görünürlük durumu
+    const [isVisible, setIsVisible] = useState(false);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -24,10 +24,8 @@ export default function Login() {
         try {
             setLoading(true);
 
-            // Backend API'ye istek atıyormuş gibi simüle edelim
             await new Promise((resolve) => setTimeout(resolve, 1500));
 
-            // Başarılı giriş sonrası yönlendirme
             router.push("/");
         } catch (error) {
             setError("Giriş başarısız, lütfen tekrar deneyin.");
@@ -46,7 +44,6 @@ export default function Login() {
                 {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
 
                 <form onSubmit={handleLogin} className="space-y-4">
-                    {/* Email Input */}
                     <div className="relative">
                         <FaUser className="absolute left-3 top-4 text-gray-400" />
                         <input
@@ -58,11 +55,10 @@ export default function Login() {
                         />
                     </div>
 
-                    {/* Şifre Input */}
                     <div className="relative">
                         <FaLock className="absolute left-3 top-4 text-gray-400" />
                         <input
-                            type={isVisible ? "text" : "password"} // Şifre görünürlük durumu
+                            type={isVisible ? "text" : "password"}
                             placeholder="Şifreniz"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -77,7 +73,6 @@ export default function Login() {
                         </button>
                     </div>
 
-                    {/* Giriş Butonu */}
                     <button
                         type="submit"
                         className="w-full bg-blue-500 text-white p-3 rounded-lg font-semibold hover:bg-blue-600 transition duration-300 disabled:bg-gray-400"
@@ -87,7 +82,6 @@ export default function Login() {
                     </button>
                 </form>
 
-                {/* Kayıt Ol Linki */}
                 <p className="text-center text-gray-600 mt-4">
                     Hesabın yok mu?{" "}
                     <a href="/register" className="text-blue-500 font-semibold hover:underline">

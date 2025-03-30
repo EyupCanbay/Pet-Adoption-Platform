@@ -7,9 +7,8 @@ function HomeComponent() {
             <div>home</div>
             <div>home</div>
             <div>home</div>
-          
 
-            {/* HOW TO ADOPTING AN ANIMAL IN 6 STEPS*/}
+
             <div>
                 <Steps />
             </div>

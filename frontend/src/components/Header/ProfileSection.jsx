@@ -66,7 +66,6 @@ function ProfileSection() {
             ) : (
                 <div className="flex gap-4 items-center">
                     <div>
-                        {/*HEMEN İLAN OLUŞTUR BUTTON */}
                         <Link
                             className='md:px-6 md:py-2 px-3 hidden md:block text-sm md:text-md lg:text-md lg:block py-2 text-sm md:text-md bg-indigo-600 text-white cursor-pointer rounded-lg hover:bg-indigo-800 focus:outline-none'
                             href="/create-advert"

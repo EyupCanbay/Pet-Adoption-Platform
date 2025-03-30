@@ -13,6 +13,8 @@ function SearchBar() {
             <button
                 className='flex items-center justify-center cursor-pointer px-6 py-3 bg-gray-500 rounded-r-full'
                 onClick={() => alert('Search')}
+                aria-label='Search'
+                title='Search'
             >
                 <IoMdSearch className='text-xl text-gray-100' />
             </button>
