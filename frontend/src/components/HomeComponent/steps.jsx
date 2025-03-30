@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 
 function Steps() {
-    const [openStep, setOpenStep] = useState(null); // Track which step is open
+    const [openStep, setOpenStep] = useState(null);
 
     const steps = [
         { title: 'How Does the Pet Adoption Process Work?', description: 'For the pet adoption process, you can contact the ad owners through the listings on our page. You can get answers to any questions you have and complete the adoption process in a practical way.' },
@@ -14,7 +14,6 @@ function Steps() {
     ];
 
     const toggleStep = (index) => {
-        // If the clicked step is already open, close it, otherwise open the new step
         setOpenStep(openStep === index ? null : index);
     };
     return (

@@ -1,39 +1,52 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Advert from "@/src/components/Advert";
 import Loading from "@/src/components/Loading";
 import UserInfo from "@/src/components/UserInfo";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // React Icons'dan ok ikonları
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
-
+import PetListing from "@/mocks/pet_listings";
+import slugify from "slugify";
 function ProfilePage() {
+
     const currentUser = true;
     const [loading, setLoading] = useState(true);
-
-    const adverts = Array.from({ length: 15 }, (_, i) => ({ id: i + 1 })); // 15 ilan örneği
+    const [adverts, setAdverts] = useState([]);
+    useEffect(() => {
+        const fetchAdverts = async () => {
+            const response = await new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve(PetListing.data);
+                }, 1000);
+            });
+            setAdverts(response);
+        };
+        fetchAdverts();
+    }, []);
+    const filteredPets = adverts.slice(0, 12);
 
     const advertsPerPage = 6;
-    const totalPages = Math.ceil(adverts.length / advertsPerPage);
+    const totalPages = Math.ceil(filteredPets.length / advertsPerPage);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [direction, setDirection] = useState(1); // 1: sağa, -1: sola kayma
+    const [direction, setDirection] = useState(1);
 
-    setTimeout(() => setLoading(false), 1000); // Simüle edilen yükleme süresi
+    setTimeout(() => setLoading(false), 1000);
 
     if (loading) return <Loading />;
 
     const paginate = (newPage) => {
         if (newPage > currentPage) {
-            setDirection(1); // Sağdan sola kaydır
+            setDirection(1);
         } else {
-            setDirection(-1); // Soldan sağa kaydır
+            setDirection(-1);
         }
         setCurrentPage(newPage);
     };
 
     const startIndex = (currentPage - 1) * advertsPerPage;
-    const displayedAdverts = adverts.slice(startIndex, startIndex + advertsPerPage);
+    const displayedAdverts = filteredPets.slice(startIndex, startIndex + advertsPerPage);
 
     return (
         <div className="flex flex-col sm:grid sm:grid-cols-1 md:grid-cols-3 gap-1 md:gap-4 lg:gap-6 w-full p-4">
@@ -45,7 +58,6 @@ function ProfilePage() {
                     </span>
                     <div className="relative overflow-hidden p-4">
                         <AnimatePresence custom={direction} mode="popLayout">
-                            {/* Sayfa içeriklerinin kayması */}
                             <motion.div
                                 key={currentPage}
                                 className="grid grid-cols-1 md:grid-cols-3 gap-4"
@@ -57,17 +69,19 @@ function ProfilePage() {
                                 {displayedAdverts.map((advert) => (
 
                                     <Link
-                                        key={advert.id} // Her advert'e unique id ver
-                                        href={`/advert/${advert.id}`} // Advert detayına yönlendirme
+                                        key={advert.user_id}
+                                        href={{
+                                            pathname: `/advert/${slugify(advert.petName).toLowerCase()}`,
+                                            query: { pet: slugify(advert.petName).toLowerCase() },
+                                        }}
                                     >
-                                        <Advert advert={advert} /> {/* Advert'i props olarak geçiyoruz */}
+                                        <Advert key={advert.id} pet={advert} />
                                     </Link>
                                 ))}
                             </motion.div>
                         </AnimatePresence>
                     </div>
 
-                    {/* Sayfalama Butonları */}
                     <div className="flex justify-center gap-4 items-center mt-4">
                         <button
                             onClick={() => paginate(currentPage - 1)}
