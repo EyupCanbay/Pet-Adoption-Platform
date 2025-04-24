@@ -24,7 +24,7 @@ function ProfileSection() {
     };
 
     useEffect(() => {
-        setUser(Users[0]);
+        setUser(Users?.data[0]);
         fetchNotifications();
     }, []);
 

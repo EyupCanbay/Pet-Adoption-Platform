@@ -3,7 +3,7 @@ import React from "react";
 
 function Advert({ id, pet }) {
     //? GELEN PET BİLGİSİNDEN USER_İD İLE BİRLİKTE FETCHSİNGLEUSER ÇALIŞARAK OWNER BİLGİLERİNE ULAŞILACAK
-    console.log(pet);
+    // console.log(pet);
     return (
         <div key={id} className="flex flex-col rounded-md shadow-md h-full">
             <div className="border-b-2">
