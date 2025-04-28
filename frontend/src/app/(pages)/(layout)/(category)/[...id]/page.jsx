@@ -13,7 +13,7 @@ function CategoryPage() {
   const categorySlug = searchParams.get("name") || "";
 
   const [filteredListings, setFilteredListings] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (!categorySlug) return;
 
@@ -31,6 +31,7 @@ function CategoryPage() {
     });
 
     setFilteredListings(filtered || []);
+    setLoading(false)
 
   }, [categorySlug]);
 
@@ -49,6 +50,14 @@ function CategoryPage() {
   const startIndex = (currentPage - 1) * advertsPerPage;
   const displayedAdverts = filteredListings.slice(startIndex, startIndex + advertsPerPage);
 
+  if (loading) {
+    return (
+      <div>
+        <Loading />
+      </div>
+    )
+  }
+
   return (
     <div className="p-4 mx-auto max-w-7xl">
       <h1 className="text-2xl font-bold my-4 text-start border-b-2 border-gray-200 text-gray-600">
@@ -62,7 +71,7 @@ function CategoryPage() {
         {displayedAdverts.length > 0 ? (
           displayedAdverts.map((pet) => (
             <Link
-              key={pet.user_id}
+              key={pet.user_id + Math.random()}
               href={{
                 pathname: `/advert/${slugify(pet.petName).toLowerCase()}`,
                 query: { pet: slugify(pet.petName).toLowerCase() },
@@ -72,35 +81,48 @@ function CategoryPage() {
             </Link>
           ))
         ) : (
-          <div className="col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-4 flex justify-center items-center">
-            <Loading />
+          <div className="col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-4 flex flex-col justify-center items-center py-12 text-center">
+            <div className="text-4xl mb-4 text-gray-400">
+              🐾
+            </div>
+            <h2 className="text-lg md:text-xl font-semibold text-gray-600">
+              Bu kategoriye ait ilan bulunamadı
+            </h2>
+            <p className="mt-2 text-sm text-gray-400">
+              Yakında yeni ilanlar eklenebilir, takipte kalın!
+            </p>
           </div>
+
         )}
       </div>
 
-      <div className="flex justify-center gap-4 items-center mt-6">
-        <button
-          onClick={() => paginate(currentPage - 1)}
-          disabled={currentPage === 1}
-          className={`flex items-center p-3 rounded-full  ${currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-indigo-600 text-white hover:bg-indigo-800 cursor-pointer"
-            }`}
-        >
-          <FaArrowLeft />
-        </button>
+      {
+        displayedAdverts.length > 0 && (
+          <div className="flex justify-center gap-4 items-center mt-6">
+            <button
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`flex items-center p-3 rounded-full  ${currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-indigo-600 text-white hover:bg-indigo-800 cursor-pointer"
+                }`}
+            >
+              <FaArrowLeft />
+            </button>
 
-        <div className="text-lg font-medium text-gray-600">
-          Page {currentPage} of {totalPages}
-        </div>
+            <div className="text-lg font-medium text-gray-600">
+              Page {currentPage} of {totalPages}
+            </div>
 
-        <button
-          onClick={() => paginate(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className={`flex items-center p-3 rounded-full  ${currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-indigo-600 text-white hover:bg-indigo-800 cursor-pointer"
-            }`}
-        >
-          <FaArrowRight />
-        </button>
-      </div>
+            <button
+              onClick={() => paginate(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={`flex items-center p-3 rounded-full  ${currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-indigo-600 text-white hover:bg-indigo-800 cursor-pointer"
+                }`}
+            >
+              <FaArrowRight />
+            </button>
+          </div>
+        )
+      }
     </div>
   );
 }

@@ -13,8 +13,8 @@ import slugify from "slugify";
 
 function AnotherProfile() {
     const params = useParams();
-    const id = Array.isArray(params?.id) ? params.id[0] : params?.id;
-
+    const userName = Array.isArray(params?.slug) ? params.slug[0] : params?.slug;
+    const id = Users?.data?.find((user) => slugify(user.userName) === userName)?._id;
     const [user, setUser] = useState(null);
     const [adverts, setAdverts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -73,7 +73,7 @@ function AnotherProfile() {
                             >
                                 {displayedAdverts.map((advert) => (
                                     <Link
-                                        key={advert._id + (advert.user_id / Math.random())}
+                                        key={Math.random() + Math.random()}
                                         href={{
                                             pathname: `/advert/${slugify(advert.petName).toLowerCase()}`,
                                             query: { pet: slugify(advert.petName).toLowerCase() },
