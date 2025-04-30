@@ -12,6 +12,7 @@ router.post('/:listing_id/bookmarks', checkUser, petListingController.addPetList
 router.post('/:listing_id/comment', checkUser, petListingCommentController.createPetListingComment)
 router.get('/:listing_id/comment', checkUser, petListingCommentController.getAllPetListingComments)
 router.delete('/:listing_id/comment/:comment_id', checkUser, petListingCommentController.deletePetListingComment)
+router.put('/:listing_id/comment/:comment_id', checkUser, petListingCommentController.updatePetListingComment)
 router.post('/:listing_id/comment/:comment_id/reply_comment', checkUser, petListingCommentController.createReplyComment)
 router.get('/:listing_id/comment/:comment_id/reply_comment', checkUser, petListingCommentController.getAllSubComments)
 router.delete('/:listing_id/comment/:comment_id/reply_comment/:reply_id', checkUser, petListingCommentController.deleteSubComment)
