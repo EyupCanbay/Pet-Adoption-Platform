@@ -16,6 +16,7 @@ router.put('/:listing_id/comment/:comment_id', checkUser, petListingCommentContr
 router.post('/:listing_id/comment/:comment_id/reply_comment', checkUser, petListingCommentController.createReplyComment)
 router.get('/:listing_id/comment/:comment_id/reply_comment', checkUser, petListingCommentController.getAllSubComments)
 router.delete('/:listing_id/comment/:comment_id/reply_comment/:reply_id', checkUser, petListingCommentController.deleteSubComment)
+router.put('/:listing_id/comment/:comment_id/reply_comment/:reply_id', checkUser, petListingCommentController.updatePetListingSubComment)
 
 
 module.exports = router

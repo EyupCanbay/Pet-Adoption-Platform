@@ -255,7 +255,6 @@ async function updatePetListingComment(req, res, next) {
     }
 }
 
-
 async function createReplyComment(req, res, next) {
     const session = await mongoose.startSession();
     session.startTransaction();
@@ -453,6 +452,119 @@ async function deleteSubComment(req, res, next) {
     }
 }
 
+async function updatePetListingSubComment(req, res, next) {
+    try {
+        const subCommentId = validateObjectId(req.params.reply_id); // Sub comment ID'si
+        const userId = validateObjectId(req.user._id); // Kullanıcı ID'si
+        const content = req.body.content; // Güncellenmiş içerik
+
+        if (!content || content.trim() === "") {
+            return responseHandler.error({
+                res,
+                statusCode: Enum.HTTP_CODES.BAD_REQUEST,
+                message: "Content is required to update the sub-comment.",
+            });
+        }
+
+        // Sub comment'i bulma
+        const subComment = await ReplyComment.aggregate([
+            { $match: { _id: subCommentId } }, // Sub comment ID'si ile eşleşme
+            {
+                $lookup: {
+                    from: "comments", // Comment koleksiyonuyla birleştir
+                    localField: "comment_id",
+                    foreignField: "_id",
+                    as: "commentDetails",
+                },
+            },
+            { $unwind: "$commentDetails" }, // Tek bir comment ile birleştirilir
+            {
+                $lookup: {
+                    from: "petlistings", // İlan bilgilerini eklemek için
+                    localField: "commentDetails.adoption_listing_id",
+                    foreignField: "_id",
+                    as: "adoptionListingDetails",
+                },
+            },
+            { $unwind: "$adoptionListingDetails" }, // Tek bir ilan ile birleştirilir
+            {
+                $lookup: {
+                    from: "users", // İlan sahibinin bilgilerini eklemek için
+                    localField: "adoptionListingDetails.user_id",
+                    foreignField: "_id",
+                    as: "listingOwnerDetails",
+                },
+            },
+            { $unwind: "$listingOwnerDetails" }, // Tek bir kullanıcı ile birleştirilir
+            {
+                $project: {
+                    _id: 1,
+                    user_id: 1,
+                    content: 1,
+                    createdAt: 1,
+                    "commentDetails.user_id": 1,
+                    "adoptionListingDetails.user_id": 1,
+                },
+            },
+        ]);
+
+
+        if (!subComment || subComment.length === 0) {
+            return responseHandler.error({
+                res,
+                statusCode: Enum.HTTP_CODES.NOT_FOUND,
+                message: "Sub-comment not found.",
+            });
+        }
+
+
+        const commentDetails = subComment[0].commentDetails;
+        const adoptionListingDetails = subComment[0].adoptionListingDetails;
+
+        // authorization check:
+        // match sub comment with User id on local user
+        // match comment owner with user id on local
+        // if authenticate is admin
+        // if listing owner and local user id match 
+        console.log(subComment)
+
+        const isAuthorized =
+            subComment[0].user_id.toString() === userId.toString() || 
+            req.user.role === "ADMIN" ||
+            commentDetails.user_id.toString() === userId.toString() ||
+            adoptionListingDetails.user_id.toString() === userId.toString();
+
+console.log(isAuthorized)
+        if (!isAuthorized) {
+            return responseHandler.error({
+                res,
+                statusCode: Enum.HTTP_CODES.FORBIDDEN,
+                message: "You do not have permission to update this sub-comment.",
+            });
+        }
+
+        console.log(subCommentId)
+
+
+        const updatedSubComment = await ReplyComment.findByIdAndUpdate(subCommentId, { content }, { new: true });
+
+        return responseHandler.success({
+            res,
+            statusCode: Enum.HTTP_CODES.OK,
+            message: "Sub-comment successfully updated.",
+            data: updatedSubComment,
+        });
+    } catch (error) {
+        return responseHandler.error({
+            res,
+            statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR,
+            message: "Failed to update the sub-comment.",
+            error,
+        });
+    }
+}
+
+
 module.exports = {
     createPetListingComment,
     getAllPetListingComments,
@@ -460,5 +572,6 @@ module.exports = {
     createReplyComment,
     getAllSubComments,
     deleteSubComment,
-    updatePetListingComment
+    updatePetListingComment,
+    updatePetListingSubComment
 }
