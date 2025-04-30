@@ -217,9 +217,67 @@ async function createReplyComment(req, res, next) {
     }
 }
 
+async function getAllSubComments(req, res, next) {
+    try {
+        const commentId = validateObjectId(req.params.comment_id); 
+        const page = Number(req.query.page) || 1; 
+        const limit = Number(req.query.limit) || 10; 
+        const skip = (page - 1) * limit; 
+
+        const subComments = await Comment.aggregate([
+            { $match: { _id: commentId } },
+            {
+                $lookup: {
+                    from: "replycomments", 
+                    localField: "reply_comment_id", 
+                    foreignField: "_id", 
+                    as: "subComments" 
+                }
+            },
+            { $unwind: "$subComments" }, 
+            {
+                $lookup: {
+                    from: "users", 
+                    localField: "subComments.user_id",
+                    foreignField: "_id", 
+                    as: "userDetails" 
+                }
+            },
+            { $unwind: "$userDetails" }, 
+            {
+                $project: { 
+                    "subComments._id": 1,
+                    "subComments.content": 1,
+                    "subComments.createdAt": 1,
+                    "userDetails.userName": 1,
+                    "userDetails.profilePhoto": 1
+                }
+            },
+            { $sort: { "subComments.createdAt": -1 } }, 
+            { $skip: skip }, 
+            { $limit: limit } 
+        ]);
+
+        return responseHandler.success({
+            res,
+            statusCode: Enum.HTTP_CODES.OK,
+            message: "Successfully fetched subComments",
+            data: subComments
+        });
+    } catch (error) {
+        return responseHandler.error({
+            res,
+            statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR,
+            message: "Failed to fetch subComments",
+            error
+        });
+    }
+}
+
 module.exports = {
     createComment,
     getAllComments,
     deleteComment,
-    createReplyComment
+    createReplyComment,
+    getAllSubComments
 }

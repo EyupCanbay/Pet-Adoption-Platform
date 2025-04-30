@@ -12,7 +12,8 @@ router.post('/:listing_id/bookmarks', checkUser, listingController.addBookmarks)
 router.post('/:listing_id/comment', checkUser, commentController.createComment)
 router.get('/:listing_id/comment', checkUser, commentController.getAllComments)
 router.delete('/:listing_id/comment/:comment_id', checkUser, commentController.deleteComment)
-router.post('/:lisitng_id/comment/:comment_id/reply_comment/',checkUser, commentController.createReplyComment)
+router.post('/:lisitng_id/comment/:comment_id/reply_comment',checkUser, commentController.createReplyComment)
+router.get('/:lisitng_id/comment/:comment_id/reply_comment', checkUser, commentController.getAllSubComments )
 
 
 module.exports = router

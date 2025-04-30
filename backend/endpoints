@@ -40,10 +40,10 @@ LOST_PET_LISTING
 + POST      /lost_listing/:lisitng_id/comment/                    -kayıp ilana yorum yap
 - PUT       /lost_listing/:lisitng_id/comment/:comment_id            -kayıp ilanın belirli yorumunu güncelle  (sadece yorum atan)
 + DELETE    /lost_listing/:lisitng_id/comment/:comment_id                    -kayıp ilanın belirli yorumunu sil  (sadece yorum atan ve ilan sahibi)
--GET       /lost_listing/:lisitng_id/comment/:comment_id/reply_comment     -kayıp ilanın belirli yorumunun yorumlarını getir (admin, user)
++ GET       /lost_listing/:lisitng_id/comment/:comment_id/reply_comment     -kayıp ilanın belirli yorumunun yorumlarını getir (admin, user)
 -PUT       /lost_listing/:lisitng_id/comment/:comment_id/reply_comment/:reply_id    -kayıp ilalnın belirli yorumunun belirli yorumunu güncelle (yorum ve ilan sahibi)
 -DELETE    /lost_listing/:lisitng_id/comment/:comment_id/reply_comment/:reply_id -kayıp ilalnın belirli yorumunun belirli yorumunu güncelle (yorum ve ilan sahibi)
--POST      /lost_listing/:lisitng_id/comment/:comment_id/reply_comment/         -kayıp ilanın yorumuna yorum yap
++ POST      /lost_listing/:lisitng_id/comment/:comment_id/reply_comment/         -kayıp ilanın yorumuna yorum yap
 
 
 ADOPTION_LISTING
