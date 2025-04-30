@@ -199,10 +199,84 @@ async function deletePetListingComment(req, res, next) {
     }
 }
 
+async function createReplyComment(req, res, next) {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        const userId = validateObjectId(req.user?._id); 
+        const commentId = validateObjectId(req.params.comment_id); 
+        const listingId = validateObjectId(req.params.listing_id); 
+        const content = req.body.content; 
+
+        if (!userId || !commentId || !listingId || !content) {
+            return responseHandler.error({
+                res,
+                statusCode: Enum.HTTP_CODES.BAD_REQUEST,
+                message: "required feild userId, commentId, listingId or content",
+            });
+        }
+
+        const petListing = await PetListing.findById(listingId).session(session);
+        if (!petListing) {
+            return responseHandler.error({
+                res,
+                statusCode: Enum.HTTP_CODES.NOT_FOUND,
+                message: "pet lsiting not found",
+            });
+        }
+
+        const replyComment = await ReplyComment.create(
+            [
+                {
+                    user_id: userId,
+                    comment_id: commentId,
+                    content: content,
+                },
+            ],
+            { session }
+        );
+
+        await Comment.findByIdAndUpdate(
+            commentId,
+            { $push: { reply_comment_id: replyComment[0]._id } },
+            { session }
+        );
+
+        await session.commitTransaction();
+        session.endSession();
+
+        Auditlog.info(
+            req.user?.userName,
+            "ReplyComment",
+            "Post",
+            `Created a reply comment for PetListing ID: ${listingId}`
+        );
+
+        return responseHandler.success({
+            res,
+            statusCode: Enum.HTTP_CODES.OK,
+            message: "succesfuly created sub comment",
+            data: replyComment[0],
+        });
+    } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
+
+        return responseHandler.error({
+            res,
+            statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR,
+            message: "Did not create sub comment",
+            error,
+        });
+    }
+}
+
 
 
 module.exports = {
     createPetListingComment,
     getAllPetListingComments,
-    deletePetListingComment
+    deletePetListingComment,
+    createReplyComment
 }

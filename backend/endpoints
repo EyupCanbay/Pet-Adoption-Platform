@@ -61,7 +61,7 @@ ADOPTION_LISTING
 -GET       /listing/:lisitng_id/comment/:comment_id/reply_comment     -ilanın belirli yorumunun yorumlarını getir (admin, user)
 -PUT       /listing/:lisitng_id/comment/:comment_id/reply_comment/:reply_id    -ilalnın belirli yorumunun belirli yorumunu güncelle (yorum ve ilan sahibi)
 -DELETE    /listing/:lisitng_id/comment/:comment_id/reply_comment/:reply_id -ilalnın belirli yorumunun belirli yorumunu güncelle (yorum ve ilan sahibi)
--POST      /listing/:lisitng_id/comment/:comment_id/reply_comment/         -ilanın yorumuna yorum yap
++ POST      /listing/:lisitng_id/comment/:comment_id/reply_comment/         -ilanın yorumuna yorum yap
 
 
 Categories (Kategoriler): (admin)
