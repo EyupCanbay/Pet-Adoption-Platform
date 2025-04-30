@@ -1,7 +1,7 @@
 const Enum = require("../config/enum")
 const responseHandler = require("../utils/responseHandler")
 const Auditlog  = require('../utils/auditlog_save.js');
-const { User, LostPetListing, Comment } = require('../models/index.js')
+const { User, LostPetListing, Comment, ReplyComment } = require('../models/index.js')
 const { validateObjectId } = require('../validators/object_validate.js')
 const mongoose = require("mongoose");
 
@@ -92,6 +92,7 @@ async function getAllComments(req,res,next) {
             },
             { 
                 $project: {
+                    "comments._id": 1,
                     "comments.createdAt": 1,
                     "comments.content": 1,
                     "users.userName": 1
@@ -156,9 +157,69 @@ async function deleteComment(req,res,next) {
     }
 }
 
+async function createReplyComment(req, res, next) {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+
+        const userId = req.user?._id;
+        const commentId = req.params.comment_id; 
+        const lostListing = req.params.listing_id;
+        const content = req.body.content; 
+
+        if (!userId || !commentId || !content) {
+            return responseHandler.error({
+                res,
+                statusCode: Enum.HTTP_CODES.BAD_REQUEST,
+                message: "User ID, comment ID ve içerik gereklidir.",
+            });
+        }
+
+        const replyComment = await ReplyComment.create(
+            [
+                {
+                    user_id: userId,
+                    comment_id: commentId,
+                    content: content,
+                },
+            ],
+            { session }
+        );
+
+        await Comment.findByIdAndUpdate(
+            commentId,
+            { $push: { reply_comment_id: replyComment[0]._id } }, 
+            { session }
+        );
+
+        await session.commitTransaction();
+        session.endSession();
+
+        Auditlog.info(req.user?.userName, "ReplyComment", "Post", "Create a reply comment");
+
+        return responseHandler.success({
+            res,
+            statusCode: Enum.HTTP_CODES.OK,
+            message: "Succesfuly created the reply comment",
+            data: replyComment[0],
+        });
+    } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
+
+        return responseHandler.error({
+            res,
+            statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR,
+            message: "Reply comment oluşturulamadi veya ana yorum güncellenemedi.",
+            error,
+        });
+    }
+}
 
 module.exports = {
     createComment,
     getAllComments,
-    deleteComment
+    deleteComment,
+    createReplyComment
 }
