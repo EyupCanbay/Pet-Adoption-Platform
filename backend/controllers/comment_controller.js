@@ -274,10 +274,83 @@ async function getAllSubComments(req, res, next) {
     }
 }
 
+async function deleteSubComment(req, res, next) {
+    try {
+
+        const userId = validateObjectId(req.user._id); 
+
+        const commentId = validateObjectId(req.params.comment_id); 
+
+        const subCommentId = validateObjectId(req.params.reply_id); 
+
+
+        const subComment = await ReplyComment.aggregate([
+            { $match: { _id: subCommentId } }, 
+            {
+                $lookup: {
+                    from: "comments", 
+                    localField: "comment_id", 
+                    foreignField: "_id",
+                    as: "parentComment"
+                }
+            },
+            { $unwind: "$parentComment" }, 
+            {
+                $project: {
+                    user_id: 1, 
+                    "parentComment.user_id": 1 
+                }
+            }
+        ]);
+
+        if (!subComment || subComment.length === 0) {
+            return responseHandler.error({
+                res,
+                statusCode: Enum.HTTP_CODES.NOT_FOUND,
+                message: "Sub-comment not found"
+            });
+        }
+
+        const subCommentData = subComment[0];
+
+        // permission check
+
+        if (
+            subCommentData.user_id.toString() === userId.toString() || 
+            subCommentData.parentComment.user_id.toString() === userId.toString() || 
+            req.user.role === "ADMIN" 
+        ) {
+            await ReplyComment.findByIdAndDelete({ _id: subCommentId }); // Alt yorumu sil
+
+            return responseHandler.success({
+                res,
+                statusCode: Enum.HTTP_CODES.OK,
+                message: "Successfully deleted the sub-comment"
+            });
+        } else {
+
+            return responseHandler.error({
+                res,
+                statusCode: Enum.HTTP_CODES.FORBIDDEN,
+                message: "You do not have permission to delete this sub-comment"
+            });
+        }
+
+    } catch (error) {
+        return responseHandler.error({
+            res,
+            statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR,
+            message: "Failed to delete the sub-comment",
+            error
+        });
+    }
+}
+
 module.exports = {
     createComment,
     getAllComments,
     deleteComment,
     createReplyComment,
-    getAllSubComments
+    getAllSubComments,
+    deleteSubComment
 }

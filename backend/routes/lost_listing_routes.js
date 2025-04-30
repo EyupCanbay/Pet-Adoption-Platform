@@ -14,6 +14,7 @@ router.get('/:listing_id/comment', checkUser, commentController.getAllComments)
 router.delete('/:listing_id/comment/:comment_id', checkUser, commentController.deleteComment)
 router.post('/:lisitng_id/comment/:comment_id/reply_comment',checkUser, commentController.createReplyComment)
 router.get('/:lisitng_id/comment/:comment_id/reply_comment', checkUser, commentController.getAllSubComments )
+router.delete('/:lisitng_id/comment/:comment_id/reply_comment/:reply_id', checkUser, commentController.deleteSubComment)
 
 
 module.exports = router
