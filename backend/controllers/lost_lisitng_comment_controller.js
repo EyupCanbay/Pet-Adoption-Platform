@@ -346,11 +346,114 @@ async function deleteSubComment(req, res, next) {
     }
 }
 
+
+async function updateLostListingSubComment(req, res, next) {
+    try {
+        const subCommentId = validateObjectId(req.params.reply_id); 
+        const userId = validateObjectId(req.user._id); 
+        const content = req.body.content; 
+
+        if (!content || content.trim() === "") {
+            return responseHandler.error({
+                res,
+                statusCode: Enum.HTTP_CODES.BAD_REQUEST,
+                message: "Content is required to update the sub-comment.",
+            });
+        }
+
+        
+        const subComment = await ReplyComment.aggregate([
+            { $match: { _id: subCommentId } }, 
+            {
+                $lookup: {
+                    from: "comments", 
+                    localField: "comment_id",
+                    foreignField: "_id",
+                    as: "commentDetails",
+                },
+            },
+            { $unwind: "$commentDetails" }, 
+            {
+                $lookup: {
+                    from: "lostpetlistings", 
+                    localField: "commentDetails.lost_listing_id",
+                    foreignField: "_id",
+                    as: "lostListingDetails",
+                },
+            },
+            { $unwind: "$lostListingDetails" }, 
+            {
+                $lookup: {
+                    from: "users", 
+                    localField: "lostListingDetails.user_id",
+                    foreignField: "_id",
+                    as: "listingOwnerDetails",
+                },
+            },
+            { $unwind: "$listingOwnerDetails" },
+            {
+                $project: {
+                    _id: 1,
+                    user_id: 1,
+                    content: 1,
+                    createdAt: 1,
+                    "commentDetails.user_id": 1,
+                    "lostListingDetails.user_id": 1,
+                },
+            },
+        ]);
+
+        if (!subComment || subComment.length === 0) {
+            return responseHandler.error({
+                res,
+                statusCode: Enum.HTTP_CODES.NOT_FOUND,
+                message: "Sub-comment not found.",
+            });
+        }
+
+        const commentDetails = subComment[0].commentDetails;
+        const lostListingDetails = subComment[0].lostListingDetails;
+
+        
+        const isAuthorized =
+            subComment[0].user_id.toString() === userId.toString() || 
+            req.user.role === "ADMIN" ||
+            commentDetails.user_id.toString() === userId.toString() ||
+            lostListingDetails.user_id.toString() === userId.toString();
+
+        if (!isAuthorized) {
+            return responseHandler.error({
+                res,
+                statusCode: Enum.HTTP_CODES.FORBIDDEN,
+                message: "You do not have permission to update this sub-comment.",
+            });
+        }
+
+        
+        const updatedSubComment = await ReplyComment.findByIdAndUpdate(subCommentId, { content }, { new: true });
+
+        return responseHandler.success({
+            res,
+            statusCode: Enum.HTTP_CODES.OK,
+            message: "Sub-comment successfully updated.",
+            data: updatedSubComment,
+        });
+    } catch (error) {
+        return responseHandler.error({
+            res,
+            statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR,
+            message: "Failed to update the sub-comment.",
+            error,
+        });
+    }
+}
+
 module.exports = {
     createComment,
     getAllComments,
     deleteComment,
     createReplyComment,
     getAllSubComments,
-    deleteSubComment
+    deleteSubComment,
+    updateLostListingSubComment
 }
