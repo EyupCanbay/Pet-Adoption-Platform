@@ -1,12 +1,10 @@
 const { PetListing, Comment, ReplyComment, Notification, User, Address } = require('../models/index')
 const responseHandler = require('../utils/responseHandler')
 const Enum = require('../config/enum')
-const mongoose = require('mongoose');
 const { validateObjectId } = require('../validators/object_validate')
+const mongoose = require('mongoose');
 
 async function createLostListing(req, res, next) {
-    console.log("sadasdasd")
-
     const session = await mongoose.startSession();
     session.startTransaction();
 
@@ -15,7 +13,7 @@ async function createLostListing(req, res, next) {
         let newListing = new PetListing({
             user_id: req.user._id, 
             category_name: req.body.category_name, 
-            sub_category_name: req.body.sub_category_name, // 
+            sub_category_name: req.body.sub_category_name, 
             petName: req.body.petName, 
             age: req.body.age, 
             gender: req.body.gender, 
@@ -278,12 +276,60 @@ async function deletePetListing(req, res, next) {
     }
 }
 
+async function addPetListingBookmarks(req, res, next) {
+    const listingId = validateObjectId(req.params.listing_id); 
+    const userId = validateObjectId(req.user._id);
+    console.log(userId)
+    console.log(listingId)
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        const [user, petListing] = await Promise.all([
+            User.findById(userId).session(session),
+            PetListing.findById(listingId).lean(), // Pet listing silinmiş mi diye kontrol etmek için
+        ]);
+
+        if (!user || !petListing) {
+            return res.status(404).json({ message: "Kullanıcı veya pet listing bulunamadı" });
+        }
+
+        if (user.bookmarks.includes(listingId)) {
+            return res.status(400).json({ message: "Bu pet listing zaten favorilerde" });
+        }
+
+        user.bookmarks.push(listingId);
+        await user.save({ session });
+
+        await session.commitTransaction();
+
+        return responseHandler.success({
+            res,
+            statusCode: Enum.HTTP_CODES.OK,
+            message: "Successfully added the pet listing to your bookmarks"
+        });
+
+    } catch (error) {
+        await session.abortTransaction();
+        return responseHandler.error({
+            res,
+            statusCode: Enum.HTTP_CODES.BAD_REQUEST,
+            message: "Failed to add the pet listing to your bookmarks",
+            error
+        });
+    } finally {
+        session.endSession();
+    }
+}
+
 
 
 module.exports = {
     createLostListing,
     getPetListing,
     getAllPetListing,
-    deletePetListing
+    deletePetListing,
+    addPetListingBookmarks
 }
 

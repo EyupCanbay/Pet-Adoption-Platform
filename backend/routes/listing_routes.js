@@ -7,6 +7,7 @@ router.post('/',checkUser , petListingController.createLostListing)
 router.get('/', checkUser, petListingController.getAllPetListing)
 router.get('/:listing_id', checkUser, petListingController.getPetListing)
 router.delete('/:listing_id', checkUser, petListingController.deletePetListing)
+router.post('/:listing_id/bookmarks', checkUser, petListingController.addPetListingBookmarks)
 
 
 module.exports = router

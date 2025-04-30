@@ -51,8 +51,8 @@ ADOPTION_LISTING
 + POST      /listing       - ilan oluştur (admin, , user)
 + GET       /listing/:lisitng_id   -belirli ilanı getir (admin,, user)
 -PUT       /listing/:lisitng_id   -belirli ilani güncelle (kendisi)
--DELETE    /listing/:lisitng_id    -belirli ilanı sil (kendisi)
--POST      /listing/:listing_id/bookmarks     ilanı bookmarklara ekle ekleyen kullanıcya (admin,  user)
++ DELETE    /listing/:lisitng_id    -belirli ilanı sil (kendisi)
++ POST      /listing/:listing_id/bookmarks     ilanı bookmarklara ekle ekleyen kullanıcya (admin,  user)
 -GET       /listing/:lisitng_id/comment        ilanın yorumlarını getir  (admin, süper admin, user)
 -POST      /listing/:lisitng_id/comment/                    -ilana yorum yap
 -GET       /listing/:lisitng_id/comment/:comment_id         ilanın belirli yorumunu getir (admin,user)
