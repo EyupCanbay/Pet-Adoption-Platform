@@ -1,0 +1,872 @@
+{
+    "data": [
+        {
+            "_id": "fbcea41e-5b16-44f2-a1d4-2b2c6c8856ff",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Toy Poodle",
+            "petName": "Poodle Max",
+            "age": 2,
+            "gender": true,
+            "description": "Enerjik ve oyuncu Toy Poodle.",
+            "images": [
+                "image1.jpg",
+                "image2.jpg"
+            ],
+            "status": false,
+            "additionalInfo": {
+                "color": "Beyaz",
+                "eyeColor": "Mavi",
+                "furType": "Kısa",
+                "size": "small",
+                "weight": 3.5,
+                "vaccinated": true,
+                "neutered": true,
+                "trainability": "easy",
+                "playfulness": 4,
+                "sociality": "medium"
+            },
+            "createdAt": "2025-04-28T09:30:00Z"
+        },
+        {
+            "_id": "fc4a583e-5f86-4c17-8853-63b53405a2af",
+            "user_id": "85cd3e77-1b6c-4f23-ba2e-9dfb3a816fe4",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Pomeranian Boo",
+            "petName": "Boo Charlie",
+            "age": 3,
+            "gender": false,
+            "description": "Minik, sevimli Pomeranian Boo.",
+            "images": [
+                "image3.jpg",
+                "image4.jpg"
+            ],
+            "status": true,
+            "additionalInfo": {
+                "color": "Turuncu",
+                "eyeColor": "Kahverengi",
+                "furType": "Uzun",
+                "size": "small",
+                "weight": 4.0,
+                "vaccinated": true,
+                "neutered": false,
+                "trainability": "medium",
+                "playfulness": 5,
+                "sociality": "high"
+            },
+            "createdAt": "2025-04-27T08:15:00Z"
+        },
+        {
+            "_id": "85cd3e77-1b6c-4f23-ba2e-9dfb3a816fe4",
+            "user_id": "85cd3e77-1b6c-4f23-ba2e-9dfb3a816fe4",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Maltipoo",
+            "petName": "Maltipoo Rocky",
+            "age": 4,
+            "gender": true,
+            "description": "Sevimli ve eğlenceli bir Maltipoo.",
+            "images": [
+                "image5.jpg",
+                "image6.jpg"
+            ],
+            "status": false,
+            "additionalInfo": {
+                "color": "Kahverengi",
+                "eyeColor": "Yeşil",
+                "furType": "Orta",
+                "size": "small",
+                "weight": 4.5,
+                "vaccinated": true,
+                "neutered": true,
+                "trainability": "easy",
+                "playfulness": 4,
+                "sociality": "medium"
+            },
+            "createdAt": "2025-04-25T10:45:00Z"
+        },
+        {
+            "_id": "3c0040b2-0f69-4727-9933-57bfb55c5497",
+            "user_id": "85cd3e77-1b6c-4f23-ba2e-9dfb3a816fe4",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Maltese Terrier",
+            "petName": "Maltese Leo",
+            "age": 5,
+            "gender": false,
+            "description": "Eğlenceli ve tatlı bir Maltese.",
+            "images": [
+                "image7.jpg",
+                "image8.jpg"
+            ],
+            "status": true,
+            "additionalInfo": {
+                "color": "Beyaz",
+                "eyeColor": "Mavi",
+                "furType": "Uzun",
+                "size": "small",
+                "weight": 5.0,
+                "vaccinated": true,
+                "neutered": false,
+                "trainability": "medium",
+                "playfulness": 3,
+                "sociality": "high"
+            },
+            "createdAt": "2025-04-22T09:00:00Z"
+        },
+        {
+            "_id": "40c02f2b-d17d-49e5-9a1c-074fdffd4be4",
+            "user_id": "85cd3e77-1b6c-4f23-ba2e-9dfb3a816fe4",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Doberman",
+            "petName": "Doberman Maximus",
+            "age": 3,
+            "gender": true,
+            "description": "Güçlü ve zeki Doberman.",
+            "images": [
+                "image9.jpg",
+                "image10.jpg"
+            ],
+            "status": false,
+            "additionalInfo": {
+                "color": "Siyah",
+                "eyeColor": "Kahverengi",
+                "furType": "Kısa",
+                "size": "medium",
+                "weight": 35.0,
+                "vaccinated": true,
+                "neutered": true,
+                "trainability": "high",
+                "playfulness": 3,
+                "sociality": "medium"
+            },
+            "createdAt": "2025-04-20T10:30:00Z"
+        },
+        {
+            "_id": "03cd224e-6ae6-482d-b22c-4d28fa5c36ed",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Chihuahua",
+            "petName": "Chihuahua Bella",
+            "age": 1,
+            "gender": false,
+            "description": "Küçük ama cesur Chihuahua.",
+            "images": [
+                "image11.jpg",
+                "image12.jpg"
+            ],
+            "status": true,
+            "additionalInfo": {
+                "color": "Sarı",
+                "eyeColor": "Kahverengi",
+                "furType": "Kısa",
+                "size": "small",
+                "weight": 2.0,
+                "vaccinated": true,
+                "neutered": false,
+                "trainability": "easy",
+                "playfulness": 4,
+                "sociality": "high"
+            },
+            "createdAt": "2025-04-19T08:15:00Z"
+        },
+        {
+            "_id": "eb504659-676f-4654-b7b1-8cec179e6f6f",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Shih Tzu",
+            "petName": "Shih Tzu Puffy",
+            "age": 2,
+            "gender": true,
+            "description": "Tatlı ve sakin bir Shih Tzu.",
+            "images": [
+                "image13.jpg",
+                "image14.jpg"
+            ],
+            "status": false,
+            "additionalInfo": {
+                "color": "Beyaz",
+                "eyeColor": "Mavi",
+                "furType": "Orta",
+                "size": "small",
+                "weight": 5.0,
+                "vaccinated": true,
+                "neutered": true,
+                "trainability": "medium",
+                "playfulness": 3,
+                "sociality": "medium"
+            },
+            "createdAt": "2025-04-18T09:45:00Z"
+        },
+        {
+            "_id": "1f17bd73-6063-4f1e-b036-43c4ee4c96ea",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Rottweiler",
+            "petName": "Rottweiler Thor",
+            "age": 4,
+            "gender": true,
+            "description": "Büyük ve cesur bir Rottweiler.",
+            "images": [
+                "image15.jpg",
+                "image16.jpg"
+            ],
+            "status": true,
+            "additionalInfo": {
+                "color": "Siyah",
+                "eyeColor": "Kahverengi",
+                "furType": "Kısa",
+                "size": "large",
+                "weight": 40.0,
+                "vaccinated": true,
+                "neutered": false,
+                "trainability": "medium",
+                "playfulness": 2,
+                "sociality": "low"
+            },
+            "createdAt": "2025-04-17T10:00:00Z"
+        },
+        {
+            "_id": "a0f70cad-6338-430f-b1da-a8507e067152",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Sibirya Kurdu (Husky)",
+            "petName": "Husky Snow",
+            "age": 3,
+            "gender": false,
+            "description": "Güzel ve zeki bir Sibirya Kurdu.",
+            "images": [
+                "image17.jpg",
+                "image18.jpg"
+            ],
+            "status": false,
+            "additionalInfo": {
+                "color": "Beyaz",
+                "eyeColor": "Mavi",
+                "furType": "Uzun",
+                "size": "large",
+                "weight": 30.0,
+                "vaccinated": true,
+                "neutered": true,
+                "trainability": "high",
+                "playfulness": 5,
+                "sociality": "medium"
+            },
+            "createdAt": "2025-04-15T09:20:00Z"
+        },
+        {
+            "_id": "2b90919c-79c0-4b0b-ae6f-2db2e5b4568e",
+            "user_id": "3c2b5d38-fd92-45a2-8a53-b67c9cd2340e",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Beagle",
+            "petName": "Beagle Buddy",
+            "age": 5,
+            "gender": true,
+            "description": "Enerjik ve sadık Beagle.",
+            "images": [
+                "image19.jpg",
+                "image20.jpg"
+            ],
+            "status": true,
+            "additionalInfo": {
+                "color": "Kahverengi",
+                "eyeColor": "Yeşil",
+                "furType": "Kısa",
+                "size": "medium",
+                "weight": 12.0,
+                "vaccinated": true,
+                "neutered": true,
+                "trainability": "medium",
+                "playfulness": 4,
+                "sociality": "high"
+            },
+            "createdAt": "2025-04-14T08:25:00Z"
+        },
+        {
+            "_id": "d4e1fbf0-ccd8-47e0-b622-559c38363fa2",
+            "user_id": "3c2b5d38-fd92-45a2-8a53-b67c9cd2340e",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Bulldog",
+            "petName": "Bulldog Max",
+            "age": 4,
+            "gender": false,
+            "description": "Güçlü ve sevimli Bulldog.",
+            "images": [
+                "image21.jpg",
+                "image22.jpg"
+            ],
+            "status": false,
+            "additionalInfo": {
+                "color": "Beyaz",
+                "eyeColor": "Kahverengi",
+                "furType": "Kısa",
+                "size": "medium",
+                "weight": 20.0,
+                "vaccinated": true,
+                "neutered": true,
+                "trainability": "medium",
+                "playfulness": 3,
+                "sociality": "high"
+            },
+            "createdAt": "2025-04-13T10:10:00Z"
+        },
+        {
+            "_id": "fbcea41e-5b16-44f2-a1d4-2b2c6c8856ff",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Toy Poodle",
+            "petName": "Poodle Max",
+            "age": 2,
+            "gender": true,
+            "description": "Enerjik ve oyuncu Toy Poodle.",
+            "images": [
+                "image1.jpg",
+                "image2.jpg"
+            ],
+            "status": false,
+            "additionalInfo": {
+                "color": "Beyaz",
+                "eyeColor": "Mavi",
+                "furType": "Kısa",
+                "size": "small",
+                "weight": 3.5,
+                "vaccinated": true,
+                "neutered": true,
+                "trainability": "easy",
+                "playfulness": 4,
+                "sociality": "medium"
+            },
+            "createdAt": "2025-04-28T09:30:00Z"
+        },
+        {
+            "_id": "fc4a583e-5f86-4c17-8853-63b53405a2af",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Pomeranian Boo",
+            "petName": "Boo Charlie",
+            "age": 3,
+            "gender": false,
+            "description": "Minik, sevimli Pomeranian Boo.",
+            "images": [
+                "image3.jpg",
+                "image4.jpg"
+            ],
+            "status": true,
+            "additionalInfo": {
+                "color": "Turuncu",
+                "eyeColor": "Kahverengi",
+                "furType": "Uzun",
+                "size": "small",
+                "weight": 4.0,
+                "vaccinated": true,
+                "neutered": false,
+                "trainability": "medium",
+                "playfulness": 5,
+                "sociality": "high"
+            },
+            "createdAt": "2025-04-27T08:15:00Z"
+        },
+        {
+            "_id": "85cd3e77-1b6c-4f23-ba2e-9dfb3a816fe4",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Maltipoo",
+            "petName": "Maltipoo Rocky",
+            "age": 4,
+            "gender": true,
+            "description": "Sevimli ve eğlenceli bir Maltipoo.",
+            "images": [
+                "image5.jpg",
+                "image6.jpg"
+            ],
+            "status": false,
+            "additionalInfo": {
+                "color": "Kahverengi",
+                "eyeColor": "Yeşil",
+                "furType": "Orta",
+                "size": "small",
+                "weight": 4.5,
+                "vaccinated": true,
+                "neutered": true,
+                "trainability": "easy",
+                "playfulness": 4,
+                "sociality": "medium"
+            },
+            "createdAt": "2025-04-25T10:45:00Z"
+        },
+        {
+            "_id": "3c0040b2-0f69-4727-9933-57bfb55c5497",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Maltese Terrier",
+            "petName": "Maltese Leo",
+            "age": 5,
+            "gender": false,
+            "description": "Eğlenceli ve tatlı bir Maltese.",
+            "images": [
+                "image7.jpg",
+                "image8.jpg"
+            ],
+            "status": true,
+            "additionalInfo": {
+                "color": "Beyaz",
+                "eyeColor": "Mavi",
+                "furType": "Uzun",
+                "size": "small",
+                "weight": 5.0,
+                "vaccinated": true,
+                "neutered": false,
+                "trainability": "medium",
+                "playfulness": 3,
+                "sociality": "high"
+            },
+            "createdAt": "2025-04-22T09:00:00Z"
+        },
+        {
+            "_id": "40c02f2b-d17d-49e5-9a1c-074fdffd4be4",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Doberman",
+            "petName": "Doberman Maximus",
+            "age": 3,
+            "gender": true,
+            "description": "Güçlü ve zeki Doberman.",
+            "images": [
+                "image9.jpg",
+                "image10.jpg"
+            ],
+            "status": false,
+            "additionalInfo": {
+                "color": "Siyah",
+                "eyeColor": "Kahverengi",
+                "furType": "Kısa",
+                "size": "medium",
+                "weight": 35.0,
+                "vaccinated": true,
+                "neutered": true,
+                "trainability": "high",
+                "playfulness": 3,
+                "sociality": "medium"
+            },
+            "createdAt": "2025-04-20T10:30:00Z"
+        },
+        {
+            "_id": "03cd224e-6ae6-482d-b22c-4d28fa5c36ed",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Chihuahua",
+            "petName": "Chihuahua Bella",
+            "age": 1,
+            "gender": false,
+            "description": "Küçük ama cesur Chihuahua.",
+            "images": [
+                "image11.jpg",
+                "image12.jpg"
+            ],
+            "status": true,
+            "additionalInfo": {
+                "color": "Sarı",
+                "eyeColor": "Kahverengi",
+                "furType": "Kısa",
+                "size": "small",
+                "weight": 2.0,
+                "vaccinated": true,
+                "neutered": false,
+                "trainability": "easy",
+                "playfulness": 4,
+                "sociality": "high"
+            },
+            "createdAt": "2025-04-19T08:15:00Z"
+        },
+        {
+            "_id": "eb504659-676f-4654-b7b1-8cec179e6f6f",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Shih Tzu",
+            "petName": "Shih Tzu Puffy",
+            "age": 2,
+            "gender": true,
+            "description": "Tatlı ve sakin bir Shih Tzu.",
+            "images": [
+                "image13.jpg",
+                "image14.jpg"
+            ],
+            "status": false,
+            "additionalInfo": {
+                "color": "Beyaz",
+                "eyeColor": "Mavi",
+                "furType": "Orta",
+                "size": "small",
+                "weight": 5.0,
+                "vaccinated": true,
+                "neutered": true,
+                "trainability": "medium",
+                "playfulness": 3,
+                "sociality": "medium"
+            },
+            "createdAt": "2025-04-18T09:45:00Z"
+        },
+        {
+            "_id": "1f17bd73-6063-4f1e-b036-43c4ee4c96ea",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Rottweiler",
+            "petName": "Rottweiler Thor",
+            "age": 4,
+            "gender": true,
+            "description": "Büyük ve cesur bir Rottweiler.",
+            "images": [
+                "image15.jpg",
+                "image16.jpg"
+            ],
+            "status": true,
+            "additionalInfo": {
+                "color": "Siyah",
+                "eyeColor": "Kahverengi",
+                "furType": "Kısa",
+                "size": "large",
+                "weight": 40.0,
+                "vaccinated": true,
+                "neutered": false,
+                "trainability": "medium",
+                "playfulness": 2,
+                "sociality": "low"
+            },
+            "createdAt": "2025-04-17T10:00:00Z"
+        },
+        {
+            "_id": "a0f70cad-6338-430f-b1da-a8507e067152",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Sibirya Kurdu (Husky)",
+            "petName": "Husky Snow",
+            "age": 3,
+            "gender": false,
+            "description": "Güzel ve zeki bir Sibirya Kurdu.",
+            "images": [
+                "image17.jpg",
+                "image18.jpg"
+            ],
+            "status": false,
+            "additionalInfo": {
+                "color": "Beyaz",
+                "eyeColor": "Mavi",
+                "furType": "Uzun",
+                "size": "large",
+                "weight": 30.0,
+                "vaccinated": true,
+                "neutered": true,
+                "trainability": "high",
+                "playfulness": 5,
+                "sociality": "medium"
+            },
+            "createdAt": "2025-04-15T09:20:00Z"
+        },
+        {
+            "_id": "fbcea41e-5b16-44f2-a1d4-2b2c6c8856ff",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Toy Poodle",
+            "petName": "Poodle Max",
+            "age": 2,
+            "gender": true,
+            "description": "Enerjik ve oyuncu Toy Poodle.",
+            "images": [
+                "image1.jpg",
+                "image2.jpg"
+            ],
+            "status": false,
+            "additionalInfo": {
+                "color": "Beyaz",
+                "eyeColor": "Mavi",
+                "furType": "Kısa",
+                "size": "small",
+                "weight": 3.5,
+                "vaccinated": true,
+                "neutered": true,
+                "trainability": "easy",
+                "playfulness": 4,
+                "sociality": "medium"
+            },
+            "createdAt": "2025-04-28T09:30:00Z"
+        },
+        {
+            "_id": "fc4a583e-5f86-4c17-8853-63b53405a2af",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Pomeranian Boo",
+            "petName": "Boo Charlie",
+            "age": 3,
+            "gender": false,
+            "description": "Minik, sevimli Pomeranian Boo.",
+            "images": [
+                "image3.jpg",
+                "image4.jpg"
+            ],
+            "status": true,
+            "additionalInfo": {
+                "color": "Turuncu",
+                "eyeColor": "Kahverengi",
+                "furType": "Uzun",
+                "size": "small",
+                "weight": 4.0,
+                "vaccinated": true,
+                "neutered": false,
+                "trainability": "medium",
+                "playfulness": 5,
+                "sociality": "high"
+            },
+            "createdAt": "2025-04-27T08:15:00Z"
+        },
+        {
+            "_id": "85cd3e77-1b6c-4f23-ba2e-9dfb3a816fe4",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Maltipoo",
+            "petName": "Maltipoo Rocky",
+            "age": 4,
+            "gender": true,
+            "description": "Sevimli ve eğlenceli bir Maltipoo.",
+            "images": [
+                "image5.jpg",
+                "image6.jpg"
+            ],
+            "status": false,
+            "additionalInfo": {
+                "color": "Kahverengi",
+                "eyeColor": "Yeşil",
+                "furType": "Orta",
+                "size": "small",
+                "weight": 4.5,
+                "vaccinated": true,
+                "neutered": true,
+                "trainability": "easy",
+                "playfulness": 4,
+                "sociality": "medium"
+            },
+            "createdAt": "2025-04-25T10:45:00Z"
+        },
+        {
+            "_id": "3c0040b2-0f69-4727-9933-57bfb55c5497",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Maltese Terrier",
+            "petName": "Maltese Leo",
+            "age": 5,
+            "gender": false,
+            "description": "Eğlenceli ve tatlı bir Maltese.",
+            "images": [
+                "image7.jpg",
+                "image8.jpg"
+            ],
+            "status": true,
+            "additionalInfo": {
+                "color": "Beyaz",
+                "eyeColor": "Mavi",
+                "furType": "Uzun",
+                "size": "small",
+                "weight": 5.0,
+                "vaccinated": true,
+                "neutered": false,
+                "trainability": "medium",
+                "playfulness": 3,
+                "sociality": "high"
+            },
+            "createdAt": "2025-04-22T09:00:00Z"
+        },
+        {
+            "_id": "40c02f2b-d17d-49e5-9a1c-074fdffd4be4",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Doberman",
+            "petName": "Doberman Maximus",
+            "age": 3,
+            "gender": true,
+            "description": "Güçlü ve zeki Doberman.",
+            "images": [
+                "image9.jpg",
+                "image10.jpg"
+            ],
+            "status": false,
+            "additionalInfo": {
+                "color": "Siyah",
+                "eyeColor": "Kahverengi",
+                "furType": "Kısa",
+                "size": "medium",
+                "weight": 35.0,
+                "vaccinated": true,
+                "neutered": true,
+                "trainability": "high",
+                "playfulness": 3,
+                "sociality": "medium"
+            },
+            "createdAt": "2025-04-20T10:30:00Z"
+        },
+        {
+            "_id": "03cd224e-6ae6-482d-b22c-4d28fa5c36ed",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Chihuahua",
+            "petName": "Chihuahua Bella",
+            "age": 1,
+            "gender": false,
+            "description": "Küçük ama cesur Chihuahua.",
+            "images": [
+                "image11.jpg",
+                "image12.jpg"
+            ],
+            "status": true,
+            "additionalInfo": {
+                "color": "Sarı",
+                "eyeColor": "Kahverengi",
+                "furType": "Kısa",
+                "size": "small",
+                "weight": 2.0,
+                "vaccinated": true,
+                "neutered": false,
+                "trainability": "easy",
+                "playfulness": 4,
+                "sociality": "high"
+            },
+            "createdAt": "2025-04-19T08:15:00Z"
+        },
+        {
+            "_id": "eb504659-676f-4654-b7b1-8cec179e6f6f",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Shih Tzu",
+            "petName": "Shih Tzu Puffy",
+            "age": 2,
+            "gender": true,
+            "description": "Tatlı ve sakin bir Shih Tzu.",
+            "images": [
+                "image13.jpg",
+                "image14.jpg"
+            ],
+            "status": false,
+            "additionalInfo": {
+                "color": "Beyaz",
+                "eyeColor": "Mavi",
+                "furType": "Orta",
+                "size": "small",
+                "weight": 5.0,
+                "vaccinated": true,
+                "neutered": true,
+                "trainability": "medium",
+                "playfulness": 3,
+                "sociality": "medium"
+            },
+            "createdAt": "2025-04-18T09:45:00Z"
+        },
+        {
+            "_id": "1f17bd73-6063-4f1e-b036-43c4ee4c96ea",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Rottweiler",
+            "petName": "Rottweiler Thor",
+            "age": 4,
+            "gender": true,
+            "description": "Büyük ve cesur bir Rottweiler.",
+            "images": [
+                "image15.jpg",
+                "image16.jpg"
+            ],
+            "status": true,
+            "additionalInfo": {
+                "color": "Siyah",
+                "eyeColor": "Kahverengi",
+                "furType": "Kısa",
+                "size": "large",
+                "weight": 40.0,
+                "vaccinated": true,
+                "neutered": false,
+                "trainability": "medium",
+                "playfulness": 2,
+                "sociality": "low"
+            },
+            "createdAt": "2025-04-17T10:00:00Z"
+        },
+        {
+            "_id": "a0f70cad-6338-430f-b1da-a8507e067152",
+            "user_id": "1417c9b2-4a28-4129-9e96-418bd7bff3cf",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Sibirya Kurdu (Husky)",
+            "petName": "Husky Snow",
+            "age": 3,
+            "gender": false,
+            "description": "Güzel ve zeki bir Sibirya Kurdu.",
+            "images": [
+                "image17.jpg",
+                "image18.jpg"
+            ],
+            "status": false,
+            "additionalInfo": {
+                "color": "Beyaz",
+                "eyeColor": "Mavi",
+                "furType": "Uzun",
+                "size": "large",
+                "weight": 30.0,
+                "vaccinated": true,
+                "neutered": true,
+                "trainability": "high",
+                "playfulness": 5,
+                "sociality": "medium"
+            },
+            "createdAt": "2025-04-15T09:20:00Z"
+        },
+        {
+            "_id": "2b90919c-79c0-4b0b-ae6f-2db2e5b4568e",
+            "user_id": "3c2b5d38-fd92-45a2-8a53-b67c9cd2340e",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Beagle",
+            "petName": "Beagle Buddy",
+            "age": 5,
+            "gender": true,
+            "description": "Enerjik ve sadık Beagle.",
+            "images": [
+                "image19.jpg",
+                "image20.jpg"
+            ],
+            "status": true,
+            "additionalInfo": {
+                "color": "Kahverengi",
+                "eyeColor": "Yeşil",
+                "furType": "Kısa",
+                "size": "medium",
+                "weight": 12.0,
+                "vaccinated": true,
+                "neutered": true,
+                "trainability": "medium",
+                "playfulness": 4,
+                "sociality": "high"
+            },
+            "createdAt": "2025-04-14T08:25:00Z"
+        },
+        {
+            "_id": "d4e1fbf0-ccd8-47e0-b622-559c38363fa2",
+            "user_id": "3c2b5d38-fd92-45a2-8a53-b67c9cd2340e",
+            "category_name": "Köpek İlanları",
+            "sub_category_name": "Bulldog",
+            "petName": "Bulldog Max",
+            "age": 4,
+            "gender": false,
+            "description": "Güçlü ve sevimli Bulldog.",
+            "images": [
+                "image21.jpg",
+                "image22.jpg"
+            ],
+            "status": false,
+            "additionalInfo": {
+                "color": "Beyaz",
+                "eyeColor": "Kahverengi",
+                "furType": "Kısa",
+                "size": "medium",
+                "weight": 20.0,
+                "vaccinated": true,
+                "neutered": true,
+                "trainability": "medium",
+                "playfulness": 3,
+                "sociality": "high"
+            },
+            "createdAt": "2025-04-13T10:10:00Z"
+        }
+    ]
+}
