@@ -157,6 +157,62 @@ async function deleteComment(req,res,next) {
     }
 }
 
+async function updateLostListingComment(req, res, next) {
+    try {
+        const commentId = validateObjectId(req.params.comment_id); 
+        const userId = validateObjectId(req.user._id); 
+        const content = req.body.content; 
+
+        if (!content || content.trim() === "") {
+            return responseHandler.error({
+                res,
+                statusCode: Enum.HTTP_CODES.BAD_REQUEST,
+                message: "Content is required to update the comment.",
+            });
+        }
+
+        const comment = await Comment.findById(commentId).populate('lost_listing_id');
+
+        if (!comment) {
+            return responseHandler.error({
+                res,
+                statusCode: Enum.HTTP_CODES.NOT_FOUND,
+                message: "Comment not found.",
+            });
+        }
+
+        const isAuthorized =
+            comment.user_id.toString() === userId.toString() || 
+            req.user.role === "ADMIN" ||
+            (comment.lost_listing_id?.user_id?.toString() === userId.toString());
+
+        if (!isAuthorized) {
+            return responseHandler.error({
+                res,
+                statusCode: Enum.HTTP_CODES.FORBIDDEN,
+                message: "You do not have permission to update this comment.",
+            });
+        }
+
+        comment.content = content;
+        await comment.save();
+
+        return responseHandler.success({
+            res,
+            statusCode: Enum.HTTP_CODES.OK,
+            message: "Comment successfully updated.",
+            data: comment,
+        });
+    } catch (error) {
+        return responseHandler.error({
+            res,
+            statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR,
+            message: "Failed to update the comment.",
+            error,
+        });
+    }
+}
+
 async function createReplyComment(req, res, next) {
     const session = await mongoose.startSession();
     session.startTransaction();
@@ -346,7 +402,6 @@ async function deleteSubComment(req, res, next) {
     }
 }
 
-
 async function updateLostListingSubComment(req, res, next) {
     try {
         const subCommentId = validateObjectId(req.params.reply_id); 
@@ -455,5 +510,6 @@ module.exports = {
     createReplyComment,
     getAllSubComments,
     deleteSubComment,
-    updateLostListingSubComment
+    updateLostListingSubComment,
+    updateLostListingComment
 }
