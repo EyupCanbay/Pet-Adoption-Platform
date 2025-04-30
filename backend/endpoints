@@ -48,8 +48,8 @@ LOST_PET_LISTING
 
 ADOPTION_LISTING
 - GET       /listing       -tüm ilanları getir (admin, user)
-- POST      /listing       - ilan oluştur (admin, , user)
--GET       /listing/:lisitng_id   -belirli ilanı getir (admin,, user)
++ POST      /listing       - ilan oluştur (admin, , user)
++ GET       /listing/:lisitng_id   -belirli ilanı getir (admin,, user)
 -PUT       /listing/:lisitng_id   -belirli ilani güncelle (kendisi)
 -DELETE    /listing/:lisitng_id    -belirli ilanı sil (kendisi)
 -POST      /listing/:listing_id/bookmarks     ilanı bookmarklara ekle ekleyen kullanıcya (admin,  user)

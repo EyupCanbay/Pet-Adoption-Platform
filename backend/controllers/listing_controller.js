@@ -153,7 +153,7 @@ async function getLostListing(req,res,next) {
                     as: "comments" 
                 }
             },
-          //  { $unwind: { path: "$comments", preserveNullAndEmptyArrays: false } },   
+            { $unwind: { path: "$comments", preserveNullAndEmptyArrays: true } },   
             
             {
                 $project: 
@@ -187,7 +187,7 @@ async function getLostListing(req,res,next) {
                 "address.country": 1,
                 "address.city": 1,
                 "address.state": 1,
-                "address.neighborhood": 1,
+                "address.neighborhood": 1        
                 } 
             }
         ]);
