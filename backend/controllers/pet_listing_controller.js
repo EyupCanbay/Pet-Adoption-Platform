@@ -276,6 +276,26 @@ async function deletePetListing(req, res, next) {
     }
 }
 
+async function updatePetListing(req,res,next) {
+    const listingId = validateObjectId(req.params.listing_id);
+    const updateData = req.body;
+
+    try {
+        const updatedListing = await PetListing.findByIdAndUpdate(
+            listingId, 
+            updateData, 
+            { new: true, runValidators: true } 
+        );
+        if (!updatedListing) {
+            return responseHandler.error({res, statusCode: Enum.HTTP_CODES.NOT_FOUND, message: "Pet listing not found"})
+        }
+
+        responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "succesfuly update the listing", data: updatedListing })
+    } catch (error) {
+        return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "database error", error})
+    }
+}
+
 async function addPetListingBookmarks(req, res, next) {
     const listingId = validateObjectId(req.params.listing_id); 
     const userId = validateObjectId(req.user._id);
@@ -330,6 +350,7 @@ module.exports = {
     getPetListing,
     getAllPetListing,
     deletePetListing,
-    addPetListingBookmarks
+    addPetListingBookmarks,
+    updatePetListing
 }
 
