@@ -219,7 +219,7 @@ async function deleteLostListing(req,res,next) {
 
         if(!lostListing) return responseHandler.error({res, statusCode: Enum.HTTP_CODES.NOT_FOUND, message: "The listing not found"})
 
-        return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly fetched the listing" })
+        return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfully deleted the lost listing but did not delete sub and major comment for this feild return geting back" })
     } catch (error) {
         return responseHandler.error({res, statusCode: Enum.HTTP_CODES.BAD_REQUEST, message: "Was not deleted the listing", error})
     }

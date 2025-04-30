@@ -6,6 +6,7 @@ const { checkUser } = require('../middleware/auth_middleware')
 router.post('/',checkUser , petListingController.createLostListing)
 router.get('/', checkUser, petListingController.getAllPetListing)
 router.get('/:listing_id', checkUser, petListingController.getPetListing)
+router.delete('/:listing_id', checkUser, petListingController.deletePetListing)
 
 
 module.exports = router

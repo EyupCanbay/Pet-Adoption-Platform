@@ -62,7 +62,7 @@ async function createLostListing(req, res, next) {
 
 async function getPetListing(req, res, next) {
     try {
-        const listingId = validateObjectId(req.params.listing_id);  // Parametreyi doğru şekilde kullanıyoruz
+        const listingId = validateObjectId(req.params.listing_id); 
         const listing = await PetListing.aggregate([
             {
                 $match: { _id: listingId }
@@ -230,13 +230,60 @@ async function getAllPetListing(req, res, next) {
             error
         });
     }
-  }
+}
   
+async function deletePetListing(req, res, next) {
+    try {
+        const listingId = validateObjectId(req.params.listing_id);
+
+        console.log("asdasdasdasd")
+        if (!listingId) {
+            return responseHandler.error({
+                res,
+                statusCode: Enum.HTTP_CODES.BAD_REQUEST,
+                message: "Id is required"
+            });
+        }
+        console.log("asdasdasdasd")
+
+        const petListing = await PetListing.findByIdAndDelete({ _id: listingId });
+        console.log("asdasdasdasd")
+
+        if (!petListing) {
+            return responseHandler.error({
+                res,
+                statusCode: Enum.HTTP_CODES.NOT_FOUND,
+                message: "The pet listing not found"
+            });
+        }
+        console.log("asdasdasdasd")
+
+        // İlgili yourml ve subYourml verilerini sil
+        // Örnek olarak, yourml ve subYourml koleksiyonlarını sildiğini varsayıyoruz. 
+        // İlgili verileri kendi koleksiyon adlarına göre düzenle.
+
+        return responseHandler.success({
+            res,
+            statusCode: Enum.HTTP_CODES.OK,
+            message: "Successfully deleted the pet listing but did not delete sub and major comment for this feild return geting back"
+        });
+
+    } catch (error) {
+        return responseHandler.error({
+            res,
+            statusCode: Enum.HTTP_CODES.BAD_REQUEST,
+            message: "Failed to delete the pet listing",
+            error
+        });
+    }
+}
+
 
 
 module.exports = {
     createLostListing,
     getPetListing,
-    getAllPetListing
+    getAllPetListing,
+    deletePetListing
 }
 
