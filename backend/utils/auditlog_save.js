@@ -1,6 +1,5 @@
 const Enum = require("../config/enum");
 const  AuditLogs  = require('../models/auditlog');
-const responseHandler = require("./responseHandler");
 
 let instance = null;    
 

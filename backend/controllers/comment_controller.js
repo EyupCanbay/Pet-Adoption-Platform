@@ -114,7 +114,6 @@ async function deleteComment(req,res,next) {
         const listingId = validateObjectId(req.params.listing_id)
         const commentId = validateObjectId(req.params.comment_id)
 
-
         const comment = await Comment.aggregate([
             { $match: {_id: commentId}},
             { 
@@ -135,9 +134,8 @@ async function deleteComment(req,res,next) {
             }
         ])
 
-        if(comment.user_id.toString() === userId.toString()  ){
-            await Comment.findByIdAndDelete({_id: commentId})
-
+        if(comment.user_id.toString() === userId.toString()){
+            await Comment.findByIdAndDelete({ _id: commentId })
             return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly updated comments "})      
           }
         else if(comment.lostListings.user_id.toString() !== userId.toString()){
@@ -154,7 +152,6 @@ async function deleteComment(req,res,next) {
 
         }
     }catch (error) {
-
         return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "Was not updated comments", error})
     }
 }
