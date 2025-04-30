@@ -59,10 +59,10 @@ async function createLostListing(req, res, next) {
         });
     }
 }
+
 async function getPetListing(req, res, next) {
     try {
         const listingId = validateObjectId(req.params.listing_id);  // Parametreyi doğru şekilde kullanıyoruz
-        console.log(listingId)
         const listing = await PetListing.aggregate([
             {
                 $match: { _id: listingId }
@@ -93,8 +93,7 @@ async function getPetListing(req, res, next) {
                     as: "comments"
                 }
             },
-            // Eğer yorumları unwind etmek istiyorsanız, aşağıdaki satırı yorumdan çıkarabilirsiniz
-             { $unwind: { path: "$comments", preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: "$comments", preserveNullAndEmptyArrays: true } },
             {
                 $project: {
                     _id: 1,
@@ -131,7 +130,6 @@ async function getPetListing(req, res, next) {
             }
         ]);
 
-        console.log(listingId);
 
         if (!listing[0]) return responseHandler.error({
             res,
@@ -156,11 +154,89 @@ async function getPetListing(req, res, next) {
     }
 }
 
-
+async function getAllPetListing(req, res, next) {
+    try {
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+  
+        const petListings = await PetListing.aggregate([
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "user_id",
+                    foreignField: "_id",
+                    as: "user"
+                }
+            },
+            { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } }, // Eğer kullanıcı yoksa `null` bırakır burası
+  
+            {
+                $lookup: {
+                    from: "addresses",
+                    localField: "user._id",
+                    foreignField: "user_id",
+                    as: "userAddress"
+                }
+            },
+            { $unwind: { path: "$userAddress", preserveNullAndEmptyArrays: true } },
+  
+            {
+                $project: {
+                    "_id": 1,
+                    "petName": 1,
+                    "age": 1,
+                    "gender": 1,
+                    "description": 1,
+                    "images": 1,
+                    "status": 1,
+                    "category_name": 1,
+                    "sub_category_name": 1,
+                    "createdAt": 1,
+                    "updatedAt": 1,
+                    "user_id": 1,
+  
+                    "user": {
+                        "_id": { $ifNull: ["$user._id", null] }, // if user did not have,  doing null on this feild
+                        "userName": { $ifNull: ["$user.userName", null] },
+                        "profilePhoto": { $ifNull: ["$user.profilePhoto", null] },
+                        "location": {
+                            country: { $ifNull: ["$userAddress.country", null] },
+                            city: { $ifNull: ["$userAddress.city", null] },
+                            state: { $ifNull: ["$userAddress.state", null] },
+                            neighborhood: { $ifNull: ["$userAddress.neighborhood", null] }
+                        }
+                    }
+                }
+            },
+  
+            { $sort: { createdAt: -1 } },
+            { $skip: skip },
+            { $limit: limit }
+        ]);
+  
+        return responseHandler.success({
+            res,
+            statusCode: Enum.HTTP_CODES.OK,
+            message: "Successfully fetched pet listings",
+            data: petListings
+        });
+  
+    } catch (error) {
+        return responseHandler.error({
+            res,
+            statusCode: Enum.HTTP_CODES.BAD_REQUEST,
+            message:"Did not fetch pet listings",
+            error
+        });
+    }
+  }
+  
 
 
 module.exports = {
     createLostListing,
-    getPetListing
+    getPetListing,
+    getAllPetListing
 }
 
