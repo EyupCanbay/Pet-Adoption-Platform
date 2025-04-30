@@ -11,6 +11,7 @@ router.delete('/:listing_id', checkUser, petListingController.deletePetListing)
 router.post('/:listing_id/bookmarks', checkUser, petListingController.addPetListingBookmarks)
 router.post('/:listing_id/comment', checkUser, petListingCommentController.createPetListingComment)
 router.get('/:listing_id/comment', checkUser, petListingCommentController.getAllPetListingComments)
+router.delete('/:listing_id/comment/:comment_id', checkUser, petListingCommentController.deletePetListingComment)
 
 
 module.exports = router

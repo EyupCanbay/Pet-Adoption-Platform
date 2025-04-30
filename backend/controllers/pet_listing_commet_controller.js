@@ -27,7 +27,7 @@ async function createPetListingComment(req, res, next) {
             [
                 {
                     user_id: userId,
-                    pet_listing_id: listingId,
+                    adoption_listing_id: listingId,
                     content: req.body.content,
                 },
             ],
@@ -131,9 +131,78 @@ async function getAllPetListingComments(req, res, next) {
     }
 }
 
+async function deletePetListingComment(req, res, next) {
+    try {
+        const userId = validateObjectId(req.user._id);
+        const commentId = validateObjectId(req.params.comment_id);
+
+        const comment = await Comment.aggregate([
+            { $match: { _id: commentId } },
+            {
+                $lookup: {
+                    from: "petlistings",
+                    localField: "adoption_listing_id",
+                    foreignField: "_id",
+                    as: "petListings"
+                }
+            },
+            { $unwind: "$petListings" },
+            {
+                $project: {
+                    user_id: 1,
+                    "petListings.user_id": 1,
+                }
+            }
+        ]);
+
+        if (!comment.length) {
+            return responseHandler.error({
+                res,
+                statusCode: Enum.HTTP_CODES.NOT_FOUND,
+                message: "Comment not found"
+            });
+        }
+
+        const [commentData] = comment;
+
+        if (
+            commentData.user_id.toString() === userId.toString() ||
+            commentData.petListings.user_id.toString() === userId.toString() ||
+            req.user.role === "ADMIN"
+        ) {
+            await Comment.deleteMany({
+                $or: [
+                    { _id: commentId },          // for major comment 
+                    { comment_id: commentId }    // for sub comment
+                ]
+            });
+
+            return responseHandler.success({
+                res,
+                statusCode: Enum.HTTP_CODES.OK,
+                message: "Successfully deleted the comment and its sub-comments"
+            });
+        }
+
+        return responseHandler.error({
+            res,
+            statusCode: Enum.HTTP_CODES.FORBIDDEN,
+            message: "You do not have permission to delete this comment"
+        });
+    } catch (error) {
+        return responseHandler.error({
+            res,
+            statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR,
+            message: "Failed to delete comment",
+            error
+        });
+    }
+}
+
 
 
 module.exports = {
     createPetListingComment,
-    getAllPetListingComments
+    getAllPetListingComments,
+    deletePetListingComment
 }
