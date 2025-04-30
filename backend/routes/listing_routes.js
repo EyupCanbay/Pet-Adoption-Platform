@@ -13,6 +13,7 @@ router.post('/:listing_id/comment', checkUser, petListingCommentController.creat
 router.get('/:listing_id/comment', checkUser, petListingCommentController.getAllPetListingComments)
 router.delete('/:listing_id/comment/:comment_id', checkUser, petListingCommentController.deletePetListingComment)
 router.post('/:listing_id/comment/:comment_id/reply_comment', checkUser, petListingCommentController.createReplyComment)
+router.get('/:listing_id/comment/:comment_id/reply_comment', checkUser, petListingCommentController.getAllSubComments)
 
 
 module.exports = router
