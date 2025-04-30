@@ -225,6 +225,26 @@ async function deleteLostListing(req,res,next) {
     }
 }
 
+async function updateLostListing(req,res,next) {
+    const listingId = validateObjectId(req.params.listing_id);
+    const updateData = req.body;
+
+    try {
+        const updatedListing = await LostPetListing.findByIdAndUpdate(
+            listingId, 
+            updateData, 
+            { new: true, runValidators: true } 
+        );
+        if (!updatedListing) {
+            return responseHandler.error({res, statusCode: Enum.HTTP_CODES.NOT_FOUND, message: "Lost listing not found"})
+        }
+
+        responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "succesfuly update the listing", data: updatedListing })
+    } catch (error) {
+        return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "database error", error})
+    }
+}
+
 async function addBookmarks(req,res,next) {
     
     const { listing_id } = req.params;
@@ -265,6 +285,7 @@ module.exports = {
     getAllLostListing,
     getLostListing,
     deleteLostListing,
-    addBookmarks
+    addBookmarks,
+    updateLostListing
 }
 
