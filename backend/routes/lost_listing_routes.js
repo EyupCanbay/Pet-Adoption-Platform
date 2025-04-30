@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const listingController = require('../controllers/listing_controller')
-const commentController = require('../controllers/comment_controller')
+const commentController = require('../controllers/lost_lisitng_comment_controller')
 const { checkUser } = require('../middleware/auth_middleware')
 
 router.post('/',checkUser , listingController.createLostListing)

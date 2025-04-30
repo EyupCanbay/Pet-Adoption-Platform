@@ -1,7 +1,7 @@
-const Enum = require("../config/enum")
-const responseHandler = require("../utils/responseHandler")
+const Enum = require("../config/enum.js")
+const responseHandler = require("../utils/responseHandler.js")
 const Auditlog  = require('../utils/auditlog_save.js');
-const { User, LostPetListing, Comment, ReplyComment } = require('../models/index.js')
+const { LostPetListing, Comment, ReplyComment } = require('../models/index.js')
 const { validateObjectId } = require('../validators/object_validate.js')
 const mongoose = require("mongoose");
 

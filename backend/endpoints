@@ -54,7 +54,7 @@ ADOPTION_LISTING
 + DELETE    /listing/:lisitng_id    -belirli ilanı sil (kendisi)
 + POST      /listing/:listing_id/bookmarks     ilanı bookmarklara ekle ekleyen kullanıcya (admin,  user)
 -GET       /listing/:lisitng_id/comment        ilanın yorumlarını getir  (admin, süper admin, user)
--POST      /listing/:lisitng_id/comment/                    -ilana yorum yap
++ POST      /listing/:lisitng_id/comment/                    -ilana yorum yap
 -GET       /listing/:lisitng_id/comment/:comment_id         ilanın belirli yorumunu getir (admin,user)
 -PUT       /listing/:lisitng_id/comment/:comment_id            -ilanın belirli yorumunu güncelle  (sadece yorum atan)
 -DELETE    /listing/:lisitng_id/comment/:comment_id                     ilanın belirli yorumunu sil  (sadece yorum atan ve ilan sahibi)
