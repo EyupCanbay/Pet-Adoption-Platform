@@ -14,7 +14,7 @@ async function register(req, res) {
       password: hashPassword,
       name: req.body.name,
       surname: req.body.surname,
-      phoneNumber: req.body.phoneNumber,
+      phoneNumber: req.body.phoneNumber, //kullanıcı fotosu ekleme yazılıcak
       role: req.role || 'USER'
     })
     await user.save();
