@@ -21,8 +21,9 @@ function AdvertDetails() {
                 const generatedSlug = slugify(pet?.petName || "", { lower: true });
                 return generatedSlug === slug;
             });
-            setPet(match || null);
+
             if (match) {
+                setPet(match);
                 const ownerId = match?.user_id;
                 const owner = Users?.data?.find((user) => user._id === ownerId);
                 setUser(owner || null);
@@ -30,8 +31,16 @@ function AdvertDetails() {
         };
         if (slug) fetchPetDetails();
     }, [slug]);
+
+    // Log pet details after the state has been updated
+    useEffect(() => {
+        if (pet) {
+            console.log("Updated pet details:", pet);
+        }
+    }, [pet]);
+
     if (!pet) {
-        return <Loading />
+        return <Loading />;
     }
 
     const {
@@ -43,7 +52,7 @@ function AdvertDetails() {
         category_name,
         sub_category_name,
         owner,
-        additionalInfo
+        additionalInfo,
     } = pet;
 
     return (
@@ -67,8 +76,7 @@ function AdvertDetails() {
                                 key={index}
                                 onClick={() => setActiveImage(index)}
                                 src={"/default-avatar.jpg" || img}
-                                className={`h-20 w-32 object-cover rounded-lg cursor-pointer border-2 ${activeImage === index ? "border-blue-500" : "border-transparent"
-                                    }`}
+                                className={`h-20 w-32 object-cover rounded-lg cursor-pointer border-2 ${activeImage === index ? "border-blue-500" : "border-transparent"}`}
                             />
                         ))}
                     </div>
@@ -92,16 +100,16 @@ function AdvertDetails() {
                         <p><span className="font-medium">Kısır:</span> {additionalInfo.neutered ? "Evet" : "Hayır"}</p>
                         <p><span className="font-medium">Arkadaş Canlısı:</span> {additionalInfo.sociality}</p>
                     </div>
-                    <Link
-                        href={`/profile/${user._id}`}
-                        className="flex justify-start gap-4 items-center mt-4">
-                        <p className="text-sm text-gray-400 mt-2">Sahibi: {user.userName}</p>
-                        <img
-                            src={user.profilePhoto || "/default-avatar.jpg"}
-                            alt="Owner"
-                            className="w-8 h-8rounded-full mt-2"
-                        />
-                    </Link>
+                    {user && (
+                        <Link href={`/profile/${user.userName}`} className="flex justify-start gap-4 items-center mt-4">
+                            <p className="text-sm text-gray-400 mt-2">Sahibi: {user.userName}</p>
+                            <img
+                                src={user.profilePhoto || "/default-avatar.jpg"}
+                                alt="Owner"
+                                className="w-8 h-8 rounded-full mt-2"
+                            />
+                        </Link>
+                    )}
                 </div>
             </div>
 

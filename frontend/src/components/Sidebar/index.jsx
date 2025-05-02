@@ -11,7 +11,6 @@ function Sidebar() {
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
 
-
     useEffect(() => {
         try {
             const fetchCategories = () => {
@@ -34,7 +33,7 @@ function Sidebar() {
     return (
         <div
             className={`${isOpen ? "absolute sm:z-50 top-0 left-0 md:relative lg:relative w-full sm:w-full bg-gray-100 md:w-64 lg:w-64" : "w-12 z-50 absolute md:relative lg:relative top-4 md:top-0 md:left-0 opacity-80 lg:w-16 md:w-16 bg-inherit"}
-                md:transition-all md:duration-300 md:ease-in-out text-black h-max overflow-hidden`}
+                md:transition-all md:duration-300 md:ease-in-out text-black h-max`}
         >
             <div className={` items-center px-4 pt-2 ${isOpen ? "justify-end absolute top-2 right-0 " : " flex justify-center"}`}>
                 <button
@@ -51,7 +50,7 @@ function Sidebar() {
                 </button>
             </div>
             {isOpen && (
-                <div className="px-4 py-6">
+                <div className="px-4 py-6 h-[calc(100vh-2rem)] overflow-y-auto">
                     <ul className="space-y-4">
                         {categories.map((category) => (
                             <li key={category.id} className="text-lg font-medium">

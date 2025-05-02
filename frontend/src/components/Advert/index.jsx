@@ -1,15 +1,43 @@
+"use client";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Users from "@/mocks/users.json";
 
-function Advert({ id, pet }) {
-    //? GELEN PET BİLGİSİNDEN USER_İD İLE BİRLİKTE FETCHSİNGLEUSER ÇALIŞARAK OWNER BİLGİLERİNE ULAŞILACAK
-    // console.log(pet);
+function Advert({ pet }) {
+    // console.log("pet", pet);
+
+    const [owner, setOwner] = useState(null);
+    const [loadingOwner, setLoadingOwner] = useState(true);
+    const userId = pet?.user_id;
+    // console.log("userId", userId);
+
+    useEffect(() => {
+        const fetchOwner = () => {
+            const own = Users?.data?.find((user) => user._id === userId);
+            console.log("own", own);
+            setOwner(own || null);
+            setLoadingOwner(false);
+        };
+
+        if (userId) {
+            fetchOwner();
+        }
+    }, [userId]);
+
+    // useEffect(() => {
+    //     if (owner) {
+    //         console.log("Updated owner details:", owner);
+    //     } else {
+    //         console.log("Owner not found");
+    //     }
+    // }, [owner]);
     return (
-        <div key={id} className="flex flex-col rounded-md shadow-md h-full">
+        <div key={pet._id} className="flex flex-col rounded-md shadow-md h-full">
             <div className="border-b-2">
                 <div className="relative w-full h-24 md:h-36 lg:h-48">
                     <Image
-                        src={pet.images[0] || "/indir.webp"}
+                        // src={pet.images[0] || "/indir.webp"}
+                        src="/indir.webp"
                         alt={pet.petName || "advert"}
                         fill
                         style={{ objectFit: "cover" }}
@@ -23,14 +51,15 @@ function Advert({ id, pet }) {
                     <div className="flex items-center gap-2 mt-2 md:mt-0">
                         <div className="relative w-6 h-6">
                             <Image
-                                src={pet.ownerAvatar || "/default-avatar.jpg"}
-                                alt={pet.owner || "Owner"}
+                                // src={owner?.profilePhoto || "/default-avatar.jpg"} 
+                                src="/default-avatar.jpg"
+                                alt={owner?.userName || "Owner"}
                                 fill
                                 className="rounded-full"
                                 style={{ objectFit: "cover" }}
                             />
                         </div>
-                        <span className="text-xs md:text-md lg:text-md truncate">{pet.owner || "Unknown Owner"}</span>
+                        <span className="text-xs md:text-md lg:text-md truncate">{owner?.userName || "Unknown Owner"}</span>
                     </div>
                 </div>
 
