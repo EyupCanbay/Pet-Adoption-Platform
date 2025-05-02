@@ -153,7 +153,7 @@ async function getLostListing(req,res,next) {
                     as: "comments" 
                 }
             },
-          //  { $unwind: { path: "$comments", preserveNullAndEmptyArrays: false } },   
+            { $unwind: { path: "$comments", preserveNullAndEmptyArrays: true } },   
             
             {
                 $project: 
@@ -187,7 +187,7 @@ async function getLostListing(req,res,next) {
                 "address.country": 1,
                 "address.city": 1,
                 "address.state": 1,
-                "address.neighborhood": 1,
+                "address.neighborhood": 1        
                 } 
             }
         ]);
@@ -219,9 +219,29 @@ async function deleteLostListing(req,res,next) {
 
         if(!lostListing) return responseHandler.error({res, statusCode: Enum.HTTP_CODES.NOT_FOUND, message: "The listing not found"})
 
-        return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly fetched the listing" })
+        return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfully deleted the lostlisting but did not delete sub and major comment for this feild return geting back" })
     } catch (error) {
         return responseHandler.error({res, statusCode: Enum.HTTP_CODES.BAD_REQUEST, message: "Was not deleted the listing", error})
+    }
+}
+
+async function updateLostListing(req,res,next) {
+    const listingId = validateObjectId(req.params.listing_id);
+    const updateData = req.body;
+
+    try {
+        const updatedListing = await LostPetListing.findByIdAndUpdate(
+            listingId, 
+            updateData, 
+            { new: true, runValidators: true } 
+        );
+        if (!updatedListing) {
+            return responseHandler.error({res, statusCode: Enum.HTTP_CODES.NOT_FOUND, message: "Lost listing not found"})
+        }
+
+        responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "succesfuly update the listing", data: updatedListing })
+    } catch (error) {
+        return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "database error", error})
     }
 }
 
@@ -265,6 +285,7 @@ module.exports = {
     getAllLostListing,
     getLostListing,
     deleteLostListing,
-    addBookmarks
+    addBookmarks,
+    updateLostListing
 }
 

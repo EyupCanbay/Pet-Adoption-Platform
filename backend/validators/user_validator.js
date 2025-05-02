@@ -1,6 +1,5 @@
 const { User, Address } = require('../models/index');
 const responseHandler = require('../utils/responseHandler');
-const { body } = require('express-validator');
 
 const validateUserData = (user, res, req, next) => {
     if (!user) return { valid: false, message: 'User data is required' };
