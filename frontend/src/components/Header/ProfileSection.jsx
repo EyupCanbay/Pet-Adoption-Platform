@@ -1,17 +1,16 @@
 "use client";
 import React, { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import Users from "@/mocks/users";
 import { IoMdArrowDropdown, IoMdNotificationsOutline } from 'react-icons/io';
 import Link from 'next/link';
+import { useUser } from '@/src/context/userProvider';
 
 function ProfileSection() {
     const router = useRouter();
-    const [user, setUser] = useState(null);
+    const { user } = useUser();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const [notificationCount, setNotificationCount] = useState(0);
-
     const dropdownRef = useRef(null);
     const fetchNotifications = () => {
         const mockNotifications = [
@@ -24,7 +23,6 @@ function ProfileSection() {
     };
 
     useEffect(() => {
-        setUser(Users?.data[0]);
         fetchNotifications();
     }, []);
 
