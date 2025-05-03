@@ -1,28 +1,28 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
+import slugify from "slugify";
 import React, { useEffect, useState } from "react";
-import Users from "@/mocks/users.json";
 
 function Advert({ pet }) {
     // console.log("pet", pet);
-
     const [owner, setOwner] = useState(null);
     const [loadingOwner, setLoadingOwner] = useState(true);
-    const userId = pet?.user_id;
-    // console.log("userId", userId);
+    const userId = pet?.user?._id;
 
-    useEffect(() => {
-        const fetchOwner = () => {
-            const own = Users?.data?.find((user) => user._id === userId);
-            console.log("own", own);
-            setOwner(own || null);
-            setLoadingOwner(false);
-        };
+    // useEffect(() => {
+    //     const fetchOwner = () => {
+    //         const own = Users?.data?.find((user) => user._id === userId);
+    //         // console.log("own", own);
+    //         setOwner(own || null);
+    //         setLoadingOwner(false);
+    //     };
 
-        if (userId) {
-            fetchOwner();
-        }
-    }, [userId]);
+    //     if (userId) {
+    //         fetchOwner();
+    //     }
+    // }, [userId]);
+
 
     // useEffect(() => {
     //     if (owner) {
@@ -32,12 +32,17 @@ function Advert({ pet }) {
     //     }
     // }, [owner]);
     return (
-        <div key={pet._id} className="flex flex-col rounded-md shadow-md h-full">
+        <Link
+            href={{
+                pathname: `/advert/${pet._id}`,
+                query: { pet: slugify(pet.petName).toLowerCase() },
+            }}
+            key={pet._id}
+            className="flex flex-col rounded-md shadow-md h-full">
             <div className="border-b-2">
                 <div className="relative w-full h-24 md:h-36 lg:h-48">
                     <Image
-                        // src={pet.images[0] || "/indir.webp"}
-                        src="/indir.webp"
+                        src={pet.images[0] || "/indir.webp"}
                         alt={pet.petName || "advert"}
                         fill
                         style={{ objectFit: "cover" }}
@@ -67,7 +72,7 @@ function Advert({ pet }) {
                     {pet.description || "No description available."}
                 </div>
             </div>
-        </div>
+        </Link>
     );
 }
 

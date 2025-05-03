@@ -2,27 +2,30 @@
 
 import React, { useEffect, useState } from 'react';
 import Steps from './steps';
-import PetListing from '@/mocks/pet_listings.json';
 import Advert from '../Advert';
 import Loading from '@/src/components/Loading'; // Loading componentini import ettik
+import { getAllListings } from '@/src/services/Listings';
 
 function HomeComponent() {
     const [adverts, setAdverts] = useState([]);
     const [loading, setLoading] = useState(true); // Loading durumu ekledik
 
     useEffect(() => {
-        const fetchAdverts = () => {
-            // Simulate fetching adverts from an API or data source
-            setAdverts(PetListing?.data || []);
-            setLoading(false); // Veriler geldikten sonra loading false
+        const fetchAdverts = async () => {
+            try {
+                const response = await getAllListings();
+                if (response) {
+                    setAdverts(response.data);
+                    setLoading(false); // Yükleme tamamlandığında loading'i false yapıyoruzbb
+                } else {
+                    console.error("No data received from the server.");
+                }
+            } catch (error) {
+                console.error("Error fetching adverts:", error);
+            }
         };
-
         fetchAdverts();
     }, []);
-
-    useEffect(() => {
-        console.log("Adverts fetched:", adverts);
-    }, [adverts]);
 
     if (loading) {
         return <Loading />; // Yükleniyorsa Loading göster

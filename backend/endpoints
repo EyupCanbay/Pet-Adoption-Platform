@@ -1,6 +1,6 @@
 AUTH (kimlik doğrulama)
 + POST      /auth/signup - Yeni kullanıcı oluşturma
-+ POST      /auth/login - Oturum açma
++ GET      /auth/login - Oturum açma
 + POST      /auth/logout - Oturum kapatma
 
 

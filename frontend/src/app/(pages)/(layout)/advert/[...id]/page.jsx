@@ -2,42 +2,45 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import PetListing from "@/mocks/pet_listings.json";
 import slugify from "slugify";
-import Users from "@/mocks/users.json";
 import Link from "next/link";
 import Loading from "@/src/components/Loading";
+import { fetchSingleListing } from "@/src/services/Listings";
 
 function AdvertDetails() {
     const params = useParams();
-    const slug = Array.isArray(params?.slug) ? params.slug[0] : params?.slug;
+    const { id } = params;
     const [pet, setPet] = useState(null);
     const [activeImage, setActiveImage] = useState(0);
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        const fetchPetDetails = () => {
-            const match = PetListing?.data?.find((pet) => {
-                const generatedSlug = slugify(pet?.petName || "", { lower: true });
-                return generatedSlug === slug;
-            });
-
-            if (match) {
-                setPet(match);
-                const ownerId = match?.user_id;
-                const owner = Users?.data?.find((user) => user._id === ownerId);
-                setUser(owner || null);
+        const fetchPetDetails = async () => {
+            try {
+                const response = await fetchSingleListing(id);
+                // console.log('response :>> ', response);
+                if (response) {
+                    //TODO EĞER RESPONSE DATA ARRAY DÖNERSE İLK İNDEXİNİ AL OBJECT DÖNERSE KENDİSİNİ AL
+                    setPet(response.data[0] || response.data);
+                    setUser(response.user);
+                } else {
+                    console.error("No data received from the server.");
+                }
+            } catch (error) {
+                console.error("Error fetching pet details:", error);
             }
         };
-        if (slug) fetchPetDetails();
-    }, [slug]);
+        fetchPetDetails();
+    }, [id])
 
-    // Log pet details after the state has been updated
-    useEffect(() => {
-        if (pet) {
-            console.log("Updated pet details:", pet);
-        }
-    }, [pet]);
+    // useEffect(() => {
+    //     if (pet) {
+    //         console.log("Pet details:", pet);
+    //     }
+    //     if (user) {
+    //         console.log("User details:", user);
+    //     }
+    // }, [pet, user]);
 
     if (!pet) {
         return <Loading />;
@@ -57,9 +60,7 @@ function AdvertDetails() {
 
     return (
         <div className="max-w-6xl mx-auto px-4 py-10 space-y-10">
-            {/* Görsel ve Slider */}
             <div className="flex flex-col md:flex-row gap-6">
-                {/* Aktif Resim */}
                 <div className="flex-1">
                     <div className="aspect-video bg-gray-100 rounded-xl overflow-hidden shadow">
                         <img
@@ -69,7 +70,6 @@ function AdvertDetails() {
                         />
                     </div>
 
-                    {/* Thumbnail Slider */}
                     <div className="flex gap-3 mt-4 overflow-x-auto">
                         {images?.map((img, index) => (
                             <img
@@ -82,7 +82,6 @@ function AdvertDetails() {
                     </div>
                 </div>
 
-                {/* Bilgiler */}
                 <div className="flex-1 space-y-3 bg-white rounded-xl p-6 shadow">
                     <h2 className="text-2xl font-semibold">{petName}</h2>
                     <p className="text-gray-600 text-sm">
@@ -113,7 +112,6 @@ function AdvertDetails() {
                 </div>
             </div>
 
-            {/* Açıklama */}
             <div className="bg-white rounded-xl shadow p-6">
                 <h3 className="text-xl font-semibold mb-2">İlan Açıklaması</h3>
                 <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
