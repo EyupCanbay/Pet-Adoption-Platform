@@ -18,7 +18,7 @@ const LostPetListingSchema = new mongoose.Schema({
         size: { type: String, enum: ["small", "medium", "large"], required: true }, // küçük, orta, büyük
         weight: { type: Number, required: true }, // ağırlık (kg)
         vaccinated: { type: Boolean, default: false }, // aşı durumu
-        neutered: { type: Boolean, default: false }, // kısırlaştırılmış mı
+        vaccinated_last_date: { type: Date, index: true }, // asısının son tarihi
         trainability: { type: String, enum: ["easy", "medium", "hard"] }, // eğitilebilirlik seviyesi
         playfulness: { type: Number, min: 1, max: 5, required: false }, // oyunculuk seviyesi (1-5 arası)
         sociality: { type: String, enum: ["low", "medium", "high"], required: false }, // sosyal uyumluluk seviyesi

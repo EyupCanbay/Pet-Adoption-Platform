@@ -11,9 +11,9 @@ const  UserSchema = new mongoose.Schema({
     profilePhoto: { type: String, required: false }, // profil fotoğrafının URL'si
     bio: { type: String, trim: true},  // biografisi
     gender: { type: String }, // cinsiyeti
-    authType: { type: String, enum: ['local'], default: 'local' }, // kimlik doğrulama türü
+    authType: { type: String, enum: ['local', 'google'], default: 'local' }, // kimlik doğrulama türü
     social_links: [
-        { platform: { type: String, enum: ['facebook', 'twitter', 'instagram'] }, url: { type: String } },
+        { platform: { type: String, enum: ['facebook', 'x', 'instagram'] }, url: { type: String } },
     ],
     job: { type: String, required: false }, //meslek
     blockedUser: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}], // engellediği kullanıcılar

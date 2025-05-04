@@ -18,6 +18,7 @@ const PetListingSchema = new mongoose.Schema({
         size: { type: String, enum: ["small", "medium", "large"], required: true }, // küçük, orta, büyük
         weight: { type: Number, required: true }, // ağırlık (kg)
         vaccinated: { type: Boolean, default: true }, // aşı durumu
+        vaccinated_last_date: { type: Date, index: true }, // asısının son tarihi
         neutered: { type: Boolean, default: true }, // kısırlaştırılmış mı
         trainability: { type: String, enum: ["easy", "medium", "hard"], required: true }, // eğitilebilirlik seviyesi
         playfulness: { type: Number, min: 1, max: 5, required: true }, // oyunculuk seviyesi (1-5 arası)
@@ -25,6 +26,7 @@ const PetListingSchema = new mongoose.Schema({
     },
     createdAt: { type: Date, default: Date.now, index: true } 
 });
+
 
 PetListingSchema.index({
     user: 1, 
