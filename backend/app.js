@@ -6,13 +6,13 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors')
-const corn = require("./config/cronJobs");
+const cron = require("./config/cronJobs");
 
 
 const app = express();
 const corsOptions = {
-    origin: "*", 
-    credentials: true, 
+    origin: "http://localhost:3000",
+    credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE']
 };
 
