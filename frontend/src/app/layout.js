@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export default async function RootLayout({ children }) {
     const cookieStore = await cookies();
-    const token = cookieStore.get("token")?.value;
+    const token = cookieStore.get("token")?.value || null;
     const user = token ? await fetchCurrentUser(token) : null;
     return (
         <html lang="tr" className={inter.className}>
