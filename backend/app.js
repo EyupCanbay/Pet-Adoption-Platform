@@ -12,8 +12,7 @@ const cron = require("./config/cronJobs");
 const app = express();
 const corsOptions = {
     origin: "http://localhost:3000",
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE']
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTİON']
 };
 
 
