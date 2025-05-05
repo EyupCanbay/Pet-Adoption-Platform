@@ -68,7 +68,7 @@ async function logout(req, res) {
     req.cookies.token = ""
 
     Auditlog.info(req.user?.userName,"Auth","Delete","Log out the system and delete")
-    return responseHandler.success({res, statusCode:200, message:"Kullanıcı çıkışı başarıyla yapıldı", data: res.cookies.token});
+    return responseHandler.success({res, statusCode:200, message:"Kullanıcı çıkışı başarıyla yapıldı"});
   } catch (error) {
     return responseHandler.error({res, statusCode:500, message:"Kullanıcı çıkış işlemi sırasında hata oluştu", error});
   }

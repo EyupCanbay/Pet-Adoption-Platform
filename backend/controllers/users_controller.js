@@ -44,9 +44,11 @@ async function getUser(req,res,next) {
     try{    
         const user = await User.findOne({ _id: req.params.user_id }).select("-password")
 
+        const location = await Address.find({user_id: user._id})
+
         Auditlog.info(req.user?.userName,"Users","Get","Fetch a user") 
         if(!user) return responseHandler.error({res, statusCode: 500, message:"User not found"})
-        return responseHandler.success({res, statusCode: 200, message:"User successfuly fetched", data: user})
+        return responseHandler.success({res, statusCode: 200, message:"User successfuly fetched", data: {user, location}})
     } catch(error){
         return responseHandler.error({res, statusCode: 500, message:"User do not fetch", error})
     }
