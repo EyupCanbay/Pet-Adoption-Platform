@@ -6,8 +6,8 @@ const { checkUser } = require('../middleware/auth_middleware')
 const { validatePetListing } = require('../validators/pet_listing_validator')
 
 
-router.post('/',checkUser , petListingController.createLostListing)
-router.get('/', checkUser, petListingController.getAllPetListing)
+router.post('/', checkUser, petListingController.createLostListing)
+router.get('/', petListingController.getAllPetListing)
 router.get('/:listing_id', checkUser, petListingController.getPetListing)
 router.delete('/:listing_id', checkUser, petListingController.deletePetListing)
 router.put('/:listing_id', checkUser, validatePetListing, petListingController.updatePetListing)
