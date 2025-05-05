@@ -65,25 +65,14 @@ async function login(req, res) {
 
 async function logout(req, res) {
   try {
-    res.cookie('jwt', '', { maxAge: 1 });
-  
-    Auditlog.info(req.user?.userName, "Auth", "Delete", "Log out the system and delete");
+    req.cookies.token = ""
 
-    return responseHandler.success({
-      res,
-      statusCode: 200,
-      message: "Kullanıcı çıkışı başarıyla yapıldı",
-    });
+    Auditlog.info(req.user?.userName,"Auth","Delete","Log out the system and delete")
+    return responseHandler.success({res, statusCode:200, message:"Kullanıcı çıkışı başarıyla yapıldı", data: res.cookies.token});
   } catch (error) {
-    return responseHandler.error({
-      res,
-      statusCode: 500,
-      message: "Kullanıcı çıkış işlemi sırasında hata oluştu",
-      error,
-    });
+    return responseHandler.error({res, statusCode:500, message:"Kullanıcı çıkış işlemi sırasında hata oluştu", error});
   }
 }
-
 
 
 module.exports = {
