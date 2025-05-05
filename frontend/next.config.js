@@ -3,7 +3,8 @@ const nextConfig = {
   images: {
     domains: [
       "example.com",
-      "loremflickr.com"
+      "loremflickr.com",
+      "picsum.photos",
     ],
   },
 };
