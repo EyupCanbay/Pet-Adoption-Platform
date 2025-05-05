@@ -5,6 +5,8 @@ const nextConfig = {
       "example.com",
       "loremflickr.com",
       "picsum.photos",
+      "present-typewriter.biz",
+      "grumpy-fuel.org"
     ],
   },
 };
