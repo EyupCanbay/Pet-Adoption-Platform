@@ -22,10 +22,10 @@ USERS (kullanıcı işlemleri)
 + GET        /usres/report/admin        - kullanıcıların şikayetlerini getir
 + PUT         /users/report/admin/:user_id         -kullanıcıyı banlamak(admin)
 
-- GET       /users/me/listing/       -belirli kullanıcının bütün ilanlarını getir (user)
++ GET       /users/me/listing/       -belirli kullanıcının bütün ilanlarını getir (user)
 + DELETE      /users/me/bookmarks/:listing_id     -ilanı booklmarkalrdan sil (kendisi)
 + GET        /users/me/bookmarks                   -bookmarkları görüntüle (kendisi)  
-
++ GET       /users/:user_id/listing
 
 
 LOST_PET_LISTING

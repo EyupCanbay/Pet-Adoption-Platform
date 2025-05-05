@@ -6,12 +6,12 @@ const responseHandler = require('../utils/responseHandler');
 const Auditlog = require('../utils/auditlog_save.js')
 
 async function register(req, res) {
-  try {
-    const hashPassword = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
+  try{
+    //const hashPassword = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
     const user = new User({
       userName: req.body.userName,
       email: req.body.email,
-      password: hashPassword,
+      password: req.body.password,//hashPassword,
       name: req.body.name,
       surname: req.body.surname,
       phoneNumber: req.body.phoneNumber, //kullanıcı fotosu ekleme yazılıcak
@@ -30,11 +30,11 @@ async function register(req, res) {
       maxAge: 24 * 60 * 60 * 1000,
       sameSite: 'lax'
     })
-
-    Auditlog.info(req.user?.userName, "Auth", "Post", "Create a user")
-    return responseHandler.success({ res, statusCode: 201, message: "Kullanıcı başarıyla kaydedildi", data: { user, token } });
-  } catch (error) {
-    return responseHandler.error({ res, statusCode: 500, message: "Kullanıcı kayıt işlemi sırasında hata oluştu", error });
+    
+    Auditlog.info(req.user?.userName,"Auth","Post","Create a user")
+    return responseHandler.success({res, statusCode:201, message:"Kullanıcı başarıyla kaydedildi", data:{user, token}});
+  } catch(error) {
+    return responseHandler.error({res, statusCode:500, message:"Kullanıcı kayıt işlemi sırasında hata oluştu", error});
   }
 }
 
@@ -55,32 +55,28 @@ async function login(req, res) {
       sameSite: 'lax'
     })
 
-    Auditlog.info(null, "Auth", "Get", "Fetch a user")
-    return responseHandler.success({ res, statusCode: 200, message: "Kullanıcı başarıyla giriş yaptı", data: { user, token } });
+    Auditlog.info(null,"Auth","Get","Fetch a user")
+    return responseHandler.success({res, statusCode:200, message:"Kullanıcı başarıyla giriş yaptı", data:{user,token}});
   } catch (error) {
-    return responseHandler.error({ res, statusCode: 500, message: "Kullanıcı giriş işlemi sırasında hata oluştu", error });
+    return responseHandler.error({res, statusCode:500, message:"Kullanıcı giriş işlemi sırasında hata oluştu", error}); 
   }
 
 }
 
 async function logout(req, res) {
   try {
-    // req.cookies.token = ""
-    res.clearCookie('token', {
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: 'lax'
-    })
+    req.cookies.token = ""
 
-    Auditlog.info(req.user?.userName, "Auth", "Delete", "Log out the system and delete")
-    return responseHandler.success({ res, statusCode: 200, message: "Kullanıcı çıkışı başarıyla yapıldı" });
+    Auditlog.info(req.user?.userName,"Auth","Delete","Log out the system and delete")
+    return responseHandler.success({res, statusCode:200, message:"Kullanıcı çıkışı başarıyla yapıldı", data: res.cookies.token});
   } catch (error) {
-    return responseHandler.error({ res, statusCode: 500, message: "Kullanıcı çıkış işlemi sırasında hata oluştu", error });
+    return responseHandler.error({res, statusCode:500, message:"Kullanıcı çıkış işlemi sırasında hata oluştu", error});
   }
 }
 
 
 module.exports = {
-  register,
-  login,
-  logout
+    register,
+    login,
+    logout
 }
