@@ -32,7 +32,6 @@ export const RegisterUser = async (formData) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include',
             body: JSON.stringify(formData),
         });
 
@@ -41,6 +40,7 @@ export const RegisterUser = async (formData) => {
         }
 
         const data = await response.json();
+        console.log("data", data);
         console.log(data);
         return data;
     } catch (error) {

@@ -9,7 +9,7 @@ export const getAllListings = async () => {
             },
             credentials: "include",
         });
-        console.log("response", response);
+        // console.log("response", response);
         if (!response.ok) {
             throw new Error(`HTTP Error: ${response.status}`);
         }
