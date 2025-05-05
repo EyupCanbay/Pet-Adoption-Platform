@@ -4,8 +4,10 @@ import React, { useEffect, useState } from "react"
 import { Pencil, Save, X, XIcon } from "lucide-react"
 import User from "@/mocks/users.json"
 import { Instagram, Facebook, Twitter } from "lucide-react"
+import { useUser } from "@/src/context/userProvider"
 
 function Settings() {
+    const { user } = useUser();
     const [currentUser, setCurrentUser] = useState(null)
     const [tempUser, setTempUser] = useState(null)
     const [isEditing, setIsEditing] = useState(false)
@@ -24,9 +26,8 @@ function Settings() {
     }
 
     useEffect(() => {
-        const userData = User.data[0]
-        setCurrentUser(userData)
-        setTempUser(userData)
+        setCurrentUser(user)
+        setTempUser(user)
     }, [])
 
     const handleEdit = () => setIsEditing(true)
@@ -170,7 +171,11 @@ function Settings() {
                             <input
                                 type="date"
                                 name="birthdate"
-                                value={tempUser.birthdate.split("T")[0]} // T'yi ayırıp sadece tarihi alıyoruz
+                                value={
+                                    currentUser.birthdate
+                                        ? new Date(currentUser.birthdate).toLocaleDateString("tr-TR")
+                                        : "xx/xx/xxxx"
+                                } // T'yi ayırıp sadece tarihi alıyoruz
                                 onChange={handleChange}
                                 disabled={!isEditing}
                                 className={`w-full border rounded-md p-2 ${!isEditing ? "bg-gray-100" : ""}`}
