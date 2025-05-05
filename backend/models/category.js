@@ -8,5 +8,6 @@ const CategorySchema = new mongoose.Schema({
     description: { type: String, required: false},
     created_by: { type: String, required: true}
 });
+ 
 
 module.exports = mongoose.model('Category', CategorySchema);

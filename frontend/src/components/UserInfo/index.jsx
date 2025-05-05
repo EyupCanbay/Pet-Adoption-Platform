@@ -1,3 +1,4 @@
+import { useUser } from '@/src/context/userProvider';
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -8,7 +9,9 @@ import { SiAuth0 } from "react-icons/si";
 
 
 function UserInfo({ currentUser }) {
+    const { user } = useUser();
 
+    const [imgSrc, setImgSrc] = React.useState(currentUser?.profilePicture || "/default-avatar.jpg");
     const permissionColors = {
         Admin: "text-md shadow-md font-semibold hover:bg-red-300 transition duration-300 ease-in-out cursor-pointer rounded-md px-4 py-2 bg-red-200 text-red-700 border-red-300",
         User: "text-md shadow-md font-semibold hover:bg-blue-300 transition duration-300 ease-in-out cursor-pointer rounded-md px-4 py-2 bg-blue-200 text-blue-700 border-blue-300",
@@ -19,14 +22,16 @@ function UserInfo({ currentUser }) {
             <div className="flex flex-col md:flex-col lg:flex-col xl:flex-row  items-center rounded-md shadow-md p-4 space-y-4 md:space-y-2 lg:space-y-4 md:space-x-4 lg:space-x-8 xl:space-x-12">
                 <div className="flex flex-col items-center rounded-md p-2">
                     <Image
-                        src={currentUser.profilePhoto || "/default-avatar.jpg"}
-                        alt="profile"
+                        src={imgSrc}
+                        alt={`${currentUser.userName} profil resmi`}
                         width={100}
                         height={100}
                         className="rounded-full"
-                        style={{ objectFit: "cover" }}
+                        style={{ objectFit: "cover", width: "auto", height: "auto" }}
+                        onError={() => setImgSrc("/default-avatar.jpg")}
+                        priority
                     />
-                    <span>{currentUser.userName}</span>
+                    <span className='font-semibold'>{currentUser.userName}</span>
                 </div>
                 <div className="flex flex-col space-y-2 text-center">
                     <span className="font-bold border-b-2 border-gray-200 text-lg">Bookmark Sayısı</span>
@@ -47,19 +52,24 @@ function UserInfo({ currentUser }) {
             <div className='flex flex-col rounded-md shadow-md p-2'>
                 <div className='flex justify-between items-center p-4 border-b-2 border-gray-200'>
                     <span>Kişisel Bilgiler</span>
-                    <Link
-                        href="/settings"
-                    >
-                        {currentUser === true ? <div className='flex gap-2 items-center' ><FaEdit /> <span className='text-gray-600'>Edit</span></div> : null}
-                    </Link>
+                    {currentUser?._id === user?._id && (
+                        <Link href="/settings">
+                            <FaEdit className='text-gray-500 hover:text-gray-700 cursor-pointer' size={18} />
+                        </Link>
+                    )}
                 </div>
+
                 <span className='text-sm text-gray-700 p-4'>
                     {currentUser.bio || "Henüz bir biyografi yok."}
                 </span>
                 <div className='flex flex-col gap-3 p-4'>
                     <div className='flex justify-start items-center gap-1'>
                         <span className='font-semibold text-xs flex gap-1 items-center'><LiaBirthdayCakeSolid /> Doğum günü:</span>
-                        <span className='text-xs'>{currentUser.birthdate || "xx/xx/xxxx"}</span>
+                        <span className='text-xs'>
+                            {currentUser.birthdate
+                                ? new Date(currentUser.birthdate).toLocaleDateString("tr-TR")
+                                : "xx/xx/xxxx"}
+                        </span>
                     </div>
                     <div className='flex justify-start items-center gap-1'>
                         <span className='font-semibold text-xs flex gap-1 items-center'><MdOutlineEmail /> Email:</span>

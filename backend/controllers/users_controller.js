@@ -1,10 +1,11 @@
 const responseHandler = require("../utils/responseHandler")
-const { User, Address } = require('../models/index')
+const { User, Address, LostPetListing } = require('../models/index')
 const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 const Auditlog = require("../utils/auditlog_save")
 const { validateObjectId } = require('../validators/object_validate')
 const Enum = require("../config/enum")
+const lostPetListing = require("../models/lostPetListing")
  
 
 async function getAllUsers(req,res,next) {
@@ -150,7 +151,6 @@ async function deleteUserBlock(req,res,next) {
     }
 }
 
-
 async function getBlockUsers(req,res,next) {
     try{
         const userId = validateObjectId(req.user._id)
@@ -242,6 +242,79 @@ async function deleteUserBookmarks(req,res,next) {
         return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message:"hes occured removing the listing in bookmarks"})
     }
 }
+
+async function getAllListing(req,res,next) {
+    try {
+        const userId = validateObjectId(req.user._id)
+        
+        const listings = await User.aggregate([
+            { $match: {_id: userId } },
+            {
+                $lookup: {
+                    from: "petlistings", 
+                    localField: "_id",
+                    foreignField: "user_id",
+                    as: "petlisting",
+                }, 
+            
+
+            },
+            {
+                $lookup: {
+                    from: "lostpetlistings", 
+                    localField: "_id",
+                    foreignField: "user_id",
+                    as: "lostpetlisting",
+                }
+            },
+            {
+                $project: {
+                    "lostpetlisting": 1,
+                    "petlisting": 1,
+                }
+            }
+        ]) 
+        return responseHandler.success({res, statusCode:Enum.HTTP_CODES.OK, message:"fetch all listing",data: listings })
+    } catch (error) {
+        return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "all listing do not fetch" , error })
+    }
+}
+
+async function getAllListingForUsers(req,res,next) {
+    const userId = validateObjectId(req.params.user_id)
+    
+    try {
+        
+        const listings = await User.aggregate([
+            { $match: {_id: userId } },
+            {
+                $lookup: {
+                    from: "petlistings", 
+                    localField: "_id",
+                    foreignField: "user_id",
+                    as: "petlisting",
+                }, 
+            },
+            {
+                $lookup: {
+                    from: "lostpetlistings", 
+                    localField: "_id",
+                    foreignField: "user_id",
+                    as: "lostpetlisting",
+                }
+            },
+            {
+                $project: {
+                    "lostpetlisting": 1,
+                    "petlisting": 1,
+                }
+            }
+        ]) 
+        return responseHandler.success({res, statusCode:Enum.HTTP_CODES.OK, message:"fetch all listing",data: listings })
+    } catch (error) {
+        return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "all listing do not fetch" , error })
+    }
+}
 module.exports = {
     getAllUsers,
     getUser,
@@ -251,5 +324,7 @@ module.exports = {
     blockedUser,
     getBlockUsers,
     getUserBookmarks,
-    deleteUserBookmarks
+    deleteUserBookmarks,
+    getAllListing,
+    getAllListingForUsers
 }

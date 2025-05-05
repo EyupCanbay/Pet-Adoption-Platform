@@ -9,5 +9,6 @@ const CommentSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now, index: true }
 });
 
+
 CommentSchema.index({ user_id: 1, createdAt: -1}, { unique: true });
 module.exports = mongoose.model('Comment', CommentSchema)

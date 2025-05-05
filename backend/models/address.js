@@ -9,5 +9,6 @@ const AddressSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
+
 AddressSchema.index({ user_id: 1, country: "text", city: "text", state: "text", neighborhood: "text"}, { unique: true });
 module.exports = mongoose.model('Address', AddressSchema);
