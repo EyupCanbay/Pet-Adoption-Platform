@@ -22,7 +22,7 @@ function AdvertDetails() {
                 if (response) {
                     //TODO EĞER RESPONSE DATA ARRAY DÖNERSE İLK İNDEXİNİ AL OBJECT DÖNERSE KENDİSİNİ AL
                     setPet(response.data[0] || response.data);
-                    setUser(response.user);
+                    setUser(response.data[0]?.user || response.data.user);
                 } else {
                     console.error("No data received from the server.");
                 }
@@ -33,14 +33,14 @@ function AdvertDetails() {
         fetchPetDetails();
     }, [id])
 
-    // useEffect(() => {
-    //     if (pet) {
-    //         console.log("Pet details:", pet);
-    //     }
-    //     if (user) {
-    //         console.log("User details:", user);
-    //     }
-    // }, [pet, user]);
+    useEffect(() => {
+        if (pet) {
+            console.log("Pet details:", pet);
+        }
+        if (user) {
+            console.log("User details:", user);
+        }
+    }, [pet, user]);
 
     if (!pet) {
         return <Loading />;
@@ -64,8 +64,8 @@ function AdvertDetails() {
                 <div className="flex-1">
                     <div className="aspect-video bg-gray-100 rounded-xl overflow-hidden shadow">
                         <img
-                            src={"/default-avatar.jpg" || images?.[activeImage]}
-                            alt="Pet image"
+                            src={images?.[activeImage]}
+                            alt={petName}
                             className="w-full h-full object-cover"
                         />
                     </div>
@@ -75,7 +75,8 @@ function AdvertDetails() {
                             <img
                                 key={index}
                                 onClick={() => setActiveImage(index)}
-                                src={"/default-avatar.jpg" || img}
+                                src={img}
+                                alt={`Thumbnail ${index + 1}`}
                                 className={`h-20 w-32 object-cover rounded-lg cursor-pointer border-2 ${activeImage === index ? "border-blue-500" : "border-transparent"}`}
                             />
                         ))}
@@ -100,7 +101,9 @@ function AdvertDetails() {
                         <p><span className="font-medium">Arkadaş Canlısı:</span> {additionalInfo.sociality}</p>
                     </div>
                     {user && (
-                        <Link href={`/profile/${user.userName}`} className="flex justify-start gap-4 items-center mt-4">
+                        <Link href={{
+                            pathname: `/profile/${user._id}/${slugify(user.userName).toLowerCase()}`,
+                        }} className="flex justify-start gap-4 items-center mt-4">
                             <p className="text-sm text-gray-400 mt-2">Sahibi: {user.userName}</p>
                             <img
                                 src={user.profilePhoto || "/default-avatar.jpg"}

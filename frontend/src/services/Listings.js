@@ -9,6 +9,10 @@ export const getAllListings = async () => {
             },
             credentials: "include",
         });
+        console.log("response", response);
+        if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+        }
         const data = await response.json();
         return data;
     } catch (error) {

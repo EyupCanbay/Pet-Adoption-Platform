@@ -32,6 +32,7 @@ export const RegisterUser = async (formData) => {
             headers: {
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify(formData),
         });
 
@@ -40,6 +41,7 @@ export const RegisterUser = async (formData) => {
         }
 
         const data = await response.json();
+        console.log(data);
         return data;
     } catch (error) {
         console.error('Error registering:', error);
@@ -55,7 +57,10 @@ export const LogoutUser = async () => {
             headers: {
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
         });
+
+        console.log(response);
 
         if (!response.ok) {
             throw new Error('Logout failed');

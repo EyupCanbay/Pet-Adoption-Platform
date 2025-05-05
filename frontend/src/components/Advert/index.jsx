@@ -47,7 +47,10 @@ function Advert({ pet }) {
                         fill
                         style={{ objectFit: "cover" }}
                         className="rounded-t-md"
+                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                        priority
                     />
+
                 </div>
             </div>
             <div className="flex flex-col gap-2 p-2 flex-grow">
@@ -56,13 +59,14 @@ function Advert({ pet }) {
                     <div className="flex items-center gap-2 mt-2 md:mt-0">
                         <div className="relative w-6 h-6">
                             <Image
-                                // src={owner?.profilePhoto || "/default-avatar.jpg"} 
                                 src="/default-avatar.jpg"
                                 alt={owner?.userName || "Owner"}
                                 fill
                                 className="rounded-full"
                                 style={{ objectFit: "cover" }}
+                                sizes="24px"
                             />
+
                         </div>
                         <span className="text-xs md:text-md lg:text-md truncate">{owner?.userName || "Unknown Owner"}</span>
                     </div>
