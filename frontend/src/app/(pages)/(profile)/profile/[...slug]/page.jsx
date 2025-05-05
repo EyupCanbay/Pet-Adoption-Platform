@@ -7,14 +7,14 @@ import Loading from "@/src/components/Loading";
 import UserInfo from "@/src/components/UserInfo";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
-import PetListing from "@/mocks/pet_listings.json";
-import Users from "@/mocks/users.json";
 import slugify from "slugify";
+import { getSingleUser } from "@/src/services/User";
 
 function AnotherProfile() {
     const params = useParams();
-    const userName = Array.isArray(params?.slug) ? params.slug[0] : params?.slug;
-    const id = Users?.data?.find((user) => slugify(user.userName) === userName)?._id;
+    const id = params?.slug?.[0];
+    const userName = params?.slug?.[1];
+
     const [user, setUser] = useState(null);
     const [adverts, setAdverts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -22,46 +22,45 @@ function AnotherProfile() {
     const [direction, setDirection] = useState(1);
 
     useEffect(() => {
-        if (!id) return;
-
-        const fetchData = async () => {
-            // Kullanıcıyı bul
-            const matchedUser = Users?.data?.find((u) => String(u._id) === String(id));
-            setUser(matchedUser || null);
-
-            // Kullanıcının ilanlarını bul
-            const userAdverts = PetListing?.data?.filter((p) => String(p.user_id) === String(id));
-            setAdverts(userAdverts || []);
-
-            // Yükleme simülasyonu
-            setTimeout(() => setLoading(false), 1000);
-        };
-
-        fetchData();
+        const fetchUser = async () => {
+            const response = await getSingleUser(id);
+            console.log("response", response);
+            setUser(response.data);
+            setAdverts(response.data[0]?.adverts || response.data.adverts);
+            setLoading(false);
+        }
+        fetchUser();
     }, [id]);
 
-    const advertsPerPage = 6;
-    const totalPages = Math.ceil(adverts.length / advertsPerPage);
-    const startIndex = (currentPage - 1) * advertsPerPage;
-    const displayedAdverts = adverts.slice(startIndex, startIndex + advertsPerPage);
+    useEffect(() => {
+        console.log("User:", user);
+        // console.log(`Adverts: ${adverts}`);
+    }, [user])
 
-    const paginate = (newPage) => {
-        setDirection(newPage > currentPage ? 1 : -1);
-        setCurrentPage(newPage);
-    };
+
+
+    // const advertsPerPage = 6;
+    // const totalPages = Math.ceil(adverts.length / advertsPerPage);
+    // const startIndex = (currentPage - 1) * advertsPerPage;
+    // const displayedAdverts = adverts.slice(startIndex, startIndex + advertsPerPage);
+
+    // const paginate = (newPage) => {
+    //     setDirection(newPage > currentPage ? 1 : -1);
+    //     setCurrentPage(newPage);
+    // };
 
     if (loading) return <Loading />;
     if (!user) return <p className="text-center text-gray-500 mt-10">Kullanıcı bulunamadı.</p>;
 
     return (
         <div className="flex flex-col sm:grid sm:grid-cols-1 md:grid-cols-3 gap-1 md:gap-4 lg:gap-6 w-full p-4">
-            <UserInfo user={user} currentUser={false} />
+            <UserInfo currentUser={user} />
             <div className="w-full md:col-span-2">
                 <div className="rounded-md shadow-md w-full max-w-4xl mx-auto p-4">
                     <span className="flex justify-center pb-2 font-semibold text-2xl border-b-2 border-gray-200 text-gray-600">
                         {user.name} {user.surname} - İLANLAR
                     </span>
-                    <div className="relative overflow-hidden p-4">
+                    {/* <div className="relative overflow-hidden p-4">
                         <AnimatePresence custom={direction} mode="popLayout">
                             <motion.div
                                 key={currentPage}
@@ -84,9 +83,9 @@ function AnotherProfile() {
                                 ))}
                             </motion.div>
                         </AnimatePresence>
-                    </div>
+                    </div> */}
 
-                    <div className="flex justify-center gap-4 items-center mt-4">
+                    {/* <div className="flex justify-center gap-4 items-center mt-4">
                         <button
                             onClick={() => paginate(currentPage - 1)}
                             disabled={currentPage === 1}
@@ -104,7 +103,7 @@ function AnotherProfile() {
                         >
                             <FaArrowRight />
                         </button>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
