@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { IoMdArrowDropdown, IoMdNotificationsOutline } from 'react-icons/io';
 import Link from 'next/link';
 import { useUser } from '@/src/context/userProvider';
+import { LogoutUser } from '@/src/services/Auth';
 
 function ProfileSection() {
     const router = useRouter();
@@ -43,6 +44,10 @@ function ProfileSection() {
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
+
+    const handleLogout = async () => {
+        await LogoutUser();
+    }
 
     return (
         <div className="flex items-center gap-4 md:gap-6">
@@ -118,8 +123,9 @@ function ProfileSection() {
                                     </li>
                                     <li>
                                         <Link
+                                            href="/login"
                                             className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                                            href="/logout"
+                                            onClick={() => handleLogout()}
                                         >
                                             Logout
                                         </Link>
