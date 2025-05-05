@@ -1,0 +1,328 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "Köpek İlanları",
+            "description": "Köpekler için ilanlar",
+            "created_by": "admin",
+            "subCategory_id": [
+                {
+                    "id": 100,
+                    "name": "Toy Poodle"
+                },
+                {
+                    "id": 99,
+                    "name": "Pomeranian Boo"
+                },
+                {
+                    "id": 95,
+                    "name": "Maltipoo"
+                },
+                {
+                    "id": 93,
+                    "name": "Maltese Terrier"
+                },
+                {
+                    "id": 5,
+                    "name": "Doberman"
+                },
+                {
+                    "id": 6,
+                    "name": "Chihuahua"
+                },
+                {
+                    "id": 7,
+                    "name": "Shih Tzu"
+                },
+                {
+                    "id": 8,
+                    "name": "Rottweiler"
+                },
+                {
+                    "id": 9,
+                    "name": "Sibirya Kurdu (Husky)"
+                },
+                {
+                    "id": 10,
+                    "name": "Cane Corso"
+                },
+                {
+                    "id": 11,
+                    "name": "Golden Retriever"
+                },
+                {
+                    "id": 12,
+                    "name": "Pug"
+                },
+                {
+                    "id": 13,
+                    "name": "French Bulldog"
+                },
+                {
+                    "id": 14,
+                    "name": "Alman Kurdu"
+                },
+                {
+                    "id": 15,
+                    "name": "Çin Aslanı"
+                },
+                {
+                    "id": 16,
+                    "name": "Labrador Retriever"
+                },
+                {
+                    "id": 17,
+                    "name": "Belçika Kurdu"
+                },
+                {
+                    "id": 18,
+                    "name": "Morkie"
+                },
+                {
+                    "id": 19,
+                    "name": "Border Collie"
+                },
+                {
+                    "id": 20,
+                    "name": "Dogo Argentino"
+                },
+                {
+                    "id": 21,
+                    "name": "Samoyed"
+                },
+                {
+                    "id": 22,
+                    "name": "Yorkshire Terrier"
+                },
+                {
+                    "id": 23,
+                    "name": "Akita Inu"
+                },
+                {
+                    "id": 24,
+                    "name": "Cavalier King Charles Spaniel"
+                },
+                {
+                    "id": 25,
+                    "name": "Labradoodle"
+                },
+                {
+                    "id": 26,
+                    "name": "Alabay"
+                },
+                {
+                    "id": 27,
+                    "name": "Cavapoo"
+                },
+                {
+                    "id": 28,
+                    "name": "Corgi"
+                },
+                {
+                    "id": 29,
+                    "name": "Shiba Köpek"
+                },
+                {
+                    "id": 30,
+                    "name": "Amerikan Cocker"
+                },
+                {
+                    "id": 31,
+                    "name": "Beagle"
+                },
+                {
+                    "id": 32,
+                    "name": "Bernese Dağ Köpeği"
+                },
+                {
+                    "id": 33,
+                    "name": "Cockapoo"
+                },
+                {
+                    "id": 34,
+                    "name": "Dalmaçyalı"
+                },
+                {
+                    "id": 35,
+                    "name": "Fransız Mastiff"
+                },
+                {
+                    "id": 36,
+                    "name": "İngiliz Cocker"
+                },
+                {
+                    "id": 37,
+                    "name": "Jack Russell Terrier"
+                },
+                {
+                    "id": 38,
+                    "name": "Schnauzer"
+                },
+                {
+                    "id": 39,
+                    "name": "Spitz"
+                },
+                {
+                    "id": 40,
+                    "name": "Alaska Kurdu"
+                },
+                {
+                    "id": 41,
+                    "name": "Avustralya Çoban Köpeği"
+                },
+                {
+                    "id": 42,
+                    "name": "Basenji"
+                },
+                {
+                    "id": 43,
+                    "name": "Bişon Çuha Köpeği"
+                },
+                {
+                    "id": 44,
+                    "name": "Boxer Köpek"
+                },
+                {
+                    "id": 45,
+                    "name": "Dakhund - Sosis Köpek"
+                },
+                {
+                    "id": 46,
+                    "name": "Danua (Great Dane)"
+                },
+                {
+                    "id": 47,
+                    "name": "İngiliz Bulldog"
+                },
+                {
+                    "id": 48,
+                    "name": "Kangal"
+                },
+                {
+                    "id": 49,
+                    "name": "Kaniş"
+                },
+                {
+                    "id": 50,
+                    "name": "Papillon Köpek"
+                },
+                {
+                    "id": 51,
+                    "name": "Pekinez"
+                },
+                {
+                    "id": 52,
+                    "name": "Presa Canario"
+                },
+                {
+                    "id": 53,
+                    "name": "Saint Bernard"
+                },
+                {
+                    "id": 54,
+                    "name": "Tibet Mastifi"
+                },
+                {
+                    "id": 55,
+                    "name": "Wolfdog"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Kedi İlanları",
+            "description": "Kediler için ilanlar",
+            "created_by": "admin",
+            "subCategory_id": [
+                {
+                    "id": 56,
+                    "name": "British Shorthair"
+                },
+                {
+                    "id": 57,
+                    "name": "Scottish Fold"
+                },
+                {
+                    "id": 58,
+                    "name": "British Longhair"
+                },
+                {
+                    "id": 59,
+                    "name": "İran Kedisi"
+                },
+                {
+                    "id": 60,
+                    "name": "Maine Coon"
+                },
+                {
+                    "id": 61,
+                    "name": "Scottish Fold Longhair"
+                },
+                {
+                    "id": 62,
+                    "name": "Sfenks Kedisi"
+                },
+                {
+                    "id": 63,
+                    "name": "Bengal Kedisi"
+                },
+                {
+                    "id": 64,
+                    "name": "Exotic Shorthair"
+                },
+                {
+                    "id": 65,
+                    "name": "Munchkin Kedisi"
+                },
+                {
+                    "id": 66,
+                    "name": "Scottish Straight"
+                },
+                {
+                    "id": 67,
+                    "name": "Chinchilla"
+                },
+                {
+                    "id": 68,
+                    "name": "Ragdoll Kedisi"
+                },
+                {
+                    "id": 69,
+                    "name": "Savannah Kedisi"
+                },
+                {
+                    "id": 70,
+                    "name": "Sibirya Kedisi"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "Eş Arayanlar",
+            "description": "Eşleşme için ilanlar",
+            "created_by": "admin",
+            "subCategory_id": [
+                {
+                    "id": 71,
+                    "name": "Köpek Çiftleştirme İlanları"
+                },
+                {
+                    "id": 72,
+                    "name": "Kedi Eş Bulma"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "Kayıp Hayvan İlanları",
+            "description": "Kayıp hayvan ilanları",
+            "created_by": "admin",
+            "subCategory_id": [
+                {
+                    "id": 73,
+                    "name": "Kayıp Kedi İlanları"
+                }
+            ]
+        }
+    ]
+}
