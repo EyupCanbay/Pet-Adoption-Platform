@@ -8,19 +8,15 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
 import PetListing from "@/mocks/pet_listings";
 import slugify from "slugify";
+import { useUser } from "@/src/context/userProvider";
 function ProfilePage() {
-
-    const currentUser = true;
+    const { user } = useUser();
     const [loading, setLoading] = useState(true);
     const [adverts, setAdverts] = useState([]);
     useEffect(() => {
         const fetchAdverts = async () => {
-            const response = await new Promise((resolve) => {
-                setTimeout(() => {
-                    resolve(PetListing.data);
-                }, 1000);
-            });
-            setAdverts(response);
+            //! ENDPOİNT YAZILMADI USERS/ME/LİSTİNGS YAZILINCA ORDAN ÇEK 
+            //    setAdverts()
         };
         fetchAdverts();
     }, []);
@@ -50,7 +46,7 @@ function ProfilePage() {
 
     return (
         <div className="flex flex-col sm:grid sm:grid-cols-1 md:grid-cols-3 gap-1 md:gap-4 lg:gap-6 w-full p-4">
-            <UserInfo currentUser={currentUser} />
+            <UserInfo currentUser={user} />
             <div className="w-full md:col-span-2">
                 <div className="rounded-md shadow-md w-full max-w-4xl mx-auto p-4">
                     <span className="flex justify-center pb-2 font-semibold text-2xl border-b-2 border-gray-200 text-gray-600">
@@ -66,43 +62,54 @@ function ProfilePage() {
                                 exit={{ x: -direction * 100 + "%", opacity: 0 }}
                                 transition={{ duration: 0.4, ease: "easeInOut" }}
                             >
-                                {displayedAdverts.map((advert) => (
+                                {
+                                    displayedAdverts.length > 0 ?
+                                        displayedAdverts.map((advert) => (
 
-                                    <Link
-                                        key={advert.user_id}
-                                        href={{
-                                            pathname: `/advert/${slugify(advert.petName).toLowerCase()}`,
-                                            query: { pet: slugify(advert.petName).toLowerCase() },
-                                        }}
-                                    >
-                                        <Advert key={advert.id} pet={advert} />
-                                    </Link>
-                                ))}
+                                            <Link
+                                                key={advert.user_id}
+                                                href={{
+                                                    pathname: `/advert/${slugify(advert.petName).toLowerCase()}`,
+                                                    query: { pet: slugify(advert.petName).toLowerCase() },
+                                                }}
+                                            >
+                                                <Advert key={advert.id} pet={advert} />
+                                            </Link>
+                                        ))
+                                        :
+                                        <div className="flex flex-col items-center justify-center h-full w-full">
+                                            <span className="text-gray-500 text-lg">Henüz ilanınız yok.</span>
+                                        </div>
+                                }
                             </motion.div>
                         </AnimatePresence>
                     </div>
 
-                    <div className="flex justify-center gap-4 items-center mt-4">
-                        <button
-                            onClick={() => paginate(currentPage - 1)}
-                            disabled={currentPage === 1}
-                            className={`flex items-center px-4 py-2 rounded-full  ${currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-indigo-600 text-white hover:bg-indigo-800 cursor-pointer"
-                                }`}
-                        >
-                            <FaArrowLeft />
-                        </button>
-                        <span className="text-lg">
-                            Sayfa {currentPage} / {totalPages}
-                        </span>
-                        <button
-                            onClick={() => paginate(currentPage + 1)}
-                            disabled={currentPage === totalPages}
-                            className={`flex items-center px-4 py-2 rounded-full  ${currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-indigo-600 text-white hover:bg-indigo-800 cursor-pointer"
-                                }`}
-                        >
-                            <FaArrowRight />
-                        </button>
-                    </div>
+                    {
+                        displayedAdverts.length > 0 && (
+                            <div className="flex justify-center gap-4 items-center mt-4">
+                                <button
+                                    onClick={() => paginate(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                    className={`flex items-center px-4 py-2 rounded-full  ${currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-indigo-600 text-white hover:bg-indigo-800 cursor-pointer"
+                                        }`}
+                                >
+                                    <FaArrowLeft />
+                                </button>
+                                <span className="text-lg">
+                                    Sayfa {currentPage} / {totalPages}
+                                </span>
+                                <button
+                                    onClick={() => paginate(currentPage + 1)}
+                                    disabled={currentPage === totalPages}
+                                    className={`flex items-center px-4 py-2 rounded-full  ${currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-indigo-600 text-white hover:bg-indigo-800 cursor-pointer"
+                                        }`}
+                                >
+                                    <FaArrowRight />
+                                </button>
+                            </div>
+                        )
+                    }
                 </div>
             </div>
         </div>

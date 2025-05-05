@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaLock, FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
+import { LoginUser } from "@/src/services/Auth";
+import { toast } from "react-toastify";
 
 export default function Login() {
     const router = useRouter();
@@ -17,16 +19,18 @@ export default function Login() {
         setError("");
 
         if (!email || !password) {
-            setError("Lütfen tüm alanları doldurun.");
+            toast.error("Lütfen tüm alanları doldurun.");
             return;
         }
-
         try {
             setLoading(true);
-
-            await new Promise((resolve) => setTimeout(resolve, 1500));
-
-            router.push("/");
+            const formData = { email, password };
+            const response = await LoginUser(formData);
+            console.log(response);
+            if (response.success) {
+                toast.success("Giriş başarılı!");       
+                router.push("/");
+            }
         } catch (error) {
             setError("Giriş başarısız, lütfen tekrar deneyin.");
         } finally {
@@ -75,7 +79,7 @@ export default function Login() {
 
                     <button
                         type="submit"
-                        className="w-full bg-blue-500 text-white p-3 rounded-lg font-semibold hover:bg-blue-600 transition duration-300 disabled:bg-gray-400"
+                        className="w-full bg-blue-500 text-white p-3 cursor-pointer rounded-lg font-semibold hover:bg-blue-600 transition duration-300 disabled:bg-gray-400"
                         disabled={loading}
                     >
                         {loading ? "Giriş Yapılıyor..." : "Giriş Yap"}
