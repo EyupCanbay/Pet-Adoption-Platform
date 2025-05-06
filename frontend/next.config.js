@@ -6,7 +6,10 @@ const nextConfig = {
       "loremflickr.com",
       "picsum.photos",
       "present-typewriter.biz",
-      "grumpy-fuel.org"
+      "grumpy-fuel.org",
+      "blushing-disappointment.net",
+      "unselfish-brochure.biz",
+      "darling-tennis.info"
     ],
   },
 };
