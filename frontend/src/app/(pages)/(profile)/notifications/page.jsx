@@ -5,35 +5,29 @@ import NotificationFavorite from '@/src/components/notifications/NotificationFav
 import NotificationGeneral from '@/src/components/notifications/NotificationGeneral';
 import NotificationReply from '@/src/components/notifications/NotificationReply';
 import NotificationReport from '@/src/components/notifications/NotificationReport';
-import User from "@/mocks/users.json";
-import NotificationsMock from "@/mocks/notifications.json";
-
-const notificationTypes = [
-    { label: "Tümü", value: "all" },
-    { label: "Yorumlar", value: "comment" },
-    { label: "Yanıtlar", value: "reply" },
-    { label: "Favoriler", value: "favorite" },
-    { label: "Şikayetler", value: "report" },
-    { label: "Genel", value: "general" }
-];
+import { useUser } from '@/src/context/userProvider';
+import { getSingleUsersNotifications } from '@/src/services/User';
 
 function Notifications() {
-    const [currentUser, setCurrentUser] = useState(null);
     const [allNotifications, setAllNotifications] = useState([]);
     const [selectedType, setSelectedType] = useState("all");
-
+    const [currentUser, setCurrentUser] = useState(null);
+    const [notificationId, setNotificationId] = useState(null);
+    const user = useUser();
+    // console.log(user);
     useEffect(() => {
-        setCurrentUser(User?.data[0]);
-    }, []);
+        if (user) {
+            setCurrentUser(user?.user);
+        }
+    }, [])
 
     useEffect(() => {
         if (currentUser) {
-            const userNotifications = NotificationsMock?.data
-                .filter(n => n.recipient_id === currentUser._id)
-                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Tarihe göre azalan sırala
-            setAllNotifications(userNotifications);
+            setNotificationId(currentUser?.notifications);
         }
     }, [currentUser]);
+
+    //! ENDPOİNT HAZIR DEĞİL !!!!!!!!!!!!!!!!!!!
 
     const renderNotificationComponent = (notif) => {
         switch (notif.type) {
@@ -59,7 +53,7 @@ function Notifications() {
 
     return (
         <div className="p-4 max-w-3xl mx-auto">
-            {/* Filtre Butonları */}
+            {/* Filtre Butonları
             <div className="flex gap-2 mb-4 flex-wrap">
                 {notificationTypes.map(({ label, value }) => (
                     <button
@@ -73,13 +67,12 @@ function Notifications() {
                 ))}
             </div>
 
-            {/* Bildirimler */}
             <div className="space-y-4">
                 {filteredNotifications.map(notif => renderNotificationComponent(notif))}
                 {filteredNotifications.length === 0 && (
                     <p className="text-gray-500 text-sm">Hiç bildirim yok.</p>
                 )}
-            </div>
+            </div> */}
         </div>
     );
 }

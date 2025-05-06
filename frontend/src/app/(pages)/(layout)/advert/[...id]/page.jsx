@@ -13,6 +13,8 @@ function AdvertDetails() {
     const [pet, setPet] = useState(null);
     const [activeImage, setActiveImage] = useState(0);
     const [user, setUser] = useState(null);
+    const [ownerImageError, setOwnerImageError] = useState(false);
+    const [petImageError, setPetImageError] = useState(false);
 
     useEffect(() => {
         const fetchPetDetails = async () => {
@@ -33,14 +35,14 @@ function AdvertDetails() {
         fetchPetDetails();
     }, [id])
 
-    useEffect(() => {
-        if (pet) {
-            console.log("Pet details:", pet);
-        }
-        if (user) {
-            console.log("User details:", user);
-        }
-    }, [pet, user]);
+    // useEffect(() => {
+    //     if (pet) {
+    //         console.log("Pet details:", pet);
+    //     }
+    //     if (user) {
+    //         console.log("User details:", user);
+    //     }
+    // }, [pet, user]);
 
     if (!pet) {
         return <Loading />;
@@ -76,7 +78,7 @@ function AdvertDetails() {
                                 key={index}
                                 onClick={() => setActiveImage(index)}
                                 src={img}
-                                alt={`Thumbnail ${index + 1}`}
+                                alt={petName}
                                 className={`h-20 w-32 object-cover rounded-lg cursor-pointer border-2 ${activeImage === index ? "border-blue-500" : "border-transparent"}`}
                             />
                         ))}
@@ -106,9 +108,14 @@ function AdvertDetails() {
                         }} className="flex justify-start gap-4 items-center mt-4">
                             <p className="text-sm text-gray-400 mt-2">Sahibi: {user.userName}</p>
                             <img
-                                src={user.profilePhoto || "/default-avatar.jpg"}
-                                alt="Owner"
+                                src={
+                                    !ownerImageError && user?.profilePhoto
+                                        ? user?.profilePhoto
+                                        : "/default-avatar.jpg"
+                                }
+                                alt={user?.userName || "Owner"}
                                 className="w-8 h-8 rounded-full mt-2"
+                                onError={() => setOwnerImageError(true)}
                             />
                         </Link>
                     )}
