@@ -1,16 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaUserAlt, FaLock, FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaUserAlt, FaLock, FaEnvelope, FaPhoneAlt, FaEye, FaEyeSlash } from "react-icons/fa";
+import { RegisterUser } from "@/src/services/Auth";
 
 export default function Register() {
     const router = useRouter();
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
+    const [name, setName] = useState("");
+    const [surname, setSurname] = useState("");
+    const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
@@ -22,27 +25,27 @@ export default function Register() {
         setError("");
         setSuccessMessage("");
 
-        if (!firstName || !lastName || !email || !password || !confirmPassword) {
-            setError("Lütfen tüm alanları doldurun.");
-            return;
-        }
+        // Form data structure
+        const formData = {
+            name,
+            surname,
+            userName,
+            email,
+            password,
+            phoneNumber,
+        };
 
-        if (password !== confirmPassword) {
-            setError("Şifreler uyuşmuyor, lütfen tekrar deneyin.");
-            return;
-        }
-
+        setLoading(true);
         try {
-            setLoading(true);
-
-            await new Promise((resolve) => setTimeout(resolve, 1500));
-
-            setSuccessMessage("Kayıt başarılı, giriş yapabilirsiniz.");
-            setTimeout(() => {
+            const response = await RegisterUser(formData);
+            if (response.status === "Success") {
+                setSuccessMessage("Kayıt başarılı! Giriş yapabilirsiniz.");
                 router.push("/login");
-            }, 2000);
+            } else {
+                setError(response.data?.message || "Kayıt işlemi başarısız oldu.");
+            }
         } catch (error) {
-            setError("Kayıt başarısız, lütfen tekrar deneyin.");
+            setError("Kayıt işlemi sırasında bir hata oluştu.");
         } finally {
             setLoading(false);
         }
@@ -64,8 +67,8 @@ export default function Register() {
                         <input
                             type="text"
                             placeholder="Adınız"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                             className="w-full pl-10 p-3 border rounded-lg outline-none"
                         />
                     </div>
@@ -75,8 +78,19 @@ export default function Register() {
                         <input
                             type="text"
                             placeholder="Soyadınız"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
+                            value={surname}
+                            onChange={(e) => setSurname(e.target.value)}
+                            className="w-full pl-10 p-3 border rounded-lg outline-none"
+                        />
+                    </div>
+
+                    <div className="relative">
+                        <FaUserAlt className="absolute left-3 top-4 text-gray-400" />
+                        <input
+                            type="text"
+                            placeholder="Kullanıcı Adınız"
+                            value={userName}
+                            onChange={(e) => setUserName(e.target.value)}
                             className="w-full pl-10 p-3 border rounded-lg outline-none"
                         />
                     </div>
@@ -88,6 +102,17 @@ export default function Register() {
                             placeholder="E-posta adresiniz"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            className="w-full pl-10 p-3 border rounded-lg outline-none"
+                        />
+                    </div>
+
+                    <div className="relative">
+                        <FaPhoneAlt className="absolute left-3 top-4 text-gray-400" />
+                        <input
+                            type="text"
+                            placeholder="Telefon Numaranız"
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
                             className="w-full pl-10 p-3 border rounded-lg outline-none"
                         />
                     </div>

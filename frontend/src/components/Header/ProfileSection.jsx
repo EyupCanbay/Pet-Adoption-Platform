@@ -47,6 +47,7 @@ function ProfileSection() {
 
     const handleLogout = async () => {
         await LogoutUser();
+        window.location.href = '/login';
     }
 
     return (

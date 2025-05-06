@@ -3,34 +3,34 @@ import Image from "next/image";
 import Link from "next/link";
 import slugify from "slugify";
 import React, { useEffect, useState } from "react";
+import { getSingleUser } from "@/src/services/User";
 
-function Advert({ pet }) {
+function Advert({ pet, userId }) {
     // console.log("pet", pet);
+    // console.log("userId", userId);
+    const [ownerImageError, setOwnerImageError] = useState(false);
     const [owner, setOwner] = useState(null);
     const [loadingOwner, setLoadingOwner] = useState(true);
-    const userId = pet?.user?._id;
 
-    // useEffect(() => {
-    //     const fetchOwner = () => {
-    //         const own = Users?.data?.find((user) => user._id === userId);
-    //         // console.log("own", own);
-    //         setOwner(own || null);
-    //         setLoadingOwner(false);
-    //     };
+    useEffect(() => {
+        const fetchOwner = async () => {
+            try {
+                const response = await getSingleUser(userId);
+                // console.log("response", response);
+                if (response.status === "Success") {
+                    setOwner(response.data);
+                } else {
+                    console.error("No data received from the server.");
+                }
+            } catch (error) {
+                console.error("Error fetching owner details:", error);
+            } finally {
+                setLoadingOwner(false);
+            }
+        };
+        fetchOwner();
+    }, [pet, userId]);
 
-    //     if (userId) {
-    //         fetchOwner();
-    //     }
-    // }, [userId]);
-
-
-    // useEffect(() => {
-    //     if (owner) {
-    //         console.log("Updated owner details:", owner);
-    //     } else {
-    //         console.log("Owner not found");
-    //     }
-    // }, [owner]);
     return (
         <Link
             href={{
@@ -59,12 +59,17 @@ function Advert({ pet }) {
                     <div className="flex items-center gap-2 mt-2 md:mt-0">
                         <div className="relative w-6 h-6">
                             <Image
-                                src="/default-avatar.jpg"
+                                src={
+                                    !ownerImageError && owner?.profilePhoto
+                                        ? owner?.profilePhoto
+                                        : "/default-avatar.jpg"
+                                }
                                 alt={owner?.userName || "Owner"}
                                 fill
                                 className="rounded-full"
                                 style={{ objectFit: "cover" }}
                                 sizes="24px"
+                                onError={() => setOwnerImageError(true)}
                             />
 
                         </div>

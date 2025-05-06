@@ -28,8 +28,8 @@ export default function Login() {
             const response = await LoginUser(formData);
             console.log(response);
             if (response.success) {
-                toast.success("Giriş başarılı!");       
-                router.push("/");
+                toast.success("Giriş başarılı!");
+                window.location.href = "/";
             }
         } catch (error) {
             setError("Giriş başarısız, lütfen tekrar deneyin.");

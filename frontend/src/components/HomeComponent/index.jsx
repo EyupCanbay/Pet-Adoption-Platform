@@ -35,7 +35,7 @@ function HomeComponent() {
         <div className="flex flex-col h-full py-4 px-10">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {adverts.map((advert) => (
-                    <Advert key={Math.random()} pet={advert} />
+                    <Advert userId={advert?.user_id} key={Math.random()} pet={advert} />
                 ))}
             </div>
             <div className="mt-10">

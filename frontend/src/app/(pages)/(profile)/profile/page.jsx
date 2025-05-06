@@ -6,20 +6,45 @@ import Loading from "@/src/components/Loading";
 import UserInfo from "@/src/components/UserInfo";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
-import PetListing from "@/mocks/pet_listings";
 import slugify from "slugify";
 import { useUser } from "@/src/context/userProvider";
+import { fetchCurrentUsersListings } from "@/src/services/User";
 function ProfilePage() {
     const { user } = useUser();
     const [loading, setLoading] = useState(true);
     const [adverts, setAdverts] = useState([]);
     useEffect(() => {
         const fetchAdverts = async () => {
-            //! ENDPOİNT YAZILMADI USERS/ME/LİSTİNGS YAZILINCA ORDAN ÇEK 
-            //    setAdverts()
+            try {
+                const response = await fetchCurrentUsersListings();
+                if (response.status) {
+                    const combinedListings = [
+                        ...response.data[0].petlisting,
+                        ...response.data[0].lostpetlisting,
+                    ];
+                    setAdverts(combinedListings);
+                } else {
+                    console.error("Error fetching adverts:", response.statusText);
+                }
+            } catch (error) {
+                console.error("Error fetching adverts:", error);
+            } finally {
+                setLoading(false);
+            }
         };
         fetchAdverts();
     }, []);
+
+
+    // useEffect(() => {
+    //     if (adverts.length > 0) {
+    //         console.log("Adverts fetched:", adverts);
+    //     } else {
+    //         console.log("No adverts found.");
+    //     }
+    // }, [adverts]);
+
+
     const filteredPets = adverts.slice(0, 12);
 
     const advertsPerPage = 6;
@@ -28,7 +53,6 @@ function ProfilePage() {
     const [currentPage, setCurrentPage] = useState(1);
     const [direction, setDirection] = useState(1);
 
-    setTimeout(() => setLoading(false), 1000);
 
     if (loading) return <Loading />;
 
@@ -65,16 +89,7 @@ function ProfilePage() {
                                 {
                                     displayedAdverts.length > 0 ?
                                         displayedAdverts.map((advert) => (
-
-                                            <Link
-                                                key={advert.user_id}
-                                                href={{
-                                                    pathname: `/advert/${slugify(advert.petName).toLowerCase()}`,
-                                                    query: { pet: slugify(advert.petName).toLowerCase() },
-                                                }}
-                                            >
-                                                <Advert key={advert.id} pet={advert} />
-                                            </Link>
+                                            <Advert userId={advert.user_id} key={advert._id} pet={advert} />
                                         ))
                                         :
                                         <div className="flex flex-col items-center justify-center h-full w-full">

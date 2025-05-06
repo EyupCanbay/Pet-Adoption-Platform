@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import UserProvider from '../context/userProvider';
 import { cookies } from 'next/headers';
-import { fetchCurrentUser } from '../services/Auth';
+import { fetchCurrentUser } from '../services/User';
 
 const inter = Inter({ subsets: ['latin'] });
 

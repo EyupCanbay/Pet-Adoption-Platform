@@ -32,7 +32,6 @@ export const RegisterUser = async (formData) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include',
             body: JSON.stringify(formData),
         });
 
@@ -41,6 +40,7 @@ export const RegisterUser = async (formData) => {
         }
 
         const data = await response.json();
+        console.log("data", data);
         console.log(data);
         return data;
     } catch (error) {
@@ -72,26 +72,4 @@ export const LogoutUser = async () => {
         throw error;
     }
 }
-
-export const fetchCurrentUser = async (token) => {
-    try {
-        const res = await fetch(`${backend_url}/users/me`, {
-            headers: {
-                Cookie: `token=${token}`,
-            },
-            cache: 'no-store',
-        });
-
-        if (!res.ok) return null;
-
-        const json = await res.json();
-        return {
-            ...json.data.user,
-            location: json.data.location,
-        };
-    } catch (error) {
-        console.error('Sunucu tarafı kullanıcı fetch hatası:', error);
-        return null;
-    }
-};
 
