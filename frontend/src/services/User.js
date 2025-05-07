@@ -72,7 +72,11 @@ export const updateCurrentUser = async (formData) => {
                 "Content-Type": "application/json",
             },
             credentials: "include",
-            body: JSON.stringify(formData),
+            body: JSON.stringify({
+                userData: {
+                    data: formData,
+                }
+            }),
         })
         if (response) {
             const data = await response.json();
@@ -186,7 +190,7 @@ export const fetchCurrentUserBlockedUsers = async () => {
     }
 }
 
-export const reportUser = async (userId) => {
+export const reportUser = async (userId, formData) => {
     try {
         const response = await fetch(`${backend_url}/users/report/${userId}`, {
             method: "POST",
@@ -194,7 +198,9 @@ export const reportUser = async (userId) => {
                 "Content-Type": "application/json",
             },
             credentials: "include",
+            body: JSON.stringify(formData),
         });
+        console.log("response", response);
         if (response) {
             const data = await response.json();
             console.log("data", data);
