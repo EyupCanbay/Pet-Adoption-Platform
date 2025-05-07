@@ -6,9 +6,8 @@ import Advert from "@/src/components/Advert";
 import Loading from "@/src/components/Loading";
 import UserInfo from "@/src/components/UserInfo";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import Link from "next/link";
-import slugify from "slugify";
 import { getSingleUser } from "@/src/services/User";
+import { fetchListingByUserId } from "@/src/services/User";
 
 function AnotherProfile() {
     const params = useParams();
@@ -23,44 +22,63 @@ function AnotherProfile() {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const response = await getSingleUser(id);
-            console.log("response", response);
-            setUser(response.data);
-            setAdverts(response.data[0]?.adverts || response.data.adverts);
-            setLoading(false);
-        }
+            try {
+                const response = await getSingleUser(id);
+                setUser(response.data);
+
+                const listingsResponse = await fetchListingByUserId(id);
+                // console.log("listingsResponse", listingsResponse);
+                if (listingsResponse.status) {
+                    const petListings = listingsResponse.data[0].petlisting.map((listing) => ({
+                        ...listing,
+                        type: "normal",
+                    }));
+
+                    const lostPetListings = listingsResponse.data[0].lostpetlisting.map((listing) => ({
+                        ...listing,
+                        type: "lost",
+                    }));
+
+                    const combinedListings = [...petListings, ...lostPetListings];
+                    setAdverts(combinedListings);
+                } else {
+                    console.error("İlanlar alınamadı:", listingsResponse.message);
+                    setAdverts([]);
+                }
+            } catch (error) {
+                console.error("Kullanıcı veya ilanlar alınırken hata:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
         fetchUser();
     }, [id]);
 
-    useEffect(() => {
-        console.log("User:", user);
-        // console.log(`Adverts: ${adverts}`);
-    }, [user])
 
 
+    const advertsPerPage = 6;
+    const totalPages = Math.ceil(adverts.length / advertsPerPage);
+    const startIndex = (currentPage - 1) * advertsPerPage;
+    const displayedAdverts = adverts.slice(startIndex, startIndex + advertsPerPage);
 
-    // const advertsPerPage = 6;
-    // const totalPages = Math.ceil(adverts.length / advertsPerPage);
-    // const startIndex = (currentPage - 1) * advertsPerPage;
-    // const displayedAdverts = adverts.slice(startIndex, startIndex + advertsPerPage);
-
-    // const paginate = (newPage) => {
-    //     setDirection(newPage > currentPage ? 1 : -1);
-    //     setCurrentPage(newPage);
-    // };
+    const paginate = (newPage) => {
+        setDirection(newPage > currentPage ? 1 : -1);
+        setCurrentPage(newPage);
+    };
 
     if (loading) return <Loading />;
     if (!user) return <p className="text-center text-gray-500 mt-10">Kullanıcı bulunamadı.</p>;
 
     return (
         <div className="flex flex-col sm:grid sm:grid-cols-1 md:grid-cols-3 gap-1 md:gap-4 lg:gap-6 w-full p-4">
-            <UserInfo currentUser={user} />
+            <UserInfo currentUser={user} count={adverts.length} />
             <div className="w-full md:col-span-2">
                 <div className="rounded-md shadow-md w-full max-w-4xl mx-auto p-4">
                     <span className="flex justify-center pb-2 font-semibold text-2xl border-b-2 border-gray-200 text-gray-600">
                         {user.name} {user.surname} - İLANLAR
                     </span>
-                    {/* <div className="relative overflow-hidden p-4">
+                    <div className="relative overflow-hidden p-4">
                         <AnimatePresence custom={direction} mode="popLayout">
                             <motion.div
                                 key={currentPage}
@@ -71,21 +89,13 @@ function AnotherProfile() {
                                 transition={{ duration: 0.4, ease: "easeInOut" }}
                             >
                                 {displayedAdverts.map((advert) => (
-                                    <Link
-                                        key={Math.random() + Math.random()}
-                                        href={{
-                                            pathname: `/advert/${slugify(advert.petName).toLowerCase()}`,
-                                            query: { pet: slugify(advert.petName).toLowerCase() },
-                                        }}
-                                    >
-                                        <Advert pet={advert} />
-                                    </Link>
+                                    <Advert key={advert._id} pet={advert} userId={id} />
                                 ))}
                             </motion.div>
                         </AnimatePresence>
-                    </div> */}
+                    </div>
 
-                    {/* <div className="flex justify-center gap-4 items-center mt-4">
+                    <div className="flex justify-center gap-4 items-center mt-4">
                         <button
                             onClick={() => paginate(currentPage - 1)}
                             disabled={currentPage === 1}
@@ -103,9 +113,10 @@ function AnotherProfile() {
                         >
                             <FaArrowRight />
                         </button>
-                    </div> */}
+                    </div>
                 </div>
             </div>
+
         </div>
     );
 }
