@@ -6,13 +6,16 @@ import slugify from "slugify";
 import Link from "next/link";
 import Loading from "@/src/components/Loading";
 import { fetchSingleListing } from "@/src/services/Listings";
+import { useUser } from "@/src/context/userProvider";
+import ReportUser from "@/src/components/reportUserSection";
 
 function AdvertDetails() {
+    const { user } = useUser();
     const params = useParams();
     const { id } = params;
     const [pet, setPet] = useState(null);
     const [activeImage, setActiveImage] = useState(0);
-    const [user, setUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
     const [ownerImageError, setOwnerImageError] = useState(false);
     const [petImageError, setPetImageError] = useState(false);
 
@@ -24,7 +27,7 @@ function AdvertDetails() {
                 if (response) {
                     //TODO EĞER RESPONSE DATA ARRAY DÖNERSE İLK İNDEXİNİ AL OBJECT DÖNERSE KENDİSİNİ AL
                     setPet(response.data[0] || response.data);
-                    setUser(response.data[0]?.user || response.data.user);
+                    setCurrentUser(response.data[0]?.user || response.data.user);
                 } else {
                     console.error("No data received from the server.");
                 }
@@ -86,7 +89,12 @@ function AdvertDetails() {
                 </div>
 
                 <div className="flex-1 space-y-3 bg-white rounded-xl p-6 shadow">
-                    <h2 className="text-2xl font-semibold">{petName}</h2>
+                    <div className="flex justify-between items-center">
+                        <h2 className="text-2xl font-semibold">{petName}</h2>
+                        {currentUser?._id !== user?._id && (
+                            <ReportUser currentUser={user} report={currentUser} id={id} />
+                        )}
+                    </div>
                     <p className="text-gray-600 text-sm">
                         {category_name} / {sub_category_name}
                     </p>
@@ -102,18 +110,18 @@ function AdvertDetails() {
                         <p><span className="font-medium">Kısır:</span> {additionalInfo.neutered ? "Evet" : "Hayır"}</p>
                         <p><span className="font-medium">Arkadaş Canlısı:</span> {additionalInfo.sociality}</p>
                     </div>
-                    {user && (
+                    {currentUser && (
                         <Link href={{
-                            pathname: `/profile/${user._id}/${slugify(user.userName).toLowerCase()}`,
+                            pathname: `/profile/${currentUser._id}/${slugify(currentUser.userName).toLowerCase()}`,
                         }} className="flex justify-start gap-4 items-center mt-4">
-                            <p className="text-sm text-gray-400 mt-2">Sahibi: {user.userName}</p>
+                            <p className="text-sm text-gray-400 mt-2">Sahibi: {currentUser.userName}</p>
                             <img
                                 src={
-                                    !ownerImageError && user?.profilePhoto
-                                        ? user?.profilePhoto
+                                    !ownerImageError && currentUser?.profilePhoto
+                                        ? currentUser?.profilePhoto
                                         : "/default-avatar.jpg"
                                 }
-                                alt={user?.userName || "Owner"}
+                                alt={currentUser?.userName || "Owner"}
                                 className="w-8 h-8 rounded-full mt-2"
                                 onError={() => setOwnerImageError(true)}
                             />
