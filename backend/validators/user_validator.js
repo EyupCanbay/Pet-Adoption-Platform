@@ -1,9 +1,9 @@
 const { User, Address } = require('../models/index');
 const responseHandler = require('../utils/responseHandler');
 
-const validateUserData = (user, res, req, next) => {
-    if (!user) return { valid: false, message: 'User data is required' };
-
+const validateUserData = ( res, req, next) => {
+   if (!user) return { valid: false, message: 'User data is required' };
+    const user = req.user
     const requiredFields = ['email', 'name', 'surname', 'phoneNumber'];
     for (let field of requiredFields) {
         if (!user[field]) {

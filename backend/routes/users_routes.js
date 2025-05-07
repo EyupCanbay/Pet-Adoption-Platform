@@ -8,7 +8,7 @@ const router = express.Router()
 
 router.get('/', checkUser, checkRole(["ADMIN","USER"]), userController.getAllUsers)
 router.get('/me',checkUser, userController.getUserMe)
-router.put('/me', checkUser, validateUserData, validateAddressData ,userController.putUserMe)
+router.put('/me', checkUser ,userController.putUserMe)
 router.get('/me/listing/', checkUser, userController.getAllListing)
 router.get('/me/bookmarks', checkUser, userController.getUserBookmarks )
 router.delete('/me/bookmarks/:listing_id', checkUser, userController.deleteUserBookmarks)

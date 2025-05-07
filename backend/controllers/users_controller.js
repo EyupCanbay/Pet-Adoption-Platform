@@ -71,42 +71,67 @@ async function getUserMe(req,res,next) {
     }
 }
 
-async function putUserMe(req,res,next) {
+async function putUserMe(req, res, next) {
     const session = await mongoose.startSession();
     session.startTransaction();
-    
-    try{
-        const userId  = req.user._id
-        const { userData, addressData } = req.body
-      
+
+    try {
+        const userId = req.user._id;
+        const { userData, addressData } = req.body;
+
+        if (!userId || !userData) {
+            throw new Error("User ID veya userData eksik.");
+        }
+
         const updatedUser = await User.findByIdAndUpdate(
             userId,
             { ...userData, updatedAt: new Date() },
             { new: true, runValidators: true }
         );
-        
-        let updatedAddress;
+
+        if (!updatedUser) {
+            throw new Error("Kullanıcı bulunamadı veya güncelleme başarısız.");
+        }
+
+        let updatedAddress = null;
 
         if (addressData) {
             updatedAddress = await Address.findOneAndUpdate(
                 { user_id: userId },
                 { ...addressData, updatedAt: new Date() },
-                { new: true, upsert: true, runValidators: true } 
+                { new: true, upsert: true, runValidators: true }
             );
+
+            if (!updatedAddress) {
+                throw new Error("Adres güncellemesi başarısız.");
+            }
         }
 
-        const data = {updatedUser, updatedAddress}
+        const data = { updatedUser, updatedAddress };
+
         await session.commitTransaction();
         session.endSession();
 
-        Auditlog.info(req.user?.userName,"Users","Update","Update user me page") 
-        return responseHandler.success({res, statusCode: 201, message: "Successfuly update users's data ", data: data})
+        Auditlog.info(req.user?.userName, "Users", "Update", "Update user me page");
 
-    } catch (error){
+        return responseHandler.success({
+            res,
+            statusCode: 201,
+            message: "Successfully updated user's data",
+            data: data,
+        });
+
+    } catch (error) {
         await session.abortTransaction();
         session.endSession();
-        return responseHandler.error({res, statusCode: 500, message: "Could not update user data"})
 
+        console.error("Error updating user or address:", error.message);
+
+        return responseHandler.error({
+            res,
+            statusCode: 500,
+            message: error.message || "Could not update user data",
+        });
     }
 }
 
@@ -135,7 +160,7 @@ async function deleteUserBlock(req,res,next) {
 
         const userId = req.user._id
         const blockedUserId = req.params.user_id
- 
+
         const user = await User.findById(userId).select("blockedUser")
         
         if (!user) {
