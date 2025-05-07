@@ -2,40 +2,73 @@
 import React, { useEffect, useState } from "react";
 import { BsBoxArrowInLeft } from "react-icons/bs";
 import { RxHamburgerMenu } from "react-icons/rx";
-import Categories from "@/mocks/categories.json";
+import { getAllCategories } from "@/src/services/Category";
+import { getAllSubCategories } from "@/src/services/SubCategory";
 import Link from "next/link";
 import slugify from "slugify";
 
 function Sidebar() {
     const [isOpen, setIsOpen] = useState(false);
-    const [categories, setCategories] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState("");
+    const [groupedCategories, setGroupedCategories] = useState([]);
 
     useEffect(() => {
-        try {
-            const fetchCategories = () => {
-                setCategories(Categories?.data);
-            };
-            fetchCategories();
-        } catch (err) {
-            console.log(err);
-        }
+        const fetchData = async () => {
+            try {
+                const [categoryRes, subCategoryRes] = await Promise.all([
+                    getAllCategories(),
+                    getAllSubCategories(),
+                ]);
+
+                const categories = categoryRes?.data || [];
+                const subCategories = subCategoryRes?.data || [];
+
+                // Aynı isimli subkategori gruplama
+                const groupedSubMap = {};
+                subCategories.forEach((sub) => {
+                    const key = (sub.breed || sub.name || "").trim().toLowerCase();
+                    if (!groupedSubMap[key]) {
+                        groupedSubMap[key] = { ...sub, count: 1 };
+                    } else {
+                        groupedSubMap[key].count += 1;
+                    }
+                });
+
+                const groupedSubCategories = Object.values(groupedSubMap);
+
+                // Kategorilere göre grupla
+                const grouped = categories.map((category) => {
+                    const children = groupedSubCategories.filter(
+                        (sub) => sub.category_id === category._id
+                    );
+                    return { ...category, subcategories: children };
+                });
+
+                setGroupedCategories(grouped);
+            } catch (error) {
+                console.error("Veriler alınırken hata oluştu:", error);
+            }
+        };
+
+        fetchData();
     }, []);
+
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
-
-    const handleCategoryClick = (categoryName) => {
-        setSelectedCategory(categoryName);
-    };
-
     return (
         <div
-            className={`${isOpen ? "absolute sm:z-50 top-0 left-0 md:relative lg:relative w-full sm:w-full bg-gray-100 md:w-64 lg:w-64" : "w-12 z-50 absolute md:relative lg:relative top-4 md:top-0 md:left-0 opacity-80 lg:w-16 md:w-16 bg-inherit"}
-                md:transition-all md:duration-300 md:ease-in-out text-black h-max`}
+            className={`${isOpen
+                ? "absolute sm:z-50 top-0 left-0 md:relative lg:relative w-full sm:w-full bg-gray-100 md:w-64 lg:w-64"
+                : "w-12 z-50 absolute md:relative lg:relative top-4 md:top-0 md:left-0 opacity-80 lg:w-16 md:w-16 bg-inherit"
+                } md:transition-all md:duration-300 md:ease-in-out text-black h-max`}
         >
-            <div className={` items-center px-4 pt-2 ${isOpen ? "justify-end absolute top-2 right-0 " : " flex justify-center"}`}>
+            <div
+                className={` items-center px-4 pt-2 ${isOpen
+                    ? "justify-end absolute top-2 right-0"
+                    : " flex justify-center"
+                    }`}
+            >
                 <button
                     onClick={toggleSidebar}
                     className="cursor-pointer p-2"
@@ -49,48 +82,52 @@ function Sidebar() {
                     )}
                 </button>
             </div>
+
             {isOpen && (
                 <div className="px-4 py-6 h-[calc(100vh-2rem)] overflow-y-auto">
                     <ul className="space-y-4">
-                        {categories.map((category) => (
-                            <li key={category.id} className="text-lg font-medium">
+                        {groupedCategories.map((category) => (
+                            <li key={category._id} className="text-lg font-medium">
                                 <div className="border-b-2 border-gray-300 pb-2 mb-2 flex justify-start items-center gap-2">
                                     <Link
                                         href={{
-                                            pathname: `/${category.id}/${slugify(category.name, { lower: true })}`,
+                                            pathname: `/${category._id}/${slugify(category.name, {
+                                                lower: true,
+                                            })}`,
                                             query: { name: slugify(category.name, { lower: true }) },
                                         }}
                                         passHref
-                                        onClick={() => handleCategoryClick(slugify(category.name, { lower: true }))}
+
                                     >
-                                        {category.name}
+                                        {category.name.charAt(0).toUpperCase() + category.name.slice(1).toLowerCase()}
                                     </Link>
                                     <span className="text-sm text-gray-500">
-                                        ({category.count > 0 ? category.count : "1"})
+                                        ({category.subCategory_id.length > 0 ? category.subCategory_id.length : "1"})
                                     </span>
                                 </div>
+
+                                {/* Subcategories */}
                                 <ul className="space-y-3 ml-4">
-                                    {category?.subCategory_id?.map((subCategory) => (
+                                    {category.subcategories.map((sub) => (
                                         <li
-                                            key={subCategory.id}
+                                            key={sub._id}
                                             className="text-sm cursor-pointer hover:text-gray-900 hover:scale-102 text-gray-500"
                                         >
                                             <Link
                                                 href={{
-                                                    pathname: `/${category.id}/${slugify(category.name, { lower: true })}`,
+                                                    pathname: `/${category._id}/${slugify(category.name, {
+                                                        lower: true,
+                                                    })}`,
                                                     query: {
-                                                        name: slugify(subCategory.name, { lower: true }),
+                                                        name: slugify(sub.breed || sub.name, { lower: true }),
                                                     },
                                                 }}
                                                 passHref
-                                                onClick={() =>
-                                                    handleCategoryClick(slugify(subCategory.name, { lower: true }))
-                                                }
                                             >
-                                                {subCategory.name}
+                                                {sub.breed || sub.name}
                                             </Link>
                                             <span className="text-xs text-gray-400">
-                                                ({subCategory.count > 0 ? subCategory.count : "1"})
+                                                ({sub.count > 0 ? sub.count : "1"})
                                             </span>
                                         </li>
                                     ))}

@@ -3,17 +3,18 @@ const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
 export const getAllCategories = async () => {
 
     try {
-        const response = await fetch(`${backend_url}/api/categories`, {
+        const response = await fetch(`${backend_url}/category`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
         });
-        if (!response.ok) {
+        if (!response) {
             throw new Error(`Error: ${response.status} ${response.message}`);
         }
         const data = await response.json();
-        console.log("Categories fetched successfully:", data);
+        // console.log("Categories fetched successfully:", data);
         return data;
     } catch (error) {
         console.error("Error fetching categories:", error);
@@ -24,7 +25,7 @@ export const getAllCategories = async () => {
 
 export const createCategory = async (formData) => {
     try {
-        const response = await fetch(`${backend_url}/categories`, {
+        const response = await fetch(`${backend_url}/category`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -35,7 +36,7 @@ export const createCategory = async (formData) => {
             throw new Error(`Error: ${response.status} ${response.message}`);
         }
         const data = await response.json();
-        console.log("Category created successfully:", data);
+        // console.log("Category created successfully:", data);
         return data;
     } catch (error) {
         console.error("Error creating category:", error);
@@ -45,7 +46,7 @@ export const createCategory = async (formData) => {
 
 export const updateCategory = async (id, formData) => {
     try {
-        const response = await fetch(`${backend_url}/categories/${id}`, {
+        const response = await fetch(`${backend_url}/category/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -66,7 +67,7 @@ export const updateCategory = async (id, formData) => {
 
 export const deleteCategory = async (id) => {
     try {
-        const response = await fetch(`${backend_url}/categories/${id}`, {
+        const response = await fetch(`${backend_url}/category/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -86,7 +87,7 @@ export const deleteCategory = async (id) => {
 
 export const createSubCategoryByCategoryId = async (categoryId, formData) => {
     try {
-        const response = await fetch(`${backend_url}/categories/${categoryId}/subcategories`, {
+        const response = await fetch(`${backend_url}/category/${categoryId}/subcategory`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -18,10 +18,17 @@ function ProfilePage() {
             try {
                 const response = await fetchCurrentUsersListings();
                 if (response.status) {
-                    const combinedListings = [
-                        ...response.data[0].petlisting,
-                        ...response.data[0].lostpetlisting,
-                    ];
+                    const petListings = response.data[0].petlisting.map((listing) => ({
+                        ...listing,
+                        type: "normal",
+                    }));
+
+                    const lostPetListings = response.data[0].lostpetlisting.map((listing) => ({
+                        ...listing,
+                        type: "lost",
+                    }));
+
+                    const combinedListings = [...petListings, ...lostPetListings];
                     setAdverts(combinedListings);
                 } else {
                     console.error("Error fetching adverts:", response.statusText);
@@ -34,15 +41,6 @@ function ProfilePage() {
         };
         fetchAdverts();
     }, []);
-
-
-    // useEffect(() => {
-    //     if (adverts.length > 0) {
-    //         console.log("Adverts fetched:", adverts);
-    //     } else {
-    //         console.log("No adverts found.");
-    //     }
-    // }, [adverts]);
 
 
     const filteredPets = adverts.slice(0, 12);
@@ -70,7 +68,7 @@ function ProfilePage() {
 
     return (
         <div className="flex flex-col sm:grid sm:grid-cols-1 md:grid-cols-3 gap-1 md:gap-4 lg:gap-6 w-full p-4">
-            <UserInfo currentUser={user} />
+            <UserInfo currentUser={user} count={adverts.length} />
             <div className="w-full md:col-span-2">
                 <div className="rounded-md shadow-md w-full max-w-4xl mx-auto p-4">
                     <span className="flex justify-center pb-2 font-semibold text-2xl border-b-2 border-gray-200 text-gray-600">
