@@ -26,12 +26,19 @@ const LostPetListingSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now, index: true }
 });
 
-LostPetListingSchema.index({ 
+LostPetListingSchema.index({
     user_id: 1, 
     category_id: 1, 
     subCategory_id: 1, 
     petName: "text", 
     description: "text",
-    additionalInfo: "text",
-    createdAt: -1}, { unique: true });
+    "additionalInfo.color": "text", 
+    "additionalInfo.eyeColor": "text", 
+    "additionalInfo.furType": "text", 
+    "additionalInfo.size": "text", 
+    "additionalInfo.trainability": "text", 
+    "additionalInfo.sociality": "text"
+} , { unique: true } );
+
 module.exports = mongoose.model('LostPetListing', LostPetListingSchema)
+
