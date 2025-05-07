@@ -2,7 +2,7 @@ const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export const getAllSubCategories = async () => {
     try {
-        const response = await fetch(`${backend_url}/subcategories`, {
+        const response = await fetch(`${backend_url}/subcategory`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -14,7 +14,7 @@ export const getAllSubCategories = async () => {
         }
 
         const data = await response.json();
-        console.log("Subcategories fetched successfully:", data);
+        // console.log("Subcategories fetched successfully:", data);
         return data;
     } catch (error) {
         console.error("Error fetching subcategories:", error);
@@ -24,7 +24,7 @@ export const getAllSubCategories = async () => {
 
 export const getSubCategoryById = async (id) => {
     try {
-        const response = await fetch(`${backend_url}/subcategories/${id}`, {
+        const response = await fetch(`${backend_url}/subcategory/${id}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export const getSubCategoryById = async (id) => {
 
 export const updateSubCategory = async (id, formData) => {
     try {
-        const response = await fetch(`${backend_url}/subcategories/${id}`, {
+        const response = await fetch(`${backend_url}/subcategory/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -69,7 +69,7 @@ export const updateSubCategory = async (id, formData) => {
 
 export const deleteSubCategory = async (id) => {
     try {
-        const response = await fetch(`${backend_url}/subcategories/${id}`, {
+        const response = await fetch(`${backend_url}/subcategory/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
