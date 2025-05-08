@@ -14,10 +14,9 @@ function Advert({ pet, userId }) {
         const fetchOwner = async () => {
             try {
                 const response = await getSingleUser(userId);
+                // console.log("response", response);
                 if (response.status === "Success") {
-                    setOwner(response.data);
-                } else {
-                    console.error("No data received from the server.");
+                    setOwner(response?.data?.user);
                 }
             } catch (error) {
                 console.error("Error fetching owner details:", error);

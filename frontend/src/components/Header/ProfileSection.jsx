@@ -47,7 +47,7 @@ function ProfileSection() {
 
     const handleLogout = async () => {
         await LogoutUser();
-        window.location.href = '/login';
+        window.location.href = '/login'; 
     }
 
     return (
@@ -100,7 +100,7 @@ function ProfileSection() {
                             onClick={toggleDropdown}
                             className="text-lg font-semibold text-gray-800 cursor-pointer focus:outline-none flex items-center gap-1"
                         >
-                            {user.userName}
+                            {user?.data?.user?.userName}
                             <IoMdArrowDropdown className="text-lg" />
                         </button>
                         {isDropdownOpen && (

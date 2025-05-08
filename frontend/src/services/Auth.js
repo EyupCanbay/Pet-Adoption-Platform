@@ -60,8 +60,7 @@ export const LogoutUser = async () => {
             credentials: 'include',
         });
 
-        console.log(response);
-
+        console.log("response", response);
         if (!response.ok) {
             throw new Error('Logout failed');
         }

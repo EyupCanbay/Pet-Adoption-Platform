@@ -68,7 +68,7 @@ function ProfilePage() {
 
     return (
         <div className="flex flex-col sm:grid sm:grid-cols-1 md:grid-cols-3 gap-1 md:gap-4 lg:gap-6 w-full p-4">
-            <UserInfo currentUser={user} count={adverts.length} />
+            <UserInfo currentUser={user?.data?.user} count={adverts.length} />
             <div className="w-full md:col-span-2">
                 <div className="rounded-md shadow-md w-full max-w-4xl mx-auto p-4">
                     <span className="flex justify-center pb-2 font-semibold text-2xl border-b-2 border-gray-200 text-gray-600">

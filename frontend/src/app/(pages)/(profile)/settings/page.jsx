@@ -27,6 +27,11 @@ function Settings() {
     useEffect(() => {
         if (userContext) {
             setUserToStore(userContext);
+            if (Array.isArray(userContext.location) && userContext.location.length > 0) {
+                setAddressState({
+                    ...userContext.location[0],
+                });
+            }
         }
     }, []);
 
@@ -73,20 +78,24 @@ function Settings() {
     const handleSave = async (e) => {
         e.preventDefault();
         setIsEditing(false);
-        const response = await updateCurrentUser(userState);
 
-        // Log response to inspect the structure
-        console.log("response", response.data);
+        const updatedPayload = {
+            ...userState,
+            location: addressState._id || userState.location?._id || null,
+        };
+
+        console.log("updatedPayload", updatedPayload);
+        const response = await updateCurrentUser(updatedPayload);
 
         if (response.success) {
-            const updatedUser = response.data.updatedUser; // Access the updated user data
-            // Update the store and context with the updated user data
+            const updatedUser = response.data.updatedUser;
             setUserToStore(updatedUser);
             setUserInContext(updatedUser);
         } else {
             console.error("Error updating user:", response.statusText);
         }
     };
+
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);

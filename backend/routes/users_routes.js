@@ -13,7 +13,7 @@ router.get('/me/listing/', checkUser, userController.getAllListing)
 router.get('/me/bookmarks', checkUser, userController.getUserBookmarks)
 router.delete('/me/bookmarks/:listing_id', checkUser, userController.deleteUserBookmarks)
 router.get('/me/block', checkUser, userController.getBlockUsers)
-router.get('/:user_id', checkUser, checkRole(["ADMIN", "USER"]), userController.getUser)
+router.get('/:user_id', userController.getUser)
 router.get('/:user_id/listing', checkUser, userController.getAllListingForUsers)
 
 router.delete('/block/:user_id', checkUser, userController.deleteUserBlock)

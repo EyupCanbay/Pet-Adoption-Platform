@@ -28,11 +28,9 @@ export const getSingleUser = async (user_id) => {
             headers: {
                 "Content-Type": "application/json",
             },
-            credentials: "include",
         })
         if (response) {
             const data = await response.json();
-            // console.log("data", data);
             return data;
         }
         throw new Error("Error in response when fetching user by Id ");
@@ -54,10 +52,8 @@ export const fetchCurrentUser = async (token) => {
         if (!res.ok) return null;
 
         const json = await res.json();
-        return {
-            ...json.data.user,
-            location: json.data.location,
-        };
+
+        return json;
     } catch (error) {
         console.error('Sunucu tarafı kullanıcı fetch hatası:', error);
         return null;
@@ -73,9 +69,7 @@ export const updateCurrentUser = async (formData) => {
             },
             credentials: "include",
             body: JSON.stringify({
-                userData: {
-                    data: formData,
-                }
+                userData: formData,
             }),
         })
         if (response) {

@@ -34,6 +34,11 @@ PetListingSchema.index({
     subCategory: 1, 
     petName: "text", 
     description: "text",
-    additionalInfo: "text",
-    createdAt: -1}, { unique: true });
+    "additionalInfo.color": "text",
+    "additionalInfo.eyeColor": "text",
+    "additionalInfo.furType": "text",
+    "additionalInfo.size": "text",
+    "additionalInfo.trainability": "text",
+    "additionalInfo.sociality": "text"
+}, { unique: true });
 module.exports = mongoose.model('PetListing', PetListingSchema);
