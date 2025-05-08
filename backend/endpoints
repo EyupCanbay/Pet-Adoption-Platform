@@ -79,7 +79,7 @@ Subcategories (Alt Kategoriler): (admin)
 
 Admin işlemleri
 + GET /admin/auditlogs        -tüm kullanıcı işlemlerini getir 
-- PUT /admin/changing_role   -kullanıcı rolunu değiştirme
++ PUT /admin/changing_role   -kullanıcı rolunu değiştirme
 
 search
 - GET /search
