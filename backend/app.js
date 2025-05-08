@@ -1,4 +1,4 @@
-if (process.env.NODE_ENV !== 'production') {
+if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 const express = require('express');
@@ -13,7 +13,7 @@ const app = express();
 const corsOptions = {
     origin: "http://localhost:3000",
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE']
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTİON']
 };
 
 
@@ -26,10 +26,10 @@ app.use(cors(corsOptions));
 
 app.use('/auth', require('./routes/auth_routes.js'));
 app.use('/users', require('./routes/users_routes.js'));
-app.use('/category', require('./routes/category_routes.js'));
+app.use('/category',require('./routes/category_routes.js'));
 app.use('/subcategory', require('./routes/subcategory_routes.js'))
 app.use('/lost_listing', require('./routes/lost_listing_routes.js'))
 app.use('/listing', require('./routes/listing_routes.js'))
 
 
-module.exports = app;
+module.exports =  app;

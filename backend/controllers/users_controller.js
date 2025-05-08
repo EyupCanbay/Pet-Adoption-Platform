@@ -6,11 +6,11 @@ const Auditlog = require("../utils/auditlog_save")
 const { validateObjectId } = require('../validators/object_validate')
 const Enum = require("../config/enum")
 const lostPetListing = require("../models/lostPetListing")
+ 
 
-
-async function getAllUsers(req, res, next) {
-    try {
-        const userId = req.user._id;
+async function getAllUsers(req,res,next) {
+    try{
+        const userId = req.user._id; 
         const user = await User.findById(userId).select('blockedUser role');
 
         if (!user) {
@@ -20,54 +20,54 @@ async function getAllUsers(req, res, next) {
         const blockedByOthers = await User.find({ blockedUser: userId }).select('_id');
 
         const excludedUsers = [...user.blockedUser, ...blockedByOthers.map(u => u._id)];
-
+        
         let users
-        if (user.role === "USER") {
+        if(user.role === "USER"){
             users = await User.find({
-                _id: { $nin: excludedUsers },
+                _id: { $nin: excludedUsers }, 
                 role: { $ne: 'ADMIN' }
             }).select("name surname userName email phoneNumber");
         } else {
             users = await User.find({
-                _id: { $nin: excludedUsers },
+                _id: { $nin: excludedUsers }, 
             }).select("name surname userName email phoneNumber role");
         }
 
-        Auditlog.info(req.user?.userName, "Users", "Get", "Fetch all users")
-        return responseHandler.success({ res, statusCode: 200, message: "User successfuly fetched", data: users })
-    } catch (error) {
-        return responseHandler.error({ res, statusCode: 500, message: "Could not fecth users", error })
+        Auditlog.info(req.user?.userName,"Users","Get","Fetch all users") 
+        return responseHandler.success({res, statusCode:200, message:"User successfuly fetched",data:users})
+    }catch ( error){
+        return responseHandler.error({res, statusCode:500, message:"Could not fecth users", error})
     }
 }
 
-async function getUser(req, res, next) {
-    try {
+async function getUser(req,res,next) {
+    try{    
         const user = await User.findOne({ _id: req.params.user_id }).select("-password")
 
-        const location = await Address.find({ user_id: user._id })
+        const location = await Address.find({user_id: user._id})
 
-        Auditlog.info(req.user?.userName, "Users", "Get", "Fetch a user")
-        if (!user) return responseHandler.error({ res, statusCode: 500, message: "User not found" })
-        return responseHandler.success({ res, statusCode: 200, message: "User successfuly fetched", data: { user, location } })
-    } catch (error) {
-        return responseHandler.error({ res, statusCode: 500, message: "User do not fetch", error })
+        Auditlog.info(req.user?.userName,"Users","Get","Fetch a user") 
+        if(!user) return responseHandler.error({res, statusCode: 500, message:"User not found"})
+        return responseHandler.success({res, statusCode: 200, message:"User successfuly fetched", data: {user, location}})
+    } catch(error){
+        return responseHandler.error({res, statusCode: 500, message:"User do not fetch", error})
     }
 }
 
-async function getUserMe(req, res, next) {
+async function getUserMe(req,res,next) {
     try {
         const userId = req.user._id
 
-        const user = await User.findById({ _id: userId }).select("-password");
+        const user = await User.findById({_id: userId}).select("-password");
 
-        const location = await Address.find({ user_id: userId })
+        const location = await Address.find({user_id: userId})
+        
+        if(!location) return responseHandler.error({res, statusCode: 404, message: "User not found"})
 
-        if (!location) return responseHandler.error({ res, statusCode: 404, message: "User not found" })
-
-        Auditlog.info(req.user?.userName, "Users", "Get", "Fetch user me page")
-        return responseHandler.success({ res, statusCode: 200, message: "Successfuly fetch user data", data: { user, location } })
+        Auditlog.info(req.user?.userName,"Users","Get","Fetch user me page") 
+        return responseHandler.success({res, statusCode:200, message: "Successfuly fetch user data", data: {user, location}})
     } catch (error) {
-        return responseHandler.error({ res, statusCode: 500, message: "User data do not fetch", error })
+        return responseHandler.error({res, statusCode: 500, message: "User data do not fetch", error})
     }
 }
 
@@ -135,34 +135,34 @@ async function putUserMe(req, res, next) {
     }
 }
 
-async function blockedUser(req, res, next) {
-    try {
-        const blockedUserId = req.params.user_id;
-        const userId = req.user.id;
+async function blockedUser(req,res,next) {
+    try{
+        const blockedUserId  = req.params.user_id;
+        const userId = req.user.id; 
 
         if (userId === blockedUserId) {
-            return responseHandler({ res, statusCode: 500, message: "Do not ban yourself" })
+            return responseHandler({ res, statusCode:500, message:"Do not ban yourself" })
         }
 
-        await User.findByIdAndUpdate(userId, {
-            $addToSet: { blockedUser: blockedUserId }
+        await User.findByIdAndUpdate(userId, { 
+            $addToSet: { blockedUser: blockedUserId } 
         });
 
-        Auditlog.info(req.user?.userName, "Users", "Put", "Added user block")
-        return responseHandler.success({ res, statusCode: 201, message: "User was forbidden" })
+        Auditlog.info(req.user?.userName,"Users","Put","Added user block") 
+        return responseHandler.success({res, statusCode: 201, message:"User was forbidden"})
     } catch (error) {
-        return responseHandler.error({ res, statusCode: 500, message: "user do not forbidden", error })
+        return responseHandler.error({res, statusCode:500, message:"user do not forbidden", error})
     }
 }
 
-async function deleteUserBlock(req, res, next) {
-    try {
+async function deleteUserBlock(req,res,next) {
+    try{
 
         const userId = req.user._id
         const blockedUserId = req.params.user_id
 
         const user = await User.findById(userId).select("blockedUser")
-
+        
         if (!user) {
             return responseHandler.error({ res, statusCode: 404, message: "User not found" });
         }
@@ -171,58 +171,54 @@ async function deleteUserBlock(req, res, next) {
 
         await user.save();
 
-        Auditlog.info(req.user?.userName, "Users", "Put", "Remove user block")
-        return responseHandler.success({ res, statusCode: 201, message: "Remove user block" })
+        Auditlog.info(req.user?.userName,"Users","Put","Remove user block") 
+        return responseHandler.success({res, statusCode: 201, message:"Remove user block"})
     } catch (error) {
-        return responseHandler.error({ res, statusCode: 500, message: "Did not remove user block", error })
+        return responseHandler.error({res, statusCode:500, message:"Did not remove user block", error})
     }
 }
 
-async function getBlockUsers(req, res, next) {
-    try {
+async function getBlockUsers(req,res,next) {
+    try{
         const userId = validateObjectId(req.user._id)
-
+        
         const blockedUsers = await User.aggregate([
             { $match: { _id: userId } }, // Kullanıcıyı bulur
-            {
-                $lookup: {
-                    from: "users",      // "users" koleksiyonunda (tablosunda) arar
-                    localField: "blockedUser",  // Kullanıcının "blockedUser" listesindeki ID’leri alır
-                    foreignField: "_id",    // Bu ID’lerle eşleşen kullanıcıları bulur
-                    as: "blockedUsers"      // Sonucu "blockedUsers" olarak kaydeter    
-                }
-            },
-            {
-                $project: {
-                    blockedUsers: { name: 1, surname: 1, userName: 1, role: 1, phoneNumber: 1, email: 1 }
-                }
-            }
+            { $lookup: { 
+                from: "users",      // "users" koleksiyonunda (tablosunda) arar
+                localField: "blockedUser",  // Kullanıcının "blockedUser" listesindeki ID’leri alır
+                foreignField: "_id",    // Bu ID’lerle eşleşen kullanıcıları bulur
+                as: "blockedUsers"      // Sonucu "blockedUsers" olarak kaydeter    
+            }},
+            { $project: { 
+                blockedUsers: { name: 1, surname: 1, userName: 1, role: 1, phoneNumber: 1, email: 1 } 
+            }}
         ]);
 
         if (!blockedUsers || !blockedUsers.length) {
             return responseHandler.error({ res, statusCode: 404, message: "User not found" });
         }
 
-        Auditlog.info(req.user?.userName, "Users", "Get", "Fetch blocked user")
+        Auditlog.info(req.user?.userName,"Users","Get","Fetch blocked user") 
         return responseHandler.success({
             res,
             statusCode: 200,
             message: "Blocked users fetched successfully",
             data: blockedUsers[0].blockedUsers || []  // agregate pipline returned a array
-        });
+        });    
     } catch (error) {
-        return responseHandler.error({ res, statusCode: 500, message: "Did not fetch block user", error })
+        return responseHandler.error({res, statusCode:500, message:"Did not fetch block user", error})
     }
 }
 
-async function getUserBookmarks(req, res, next) {
-    const user_id = validateObjectId(req.user._id)
+async function getUserBookmarks(req,res,next){
+    const  user_id = validateObjectId(req.user._id)
     try {
         const bookmarks = await User.aggregate([
-            { $match: { _id: user_id } },
+            { $match: { _id: user_id } }, 
             {
                 $lookup: {
-                    from: "lostpetlistings",
+                    from: "lostpetlistings", 
                     localField: "bookmarks",
                     foreignField: "_id",
                     as: "bookmarks",
@@ -230,7 +226,7 @@ async function getUserBookmarks(req, res, next) {
             },
             {
                 $project: {
-                    _id: 0,
+                    _id: 0, 
                     bookmarks: {
                         _id: 1,
                         title: 1,
@@ -240,59 +236,59 @@ async function getUserBookmarks(req, res, next) {
                 },
             },
         ]);
-
+    
         if (!bookmarks.length) {
-            return responseHandler.error({ res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "User did not have bookmarks" })
+            return responseHandler.error({res, statusCode:Enum.HTTP_CODES.INT_SERVER_ERROR, message: "User did not have bookmarks"})
         }
         console.log(bookmarks)
-
-        return responseHandler.success({ res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly fetched the listing in bookmarks", data: bookmarks })
+    
+        return responseHandler.success({res,statusCode:Enum.HTTP_CODES.OK, message:"Successfuly fetched the listing in bookmarks", data:bookmarks})
     } catch (err) {
-        return responseHandler.error({ res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "Bookmarks was not fetched" });
+        return responseHandler.error({res, statusCode:Enum.HTTP_CODES.INT_SERVER_ERROR,message: "Bookmarks was not fetched"});
     }
-
+    
 }
 
-async function deleteUserBookmarks(req, res, next) {
-    try {
+async function deleteUserBookmarks(req,res,next) {
+    try{
         const userId = validateObjectId(req.user._id)
         const listingId = validateObjectId(req.params.listing_id)
-
+        
         const user = await User.findByIdAndUpdate(
             userId,
-            { $pull: { bookmarks: listingId } },
-            { new: true }
+            { $pull: { bookmarks: listingId } },  
+            { new: true } 
         );
 
         if (!user) {
             return responseHandler.error({ res, statusCode: Enum.HTTP_CODES.NOT_FOUND, message: "User not found" });
         }
 
-        return responseHandler.success({ res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly removing the listing in bookmarks" })
-    } catch (error) {
-        return responseHandler.error({ res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "hes occured removing the listing in bookmarks" })
+        return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly removing the listing in bookmarks"})
+    }catch(error) {
+        return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message:"hes occured removing the listing in bookmarks"})
     }
 }
 
-async function getAllListing(req, res, next) {
+async function getAllListing(req,res,next) {
     try {
         const userId = validateObjectId(req.user._id)
-
+        
         const listings = await User.aggregate([
-            { $match: { _id: userId } },
+            { $match: {_id: userId } },
             {
                 $lookup: {
-                    from: "petlistings",
+                    from: "petlistings", 
                     localField: "_id",
                     foreignField: "user_id",
                     as: "petlisting",
-                },
-
+                }, 
+            
 
             },
             {
                 $lookup: {
-                    from: "lostpetlistings",
+                    from: "lostpetlistings", 
                     localField: "_id",
                     foreignField: "user_id",
                     as: "lostpetlisting",
@@ -304,31 +300,31 @@ async function getAllListing(req, res, next) {
                     "petlisting": 1,
                 }
             }
-        ])
-        return responseHandler.success({ res, statusCode: Enum.HTTP_CODES.OK, message: "fetch all listing", data: listings })
+        ]) 
+        return responseHandler.success({res, statusCode:Enum.HTTP_CODES.OK, message:"fetch all listing",data: listings })
     } catch (error) {
-        return responseHandler.error({ res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "all listing do not fetch", error })
+        return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "all listing do not fetch" , error })
     }
 }
 
-async function getAllListingForUsers(req, res, next) {
+async function getAllListingForUsers(req,res,next) {
     const userId = validateObjectId(req.params.user_id)
-
+    
     try {
-
+        
         const listings = await User.aggregate([
-            { $match: { _id: userId } },
+            { $match: {_id: userId } },
             {
                 $lookup: {
-                    from: "petlistings",
+                    from: "petlistings", 
                     localField: "_id",
                     foreignField: "user_id",
                     as: "petlisting",
-                },
+                }, 
             },
             {
                 $lookup: {
-                    from: "lostpetlistings",
+                    from: "lostpetlistings", 
                     localField: "_id",
                     foreignField: "user_id",
                     as: "lostpetlisting",
@@ -340,10 +336,10 @@ async function getAllListingForUsers(req, res, next) {
                     "petlisting": 1,
                 }
             }
-        ])
-        return responseHandler.success({ res, statusCode: Enum.HTTP_CODES.OK, message: "fetch all listing", data: listings })
+        ]) 
+        return responseHandler.success({res, statusCode:Enum.HTTP_CODES.OK, message:"fetch all listing",data: listings })
     } catch (error) {
-        return responseHandler.error({ res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "all listing do not fetch", error })
+        return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "all listing do not fetch" , error })
     }
 }
 module.exports = {
