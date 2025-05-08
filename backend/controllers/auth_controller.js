@@ -62,16 +62,19 @@ async function login(req, res) {
   }
 
 }
-
 async function logout(req, res) {
   try {
     req.cookies.token = ""
+    res.clearCookie('token', {
+      httpOnly: true,
+      sameSite: 'lax'
+    })
 
-    Auditlog.info(req.user?.userName,"Auth","Delete","Log out the system and delete")
-    return responseHandler.success({res, statusCode:200, message:"Kullanıcı çıkışı başarıyla yapıldı"});
+    Auditlog.info(req.user?.userName, "Auth", "Delete", "Log out the system and delete")
+    return responseHandler.success({ res, statusCode: 200, message: "Kullanıcı çıkışı başarıyla yapıldı", data:req.cookies });
   } catch (error) {
-    return responseHandler.error({res, statusCode:500, message:"Kullanıcı çıkış işlemi sırasında hata oluştu", error});
-  }
+    return responseHandler.error({ res, statusCode: 500, message: "Kullanıcı çıkış işlemi sırasında hata oluştu", error });
+  }
 }
 
 
