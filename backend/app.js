@@ -31,6 +31,7 @@ app.use('/subcategory', require('./routes/subcategory_routes.js'))
 app.use('/lost_listing', require('./routes/lost_listing_routes.js'))
 app.use('/listing', require('./routes/listing_routes.js'))
 app.use('/admin', require('./routes/admin_routes.js'))
+app.use('/search', require('./routes/search_routes.js'))
 
 
 module.exports =  app;
