@@ -12,7 +12,7 @@ import ReportUser from '../reportUserSection';
 
 function UserInfo({ currentUser, count }) {
     const { user } = useUser();
-    // console.log(currentUser);
+    console.log(currentUser);
 
     const [imgSrc, setImgSrc] = React.useState(currentUser?.profilePicture || "/default-avatar.jpg");
     const permissionColors = {
@@ -76,13 +76,13 @@ function UserInfo({ currentUser, count }) {
             <div className='flex flex-col rounded-md shadow-md p-2'>
                 <div className='flex justify-between items-center p-4 border-b-2 border-gray-200'>
                     <span>Kişisel Bilgiler</span>
-                    {currentUser?._id === user?._id && (
+                    {currentUser?._id === user?.data?.user?._id && (
                         <Link href="/settings">
                             <FaEdit className='text-gray-500 hover:text-gray-700 cursor-pointer' size={18} />
                         </Link>
                     )}
-                    {currentUser?._id !== user?._id && (
-                        <BlockUser currentUser={user} block={currentUser} />
+                    {currentUser?._id !== user?.data?.user?._id && (
+                        <BlockUser currentUser={user?.data?.user} block={currentUser} />
                     )}
 
                 </div>
