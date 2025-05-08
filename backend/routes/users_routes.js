@@ -6,21 +6,21 @@ const { validateUserData, validateAddressData } = require('../validators/user_va
 const { validateReportData } = require('../validators/report_ validator')
 const router = express.Router()
 
-router.get('/', checkUser, checkRole(["ADMIN","USER"]), userController.getAllUsers)
-router.get('/me',checkUser, userController.getUserMe)
-router.put('/me', checkUser ,userController.putUserMe)
+router.get('/', checkUser, checkRole(["ADMIN", "USER"]), userController.getAllUsers)
+router.get('/me', checkUser, userController.getUserMe)
+router.put('/me', checkUser, userController.putUserMe)
 router.get('/me/listing/', checkUser, userController.getAllListing)
-router.get('/me/bookmarks', checkUser, userController.getUserBookmarks )
+router.get('/me/bookmarks', checkUser, userController.getUserBookmarks)
 router.delete('/me/bookmarks/:listing_id', checkUser, userController.deleteUserBookmarks)
-router.get('/me/block',checkUser, userController.getBlockUsers)
-router.get('/:user_id',checkUser, checkRole(["ADMIN","USER"]), userController.getUser)
-router.get('/:user_id/listing',checkUser,userController.getAllListingForUsers )
+router.get('/me/block', checkUser, userController.getBlockUsers)
+router.get('/:user_id', userController.getUser)
+router.get('/:user_id/listing', checkUser, userController.getAllListingForUsers)
 
 router.delete('/block/:user_id', checkUser, userController.deleteUserBlock)
 router.put('/block/:user_id', checkUser, checkRole(["USER"]), userController.blockedUser)
 
-router.post('/report/:user_id',checkUser, validateReportData, reportController.reportUser)
-router.get('/report/admin',checkUser, reportController.getAllReport)
-router.put('/report/admin/:user_id',checkUser, reportController.forbiddenUser)
+router.post('/report/:user_id', checkUser, validateReportData, reportController.reportUser)
+router.get('/report/admin', checkUser, reportController.getAllReport)
+router.put('/report/admin/:user_id', checkUser, reportController.forbiddenUser)
 
 module.exports = router;
