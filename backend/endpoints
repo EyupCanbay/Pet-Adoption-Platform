@@ -77,15 +77,9 @@ Subcategories (Alt Kategoriler): (admin)
 + PUT /subcategories/:id - Alt kategori güncelle
 + DELETE /subcategories/:id - Alt kategori sil
 
-
-Auditlog (admin)
--GET /auditlog         -tüm kullanıcı işlemlerini getir 
-
-
 Admin işlemleri
-- GET /reports   -tüm reportları getir
-- PUT /forbidden_user  -kullanıcı banlama
-- PUT /changing_role   -kullanıcı rolunu değiştirme
++ GET /admin/auditlogs        -tüm kullanıcı işlemlerini getir 
+- PUT /admin/changing_role   -kullanıcı rolunu değiştirme
 
 search
 - GET /search
