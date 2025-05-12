@@ -23,7 +23,6 @@ function AdvertDetails() {
         const fetchPetDetails = async () => {
             try {
                 const response = await fetchSingleListing(id);
-                // console.log('response :>> ', response);
                 if (response) {
                     //TODO EĞER RESPONSE DATA ARRAY DÖNERSE İLK İNDEXİNİ AL OBJECT DÖNERSE KENDİSİNİ AL
                     setPet(response.data[0] || response.data);
@@ -61,6 +60,7 @@ function AdvertDetails() {
         sub_category_name,
         owner,
         additionalInfo,
+        address,
     } = pet;
 
     return (
@@ -110,6 +110,13 @@ function AdvertDetails() {
                         <p><span className="font-medium">Kısır:</span> {additionalInfo.neutered ? "Evet" : "Hayır"}</p>
                         <p><span className="font-medium">Arkadaş Canlısı:</span> {additionalInfo.sociality}</p>
                     </div>
+
+                    <div className="mt-6 text-sm">
+                        <p>
+                            <span className="font-semibold">Konum: </span>{address.city},{address.country}
+                        </p>
+                    </div>
+
                     {currentUser && (
                         <Link href={{
                             pathname: `/profile/${currentUser._id}/${slugify(currentUser.userName).toLowerCase()}`,
