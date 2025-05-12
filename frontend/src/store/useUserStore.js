@@ -24,12 +24,37 @@ export const useUserStore = create((set) => ({
         banCount: 0,
         role: [],
         notifications: [],
-        location: null,
         createdAt: '',
         updatedAt: ''
     },
+    location: {
+        _id: '',
+        neighborhood: '',
+        city: '',
+        state: '',
+        country: ''
+    },
     setUser: (newUser) => set({ user: newUser }),
-    updateUserField: (field, value) => set((state) => ({
-        user: { ...state.user, [field]: value }
-    })),
+    updateUserField: (field, value) =>
+        set((state) => ({
+            user: {
+                ...state.user,
+                data: {
+                    ...state.user.data,
+                    user: {
+                        ...state.user.data.user,
+                        [field]: value,
+                    },
+                },
+            },
+        })),
+
+    setLocation: (newLocation) => set({ location: newLocation }),
+    updateLocationField: (field, value) =>
+        set((state) => ({
+            location: {
+                ...state.location,
+                [field]: value,
+            },
+        }))
 }))

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import ReportModal from './modal'
 import { reportUser } from '@/src/services/User'
+import { Button } from '@material-tailwind/react';
 
 function ReportUser({ currentUser, report, id }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,19 +41,23 @@ function ReportUser({ currentUser, report, id }) {
     return (
         <div>
             <div>
-                <button
-                    className="flex items-center gap-2 text-xs text-center cursor-pointer bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full shadow transition"
-                    onClick={() => openModal('Bildir')}
+                <Button
+                    onClick={() => openModal('report')}
+                    className="flex items-center gap-2 cursor-pointer hover:bg-red-100"
+                    variant="outlined"
+                    color="red"
+                    size="sm"
+                    fullWidth
                 >
-                    <span>İlanı Bildir</span>
-                </button>
+                    İlanı Bildir
+                </Button>
             </div>
             <ReportModal
                 isOpen={isModalOpen}
                 onClose={closeModal}
                 actionType={actionType}
                 onConfirm={handleConfirm}
-                onReasonChange={setReason} 
+                onReasonChange={setReason}
             />
 
 

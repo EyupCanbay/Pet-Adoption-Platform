@@ -1,3 +1,4 @@
+import { Button } from '@material-tailwind/react';
 import React, { useState } from 'react'
 
 function ReportModal({ isOpen, onClose, onConfirm, actionType, onReasonChange }) {
@@ -22,26 +23,28 @@ function ReportModal({ isOpen, onClose, onConfirm, actionType, onReasonChange })
                         value={reason}
                     />
                     <div className="flex justify-end">
-                        <button
-                            className="bg-gray-400 text-white px-4 py-2 cursor-pointer rounded mr-2"
-                            onClick={() => {
-                                onClose();
-                                setReason("");
-                                onReasonChange(""); // temizle
-                            }}
+                        <Button
+                            size='sm'
+                            variant="outlined"
+                            className="text-black px-4 py-2 cursor-pointer rounded mr-2"
+                            onClick={onClose}
                         >
                             İptal Et
-                        </button>
-                        <button
-                            className="bg-red-600 text-white px-4 py-2 cursor-pointer rounded"
+                        </Button>
+                        <Button
+                            size='sm'
+                            variant="outlined"
+                            color="red"
+                            className="bg-red-500 text-white px-4 py-2 cursor-pointer rounded"
                             onClick={() => {
                                 onConfirm();
                                 setReason("");
-                                onReasonChange(""); // temizle
+                                onClose();
                             }}
+                            disabled={reason.length === 0}
                         >
-                            Evet, {actionType}
-                        </button>
+                            Evet,Bildir
+                        </Button>
                     </div>
                 </div>
             </div>

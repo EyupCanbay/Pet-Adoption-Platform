@@ -9,7 +9,17 @@ const nextConfig = {
       "grumpy-fuel.org",
       "blushing-disappointment.net",
       "unselfish-brochure.biz",
-      "darling-tennis.info"
+      "darling-tennis.info",
+      "supportive-cash.com",
+      "ornery-daughter.name",
+      "taut-tennis.biz",
+      "short-term-fundraising.net",
+      "known-dead.name",
+      "black-and-white-flat.info",
+      "immense-anticodon.net",
+      "concrete-meander.org",
+      "sick-cash.name",
+      
     ],
   },
 };

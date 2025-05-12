@@ -137,7 +137,6 @@ export const blockUser = async (userId) => {
         });
         if (response) {
             const data = await response.json();
-            console.log("data", data);
             return data;
         }
         throw new Error("Error in response when blocking user ");
@@ -157,7 +156,6 @@ export const unblockUser = async (userId) => {
         });
         if (response) {
             const data = await response.json();
-            console.log("data", data);
             return data;
         }
         throw new Error("Error in response when unblocking user ");
@@ -273,7 +271,6 @@ export const deleteCurrentUserBookmarkById = async (listingId) => {
         });
         if (response) {
             const data = await response.json();
-            console.log("data", data);
             return data;
         }
         throw new Error("Error in response when deleting user bookmark ");

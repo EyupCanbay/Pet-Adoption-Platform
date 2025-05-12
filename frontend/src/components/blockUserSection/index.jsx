@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Modal from './Modal';
 import { Ban, ShieldCheck } from 'lucide-react';
 import { blockUser, unblockUser } from '@/src/services/User';
+import { Button } from '@material-tailwind/react';
 
 function BlockUser({ currentUser, block }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,13 +23,11 @@ function BlockUser({ currentUser, block }) {
         try {
             if (actionType === 'engelle') {
                 const result = await blockUser(block._id);
-                console.log("reuslt", result);
                 if (result.success) {
                     setIsBlocked(true);
                 }
-            } else if (actionType === 'engeli kaldır') {
+            } else if (actionType === 'engeli Kaldır') {
                 const result = await unblockUser(block._id);
-                console.log("reuslt", result);
                 if (result.success) {
                     setIsBlocked(false);
                 }
@@ -43,19 +42,29 @@ function BlockUser({ currentUser, block }) {
         <div>
             <div className="flex justify-end items-center">
                 {!isBlocked ? (
-                    <button
-                        className="flex items-center gap-2 text-xs text-center cursor-pointer bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full shadow transition"
+                    <Button
                         onClick={() => openModal('engelle')}
+                        className="flex items-center gap-1 text-xs text-center cursor-pointer hover:bg-red-100 px-4 py-2  shadow transition"
+                        variant="outlined"
+                        color="red"
+                        size="sm"
+                        fullWidth
                     >
-                        <Ban size={18} /> Engelle
-                    </button>
+                        <Ban size={18} className="mr-2" />
+                        Engelle
+                    </Button>
                 ) : (
-                    <button
-                        className="flex items-center gap-2 text-xs text-center  cursor-pointer bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full shadow transition"
+                    <Button
                         onClick={() => openModal('engeli Kaldır')}
+                        className="flex items-center gap-1 text-xs text-center cursor-pointer hover:bg-green-100 px-4 py-2  shadow transition"
+                        variant="outlined"
+                        color="green"
+                        size="sm"
+                        fullWidth
                     >
-                        <ShieldCheck size={18} /> Engeli Kaldır
-                    </button>
+                        <ShieldCheck size={18} className="mr-2" />
+                        Engeli Kaldır
+                    </Button>
                 )}
             </div>
 

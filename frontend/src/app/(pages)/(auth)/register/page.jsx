@@ -25,7 +25,6 @@ export default function Register() {
         setError("");
         setSuccessMessage("");
 
-        // Form data structure
         const formData = {
             name,
             surname,
@@ -37,6 +36,11 @@ export default function Register() {
 
         setLoading(true);
         try {
+            if (password !== confirmPassword) {
+                setError("Şifreler eşleşmiyor.");
+                setLoading(false);
+                return;
+            }
             const response = await RegisterUser(formData);
             if (response.status === "Success") {
                 setSuccessMessage("Kayıt başarılı! Giriş yapabilirsiniz.");

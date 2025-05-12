@@ -103,7 +103,6 @@ export const createListingToBookmarkByUser = async (id) => {
             credentials: "include",
         });
         const data = await response.json();
-        console.log("Listing bookmarked:", data);
         return data;
     } catch (error) {
         console.error("Error bookmarking listing:", error);
