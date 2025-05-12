@@ -95,7 +95,7 @@ export const deleteLostListing = async (id) => {
 }
 
 
-export const getLostListingsBookmarksbyPetId = async (id) => {
+export const createLostListingsBookmarksbyPetId = async (id) => {
     try {
         const response = await fetch(`${backend_url}/lost_listing/${id}/bookmarks`, {
             method: "POST",
@@ -105,7 +105,6 @@ export const getLostListingsBookmarksbyPetId = async (id) => {
             credentials: "include",
         });
         const data = await response.json();
-        console.log("fetching lost listings bookmarks by pet id", data);
         return data;
     } catch (error) {
         console.error("Error fetching lost listings bookmarks by pet id:", error);
