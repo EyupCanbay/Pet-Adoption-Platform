@@ -2,8 +2,6 @@ import { create } from "zustand";
 
 export const useLostListingStore = create((set) => ({
     lostListing: {
-        _id: "",
-        user_id: null,
         category_name: "",
         sub_category_name: "",
         comment_id: [],
@@ -17,7 +15,7 @@ export const useLostListingStore = create((set) => ({
             color: "",
             eyeColor: "",
             furType: "",
-            size: "small", // "small" | "medium" | "large"
+            size: "", // "small" | "medium" | "large"
             weight: 0,
             vaccinated: false,
             vaccinated_last_date: null,

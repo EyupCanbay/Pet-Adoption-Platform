@@ -29,7 +29,6 @@ export const fetchSingleListing = async (id) => {
             credentials: "include",
         });
         const data = await response.json();
-        // console.log("Single listing fetched:", data);
         return data;
     } catch (error) {
         console.error("Error fetching single listing:", error);

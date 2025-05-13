@@ -8,6 +8,7 @@ import Loading from "@/src/components/Loading";
 import { fetchSingleListing } from "@/src/services/Listings";
 import { useUser } from "@/src/context/userProvider";
 import ReportUser from "@/src/components/reportUserSection";
+import { fetchSingleLostListing, getAllLostListings } from "@/src/services/LostListings";
 
 function AdvertDetails() {
     const { user } = useUser();
@@ -22,16 +23,24 @@ function AdvertDetails() {
     useEffect(() => {
         const fetchPetDetails = async () => {
             try {
-                const response = await fetchSingleListing(id);
-                if (response) {
-                    //TODO EĞER RESPONSE DATA ARRAY DÖNERSE İLK İNDEXİNİ AL OBJECT DÖNERSE KENDİSİNİ AL
-                    setPet(response.data[0] || response.data);
-                    setCurrentUser(response.data[0]?.user || response.data.user);
-                } else {
-                    console.error("No data received from the server.");
+                let response = await fetchSingleListing(id);
+                // console.log("Listing response:", response);
+                if (response?.data) {
+                    const data = Array.isArray(response.data) ? response.data[0] : response.data;
+                    if (data) {
+                        setPet(data);
+                        setCurrentUser(data.user);
+                        return;
+                    }
+                }
+                let lost = await fetchSingleLostListing(id);
+                if (lost?.data) {
+                    setPet(lost?.data[0] || lost?.data);
+                    setCurrentUser(lost?.data[0].user || lost?.data.user);
+                    return;
                 }
             } catch (error) {
-                console.error("Error fetching pet details:", error);
+                console.error("İlan detayları alınırken hata oluştu:", error);
             }
         };
         fetchPetDetails();
@@ -113,7 +122,7 @@ function AdvertDetails() {
 
                     <div className="mt-6 text-sm">
                         <p>
-                            <span className="font-semibold">Konum: </span>{address.city},{address.country}
+                            <span className="font-semibold">Konum: </span>{address?.city},{address?.country}
                         </p>
                     </div>
 

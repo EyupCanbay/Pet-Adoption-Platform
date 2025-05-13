@@ -29,9 +29,6 @@ const PetListingSchema = new mongoose.Schema({
 
 
 PetListingSchema.index({
-    user: 1, 
-    category: 1, 
-    subCategory: 1, 
     petName: "text", 
     description: "text",
     "additionalInfo.color": "text",
@@ -40,5 +37,5 @@ PetListingSchema.index({
     "additionalInfo.size": "text",
     "additionalInfo.trainability": "text",
     "additionalInfo.sociality": "text"
-}, { unique: true });
+});
 module.exports = mongoose.model('PetListing', PetListingSchema);

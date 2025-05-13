@@ -14,7 +14,7 @@ const clours = ["red", "blue", "green", "black", "brown"]
 const dbConn = async (retryCount = 5) => {
     try {
         await mongoose.connect(process.env.DB_URI, {
-            dbName: 'test'
+            dbName: 'tesodev_product'
         });
         console.log("Database connected successfully!");
 
@@ -32,95 +32,90 @@ const dbConn = async (retryCount = 5) => {
 };
 
 
+// async function seedDatabase() {
+//     await mongoose.connection.dropDatabase();
+
+//     const users = await createUsers();
+//     const categories = await createCategories(users);
+//     const subCategories = await createSubCategories(categories, users);
+//     const comments = await createComments(users);
+//     const replyComments = await createReplyComments(users, comments);
+//     const locations = await createAddresses(users);
+//     const petListings = await createPetListings(users, categories, subCategories, comments);
+//     const lostPetListings = await createLostPetListings(users, categories, subCategories, comments);
+//     const notifications = await createNotifications(users, petListings);
+//     const reportes = await createReports(users, petListings, lostPetListings);
+//     console.log("\n\nAdded fake data in monogDB")
+     
+//     for(let i = 0; i<5; i++) {
+//     const user = await User.findByIdAndUpdate(
+//         faker.helpers.arrayElement(users)._id,{
+//             $set: {
+//                 blockedUser: faker.helpers.arrayElement(users)._id,
+//                 bookmarks: [
+//                     faker.helpers.arrayElement(petListings)._id,
+//                     faker.helpers.arrayElement(petListings)._id,
+//                     faker.helpers.arrayElement(petListings)._id
+//                 ],
+//                 rates:[{
+//                     user: faker.helpers.arrayElement(users)._id,
+//                     rate: faker.number.int({ min: 1, max: 10 })
+//                 }],
+//                 notifications: [
+//                     faker.helpers.arrayElement(notifications)._id,
+//                     faker.helpers.arrayElement(notifications)._id,
+//                     faker.helpers.arrayElement(notifications)._id
+//                 ],
+//                 location:[
+//                     faker.helpers.arrayElement(locations)._id
+//                 ]
+//             }
+//         }, 
+//         {new: true})
+//     console.log(user)
+//     }
+
+//     const comment = await Comment.find();
+//     const replyComment = await ReplyComment.find();
+//     const category = await Category.find();
+//     const subcategory = await SubCategory.find();
+    
+//     for referances comment data 
+//     for(let c = 0; c < 30; c++) {
+//         let buffer = []
+//         for(let rc = 0; rc < 45; rc++) {
+
+//             if(comment[c]._id.toString() === replyComment[rc].comment_id.toString()) {
+//                 console.log(comment[c]._id, replyComment[rc].comment_id)
+//                 buffer.push(replyComment[rc]._id)
+//             }
+//         }
+//         let dbComment = await Comment.findByIdAndUpdate(comment[c]._id,{
+//             reply_comment_id: buffer 
+//         })
+        
+//     }
+
+//     for referances category data 
+//     for(let c = 0; c < 2; c++) {
+//         let buffer = []
+//         for(let sc = 0; sc < 10; sc++) {
+
+//             if(category[c]._id.toString() === subcategory[sc].category_id.toString()) {
+//                 console.log(category[c]._id, subcategory[sc].category_id)
+//                 buffer.push(subcategory[sc]._id)
+//             }
+//         }
+//         let dbComment = await Category.findByIdAndUpdate(category[c]._id,{
+//             subCategory_id: buffer 
+//         })
+//     }
+// }
+
 async function seedDatabase() {
     await mongoose.connection.dropDatabase();
 
-    const users = await createUsers();
-    const categories = await createCategories(users);
-    const subCategories = await createSubCategories(categories, users);
-    const comments = await createComments(users);
-    const replyComments = await createReplyComments(users, comments);
-    const locations = await createAddresses(users);
-    const petListings = await createPetListings(users, categories, subCategories, comments);
-    const lostPetListings = await createLostPetListings(users, categories, subCategories, comments);
-    const notifications = await createNotifications(users, petListings);
-    const reportes = await createReports(users, petListings, lostPetListings);
-    console.log("\n\nAdded fake data in monogDB")
-    
-    
-    for(let i = 0; i<5; i++) {
-    const user = await User.findByIdAndUpdate(
-        faker.helpers.arrayElement(users)._id,{
-            $set: {
-                blockedUser: faker.helpers.arrayElement(users)._id,
-                bookmarks: [
-                    faker.helpers.arrayElement(petListings)._id,
-                    faker.helpers.arrayElement(petListings)._id,
-                    faker.helpers.arrayElement(petListings)._id
-                ],
-                rates:[{
-                    user: faker.helpers.arrayElement(users)._id,
-                    rate: faker.number.int({ min: 1, max: 10 })
-                }],
-                notifications: [
-                    faker.helpers.arrayElement(notifications)._id,
-                    faker.helpers.arrayElement(notifications)._id,
-                    faker.helpers.arrayElement(notifications)._id
-                ],
-                location:[
-                    faker.helpers.arrayElement(locations)._id
-                ]
-            }
-        }, 
-        {new: true})
-    console.log(user)
-    }
-
-    
-    const comment = await Comment.find();
-    const replyComment = await ReplyComment.find();
-     const category = await Category.find();
-     const subcategory = await SubCategory.find();
-    
-    //for referances comment data 
-    for(let c = 0; c < 30; c++) {
-        let buffer = []
-        for(let rc = 0; rc < 45; rc++) {
-
-            if(comment[c]._id.toString() === replyComment[rc].comment_id.toString()) {
-                console.log(comment[c]._id, replyComment[rc].comment_id)
-                buffer.push(replyComment[rc]._id)
-            }
-        }
-        let dbComment = await Comment.findByIdAndUpdate(comment[c]._id,{
-            reply_comment_id: buffer 
-        })
-        
-    }
-
-    //for referances category data 
-    for(let c = 0; c < 2; c++) {
-        let buffer = []
-        for(let sc = 0; sc < 10; sc++) {
-
-            if(category[c]._id.toString() === subcategory[sc].category_id.toString()) {
-                console.log(category[c]._id, subcategory[sc].category_id)
-                buffer.push(subcategory[sc]._id)
-            }
-        }
-        let dbComment = await Category.findByIdAndUpdate(category[c]._id,{
-            subCategory_id: buffer 
-        })
-    }
-    
-
-        
-
-
-
 }
-
-
 
 async function createUsers(){    //fake users create this part
     const users = []
