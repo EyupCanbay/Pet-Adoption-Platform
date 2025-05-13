@@ -2,43 +2,36 @@
 import React, { useState } from 'react'
 import LostListing from '@/src/components/create-advert/lost-listing'
 import Listing from '@/src/components/create-advert/listing'
+import { Button } from '@material-tailwind/react'
 
 function CreateAdverts() {
     const [activeTab, setActiveTab] = useState('listing')
 
-    const handleTabClick = (tab) => {
-        setActiveTab(tab)
-    }
-
-    const renderTabContent = () => {
-        switch (activeTab) {
-            case 'listing':
-                return <Listing />
-            case 'lost-listing':
-                return <LostListing />
-            default:
-                return null
-        }
-    }
+    const tabs = [
+        { id: 'listing', label: 'Sahiplendirme İlanı' },
+        { id: 'lost-listing', label: 'Kayıp İlanı' },
+    ]
 
     return (
-        <div>
-            <div className="flex gap-4 mb-4">
-                <button
-                    onClick={() => handleTabClick('listing')}
-                    className={`tab ${activeTab === 'listing' ? 'active' : ''} border border-2 p-2`}
-                >
-                    Listing
-                </button>
-                <button
-                    onClick={() => handleTabClick('lost-listing')}
-                    className={`tab ${activeTab === 'lost-listing' ? 'active' : ''} border border-2 p-2`}
-                >
-                    Lost Listing
-                </button>
+        <div className="max-w-5xl mx-auto px-4 py-8">
+            {/* Tab buttons */}
+            <div className="flex justify-center gap-4 mb-6">
+                {tabs.map(tab => (
+                    <Button
+                        key={tab.id}
+                        variant={activeTab === tab.id ? 'filled' : 'outlined'}
+                        color="blue"
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`transition duration-300 ${activeTab === tab.id ? 'bg-orange-500 text-white' : 'text-orange-500 border-orange-500'}`}
+                    >
+                        {tab.label}
+                    </Button>
+                ))}
             </div>
-            <div>
-                {renderTabContent()}
+
+            <div className="bg-white p-6">
+                {activeTab === 'listing' && <Listing />}
+                {activeTab === 'lost-listing' && <LostListing />}
             </div>
         </div>
     )
