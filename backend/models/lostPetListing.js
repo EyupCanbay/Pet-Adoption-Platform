@@ -27,9 +27,6 @@ const LostPetListingSchema = new mongoose.Schema({
 });
 
 LostPetListingSchema.index({
-    user_id: 1, 
-    category_id: 1, 
-    subCategory_id: 1, 
     petName: "text", 
     description: "text",
     "additionalInfo.color": "text", 
@@ -38,7 +35,7 @@ LostPetListingSchema.index({
     "additionalInfo.size": "text", 
     "additionalInfo.trainability": "text", 
     "additionalInfo.sociality": "text"
-} , { unique: true } );
+} );
 
 module.exports = mongoose.model('LostPetListing', LostPetListingSchema)
 
