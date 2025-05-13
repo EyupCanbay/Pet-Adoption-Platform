@@ -62,7 +62,6 @@ async function getAllLostListing(req, res, next) {
               }
           },
           { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } }, // Eğer kullanıcı yoksa `null` bırakır burası
-
           {
               $lookup: {
                   from: "addresses",
@@ -144,7 +143,7 @@ async function getLostListing(req,res,next) {
                     as: "address"
                 }
             },
-            { $unwind: { path: "$address", preserveNullAndEmptyArrays: false } },
+            { $unwind: { path: "$address", preserveNullAndEmptyArrays: true } },
             {
                 $lookup: {
                     from: "comments",

@@ -73,7 +73,7 @@ async function getPetListing(req, res, next) {
                     as: "user"
                 }
             },
-            { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: "$user", preserveNullAndEmptyArrays: false } },
             {
                 $lookup: {
                     from: "addresses",
@@ -82,7 +82,7 @@ async function getPetListing(req, res, next) {
                     as: "address"
                 }
             },
-            { $unwind: { path: "$address", preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: "$address", preserveNullAndEmptyArrays: false } },
             {
                 $lookup: {
                     from: "comments",
@@ -299,8 +299,6 @@ async function updatePetListing(req,res,next) {
 async function addPetListingBookmarks(req, res, next) {
     const listingId = validateObjectId(req.params.listing_id); 
     const userId = validateObjectId(req.user._id);
-    console.log(userId)
-    console.log(listingId)
 
     const session = await mongoose.startSession();
     session.startTransaction();
