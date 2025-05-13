@@ -1,144 +1,135 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { BsBoxArrowInLeft } from "react-icons/bs";
-import { RxHamburgerMenu } from "react-icons/rx";
+import {
+    Drawer, Card, Typography, List, ListItem,
+    Accordion, AccordionHeader, AccordionBody, IconButton
+} from "@material-tailwind/react";
+import {
+    Bars3Icon, XMarkIcon, ChevronDownIcon
+} from "@heroicons/react/24/outline";
 import { getAllCategories } from "@/src/services/Category";
 import { getAllSubCategories } from "@/src/services/SubCategory";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import slugify from "slugify";
+import Link from "next/link";
 
-function Sidebar() {
-    const [isOpen, setIsOpen] = useState(false);
+export function Sidebar() {
+    const router = useRouter();
+    const [open, setOpen] = useState(0);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [groupedCategories, setGroupedCategories] = useState([]);
+
+    const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
+    const handleOpen = (value) => setOpen(open === value ? 0 : value);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const [categoryRes, subCategoryRes] = await Promise.all([
                     getAllCategories(),
-                    getAllSubCategories(),
+                    getAllSubCategories()
                 ]);
 
                 const categories = categoryRes?.data || [];
                 const subCategories = subCategoryRes?.data || [];
 
-                // Aynı isimli subkategori gruplama
-                const groupedSubMap = {};
-                subCategories.forEach((sub) => {
-                    const key = (sub.breed || sub.name || "").trim().toLowerCase();
-                    if (!groupedSubMap[key]) {
-                        groupedSubMap[key] = { ...sub, count: 1 };
-                    } else {
-                        groupedSubMap[key].count += 1;
-                    }
-                });
-
-                const groupedSubCategories = Object.values(groupedSubMap);
-
-                // Kategorilere göre grupla
                 const grouped = categories.map((category) => {
-                    const children = groupedSubCategories.filter(
-                        (sub) => sub.category_id === category._id
+                    const children = subCategories.filter(
+                        (sub) => String(sub.category_id) === String(category._id)
                     );
                     return { ...category, subcategories: children };
                 });
 
                 setGroupedCategories(grouped);
             } catch (error) {
-                console.error("Veriler alınırken hata oluştu:", error);
+                console.error("Veri alınamadı:", error);
             }
         };
-
         fetchData();
     }, []);
 
-
-    const toggleSidebar = () => {
-        setIsOpen(!isOpen);
-    };
     return (
-        <div
-            className={`${isOpen
-                ? "absolute sm:z-50 top-0 left-0 md:relative lg:relative w-full sm:w-full bg-gray-100 md:w-64 lg:w-64"
-                : "w-12 z-50 absolute md:relative lg:relative top-4 md:top-0 md:left-0 opacity-80 lg:w-16 md:w-16 bg-inherit"
-                } md:transition-all md:duration-300 md:ease-in-out text-black h-max`}
-        >
-            <div
-                className={` items-center px-4 pt-2 ${isOpen
-                    ? "justify-end absolute top-2 right-0"
-                    : " flex justify-center"
-                    }`}
-            >
-                <button
-                    onClick={toggleSidebar}
-                    className="cursor-pointer p-2"
-                    aria-label="Toggle Sidebar"
-                    title="Toggle Sidebar"
-                >
-                    {isOpen ? (
-                        <BsBoxArrowInLeft size={24} />
+        <>
+            {/* Burger Button */}
+            <div className="p-4 z-50 relative">
+                <IconButton variant="text" size="lg" onClick={toggleDrawer}>
+                    {isDrawerOpen ? (
+                        <XMarkIcon className="h-6 w-6 cursor-pointer" />
                     ) : (
-                        <RxHamburgerMenu className="text-center" size={24} />
+                        <Bars3Icon className="h-6 w-6 cursor-pointer" />
                     )}
-                </button>
+                </IconButton>
             </div>
 
-            {isOpen && (
-                <div className="px-4 py-6 h-[calc(100vh-2rem)] overflow-y-auto">
-                    <ul className="space-y-4">
-                        {groupedCategories.map((category) => (
-                            <li key={category._id} className="text-lg font-medium">
-                                <div className="border-b-2 border-gray-300 pb-2 mb-2 flex justify-start items-center gap-2">
-                                    <Link
-                                        href={{
-                                            pathname: `/${category._id}/${slugify(category.name, {
-                                                lower: true,
-                                            })}`,
-                                            query: { name: slugify(category.name, { lower: true }) },
-                                        }}
-                                        passHref
-
-                                    >
-                                        {category.name.charAt(0).toUpperCase() + category.name.slice(1).toLowerCase()}
-                                    </Link>
-                                    <span className="text-sm text-gray-500">
-                                        ({category.subCategory_id.length > 0 ? category.subCategory_id.length : "1"})
-                                    </span>
-                                </div>
-
-                                {/* Subcategories */}
-                                <ul className="space-y-3 ml-4">
-                                    {category.subcategories.map((sub) => (
-                                        <li
-                                            key={sub._id}
-                                            className="text-sm cursor-pointer hover:text-gray-900 hover:scale-102 text-gray-500"
-                                        >
-                                            <Link
-                                                href={{
-                                                    pathname: `/${category._id}/${slugify(category.name, {
-                                                        lower: true,
-                                                    })}`,
-                                                    query: {
-                                                        name: slugify(sub.breed || sub.name, { lower: true }),
-                                                    },
-                                                }}
-                                                passHref
-                                            >
-                                                {sub.breed || sub.name}
-                                            </Link>
-                                            <span className="text-xs text-gray-400">
-                                                ({sub.count > 0 ? sub.count : "1"})
-                                            </span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+            {/* Blur Overlay */}
+            {isDrawerOpen && (
+                <div
+                    className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm transition-all duration-300"
+                    onClick={toggleDrawer}
+                />
             )}
-        </div>
+
+            {/* Sidebar Drawer */}
+            <Drawer open={isDrawerOpen} onClose={toggleDrawer} placement="left" className="z-50">
+                <Card color="transparent" shadow={false} className="h-full w-full p-4">
+                    <div className="flex justify-between items-center mb-4">
+                        <Typography variant="h5">Tüm Kategoriler</Typography>
+                        <IconButton variant="text" onClick={toggleDrawer}>
+                            <XMarkIcon className="h-6 w-6 cursor-pointer" />
+                        </IconButton>
+                    </div>
+                    <List>
+                        {groupedCategories.map((category, index) => (
+                            <Accordion
+                                key={category._id}
+                                open={open === index + 1}
+                                icon={
+                                    <ChevronDownIcon
+                                        strokeWidth={2.5}
+                                        className={`h-4 w-4 transition-transform ${open === index + 1 ? "rotate-180" : ""}`}
+                                    />
+                                }
+                            >
+                                <ListItem className="p-0" selected={open === index + 1}>
+                                    <AccordionHeader
+                                        onClick={() => handleOpen(index + 1)}
+                                        className="border-b-0 p-3 cursor-pointer"
+                                    >
+                                        <Typography className="mr-auto font-semibold capitalize">
+                                            {category.name}
+                                        </Typography>
+                                    </AccordionHeader>
+                                </ListItem>
+                                <AccordionBody className="py-1">
+                                    <List className="p-0 pl-4">
+                                        {category.subcategories.map((sub) => (
+                                            <ListItem key={sub._id}>
+                                                <Link
+                                                    href={{
+                                                        pathname: `/${category._id}/${slugify(category.name, { lower: true })}`,
+                                                        query: { name: slugify(sub.breed, { lower: true }) },
+                                                    }}
+                                                    className="text-sm text-blue-600 hover:underline"
+                                                >
+                                                    {sub.breed}
+                                                </Link>
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                </AccordionBody>
+                            </Accordion>
+                        ))}
+
+                        {/* Kayıp İlanlar */}
+                        <ListItem
+                            className="p-3 hover:bg-gray-100 cursor-pointer rounded-lg"
+                            onClick={() => router.push("/lost-pets")}
+                        >
+                            <Typography className="font-semibold capitalize">Kayıp İlanlar</Typography>
+                        </ListItem>
+                    </List>
+                </Card>
+            </Drawer>
+        </>
     );
 }
-
-export default Sidebar;
