@@ -2,8 +2,6 @@ import { create } from "zustand";
 
 export const useListingStore = create((set) => ({
     listing: {
-        _id: "",
-        user_id: null,
         category_name: "",
         sub_category_name: "",
         comment_id: [],

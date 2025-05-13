@@ -10,12 +10,9 @@ import {
     CardBody,
     CardFooter,
     Typography,
-    Button,
-    Tooltip,
     IconButton,
     Avatar,
 } from "@material-tailwind/react";
-import { Bookmark, BookmarkCheck, Heart, HeartMinus, HeartPlus } from "lucide-react";
 import { useUser } from "@/src/context/userProvider";
 import { createLostListingsBookmarksbyPetId } from "@/src/services/LostListings";
 import { createListingToBookmarkByUser } from "@/src/services/Listings";
@@ -112,7 +109,7 @@ function Advert({ pet, userId }) {
                         </div>
                     )}
                     <Image
-                        src={pet?.images[0]}
+                        src={pet?.images[0] || "/default-pet.jpg"}
                         alt="advert"
                         width={100}
                         height={100}

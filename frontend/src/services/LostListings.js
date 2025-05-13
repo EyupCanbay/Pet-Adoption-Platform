@@ -11,7 +11,6 @@ export const getAllLostListings = async () => {
         });
 
         const data = await response.json();
-        console.log("fetching lost listings", data);
         return data;
     } catch (error) {
         console.error("Error fetching lost listings:", error);
@@ -31,7 +30,6 @@ export const createLostListing = async (formData) => {
         });
 
         const data = await response.json();
-        console.log("Creating lost listing", data);
         return data;
     } catch (error) {
         console.error("Error creating lost listing:", error);
@@ -49,7 +47,6 @@ export const fetchSingleLostListing = async (id) => {
             credentials: "include",
         });
         const data = await response.json();
-        console.log("fetching single lost listing", data);
         return data;
     } catch (error) {
         console.error("Error fetching single lost listing:", error);
