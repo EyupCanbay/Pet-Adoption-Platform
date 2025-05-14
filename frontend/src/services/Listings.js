@@ -211,7 +211,6 @@ export const getListingCommentReplyComment = async (listingId, commentId) => {
             credentials: "include",
         });
         const data = await response.json();
-        console.log("Listing comment reply comments fetched:", data);
         return data;
     } catch (error) {
         console.error("Error fetching listing comment reply comments:", error);

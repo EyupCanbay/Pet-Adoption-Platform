@@ -18,15 +18,16 @@ import { deleteCurrentUserBookmarkById } from "@/src/services/User";
 import { createLostListingsBookmarksbyPetId } from "@/src/services/LostListings";
 import { useUserStore } from "@/src/store/useUserStore";
 import { fetchSingleLostListing } from "@/src/services/LostListings";
+import { CardPlacehoderSkeleton } from "./advertSkeleton";
 
 function LostListingAdvert({ pet }) {
     const { user } = useUser();
     const setUser = useUserStore((state) => state.setUser);
     const [ownerImageError, setOwnerImageError] = useState(false);
     const [isBookmarked, setIsBookmarked] = useState(false);
-    const [loadingPhoto, setLoadingPhoto] = useState(true);
     const [loading, setLoading] = useState(true);
-
+    const [loadingPhoto, setLoadingPhoto] = useState(true);
+    const [loadingPet, setLoadingPet] = useState(true);
     const [singlePet, setSinglePet] = useState(null);
     const fetchPetDetails = async () => {
         try {
@@ -35,6 +36,7 @@ function LostListingAdvert({ pet }) {
                 setSinglePet(response.data[0] || response.data);
                 setLoadingPhoto(false);
                 setLoading(false);
+                setLoadingPet(false);
             }
             else {
                 console.error("No data received from the server.");
@@ -87,6 +89,15 @@ function LostListingAdvert({ pet }) {
         });
     };
 
+    if (loadingPet) {
+        return (
+            <div className="flex flex-wrap gap-4">
+                {[...Array(6)].map((_, index) => (
+                    <CardPlacehoderSkeleton key={index} />
+                ))}
+            </div>
+        );
+    }
     return (
         <Card className="w-full max-w-[26rem] shadow-lg flex flex-col justify-between h-full min-h-[300px]">
             <CardHeader floated={false} color="blue-gray">
@@ -109,6 +120,7 @@ function LostListingAdvert({ pet }) {
                                 width={100}
                                 height={100}
                                 className="h-48 w-full object-cover rounded-t-md"
+                                priority
                             />
                         )}
                     </Link>
@@ -144,8 +156,8 @@ function LostListingAdvert({ pet }) {
             <CardBody className="flex-grow">
                 <div className="mb-3 flex items-center justify-between">
                     <Typography variant="h6" color="blue-gray" className="text-sm">
-                        <span className="font-bold">{pet?.petName}</span>{" "}
-                        <span className="text-gray-400 text-xs">{pet?.sub_category_name}</span>
+                        <span className="font-bold">{singlePet?.petName}</span>{" "}
+                        <span className="text-gray-400 text-xs">{singlePet?.sub_category_name}</span>
                     </Typography>
                 </div>
                 <Typography color="gray" className="text-xs">
