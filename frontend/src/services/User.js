@@ -68,9 +68,7 @@ export const updateCurrentUser = async (formData) => {
                 "Content-Type": "application/json",
             },
             credentials: "include",
-            body: JSON.stringify({
-                userData: formData,
-            }),
+            body: JSON.stringify(formData),
         })
         if (response) {
             const data = await response.json();

@@ -193,7 +193,6 @@ export const getLostListingsCommentReplies = async (id, commentId) => {
             credentials: "include",
         });
         const data = await response.json();
-        console.log("fetching lost listings comment replies", data);
         return data;
     } catch (error) {
         console.error("Error fetching lost listings comment replies:", error);

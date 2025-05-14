@@ -121,6 +121,7 @@ function ProfileSection() {
                             onError={() => setOwnerImageError(true)}
                             alt="user-avatar"
                             className="w-12 h-12"
+                            priority="true"
                         />
                         <ChevronDownIcon className="h-4 w-4 text-gray-600" />
                     </Button>

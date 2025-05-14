@@ -1,20 +1,8 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
+import React from "react";
 import HomeComponent from "../components/HomeComponent";
-import Loading from "../components/Loading";
 import { Sidebar } from "../components/Sidebar";
 
 function HomePageContainer() {
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        setLoading(false);
-    }, []);
-
-    if (loading) {
-        return <Loading />;
-    }
 
     return (
         <div className="flex">

@@ -90,7 +90,7 @@ function Settings() {
         setIsEditing(false);
 
         const updatedPayload = {
-            user: {
+            userData: {
                 ...userState?.data?.user,
             },
             addressData: {
@@ -106,7 +106,7 @@ function Settings() {
                 setUserToStore(updatedUser);
                 setUserInContext(updatedUser);
                 setLoading(false);
-                window.location.reload();
+                router.push("/profile");
             } else {
                 console.error("Kullanıcı güncelleme hatası:", response.statusText);
             }
