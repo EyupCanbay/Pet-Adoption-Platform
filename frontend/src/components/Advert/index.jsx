@@ -17,6 +17,7 @@ import { useUser } from "@/src/context/userProvider";
 import { createLostListingsBookmarksbyPetId } from "@/src/services/LostListings";
 import { createListingToBookmarkByUser } from "@/src/services/Listings";
 import { useUserStore } from "@/src/store/useUserStore";
+import { CardPlacehoderSkeleton } from "./advertSkeleton";
 
 function Advert({ pet, userId }) {
     const { user } = useUser();
@@ -24,6 +25,7 @@ function Advert({ pet, userId }) {
     const [ownerImageError, setOwnerImageError] = useState(false);
     const [owner, setOwner] = useState(null);
     const [loadingOwner, setLoadingOwner] = useState(true);
+    const [loadingPet, setLoadingPet] = useState(true);
 
     const [isBookmarked, setIsBookmarked] = useState(false);
 
@@ -43,6 +45,7 @@ function Advert({ pet, userId }) {
                 // console.log("response", response);
                 if (response.status === "Success") {
                     setOwner(response?.data?.user);
+                    setLoadingPet(false);
                 }
             } catch (error) {
                 console.error("Error fetching owner details:", error);
@@ -52,6 +55,16 @@ function Advert({ pet, userId }) {
         };
         fetchOwner();
     }, [pet, userId]);
+
+    if (loadingPet) {
+        return (
+            <div className="flex flex-wrap gap-4">
+                {[...Array(6)].map((_, index) => (
+                    <CardPlacehoderSkeleton key={index} />
+                ))}
+            </div>
+        );
+    }
 
     const handleBookmark = async (e, petId) => {
         e.stopPropagation();
@@ -114,6 +127,7 @@ function Advert({ pet, userId }) {
                         width={100}
                         height={100}
                         className="h-48 w-full object-cover rounded-t-md"
+                        priority
                     />
                 </Link>
                 <IconButton
@@ -170,6 +184,7 @@ function Advert({ pet, userId }) {
                         onError={() => setOwnerImageError(true)}
                         alt={owner?.name || "User"}
                         className="w-10 h-10"
+                        priority="true"
                     />
                     <div>
                         <Typography variant="h6" className="text-sm">
