@@ -45,11 +45,14 @@ export const fetchCurrentUser = async (token) => {
         const res = await fetch(`${backend_url}/users/me`, {
             headers: {
                 Cookie: `token=${token}`,
+                Authorization: `Bearer ${token}`,
             },
             cache: 'no-store',
         });
 
-        if (!res.ok) return null;
+        if (!res.ok) {
+            throw new Error('unAuthorized');
+        }
 
         const json = await res.json();
 
