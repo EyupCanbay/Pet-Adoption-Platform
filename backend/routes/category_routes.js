@@ -6,7 +6,7 @@ const { validateCategory } = require('../validators/category_validator')
 const { checkUser } = require('../middleware/auth_middleware')
 
 
-router.get('/', checkUser,categoryController.getCategories)
+router.get('/',categoryController.getCategories)
 router.post('/', checkUser, validateCategory, categoryController.createCategory)
 router.put('/:category_id', categoryController.updateCategory)
 router.delete('/:category_id', categoryController.deleteCategory)
@@ -15,4 +15,4 @@ router.post('/:category_id/subcategory', checkUser, categoryController.createSub
 
 
 
-module.exports = router
+module.exports = router 
