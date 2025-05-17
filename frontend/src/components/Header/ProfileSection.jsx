@@ -127,6 +127,18 @@ function ProfileSection() {
                     </Button>
                 </MenuHandler>
                 <MenuList className="p-2 rounded-lg shadow-md min-w-[180px]">
+                    {
+                        user?.data?.user?.role === "ADMIN" && (
+                            <Link href="/admin">
+                                <MenuItem className="flex items-center gap-3 px-4 py-3 rounded-md hover:bg-gray-100 focus:bg-gray-100 transition-colors">
+
+                                    <InboxArrowDownIcon className="h-5 w-5 text-gray-600" />
+                                    <Typography variant="paragraph" className="text-base font-medium text-gray-800">
+                                        Admin Paneli
+                                    </Typography>
+                                </MenuItem>
+                            </Link>
+                        )}
                     {profileMenuItems.map(({ label, icon: Icon, href }) => (
                         <Link key={label} href={href}>
                             <MenuItem className="flex items-center gap-3 px-4 py-3 rounded-md hover:bg-gray-100 focus:bg-gray-100 transition-colors">
