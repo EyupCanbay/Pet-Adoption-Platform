@@ -1,8 +1,13 @@
+"use client"
+import AdminPageContainer from '@/src/containers/AdminPageContainer'
 import React from 'react'
+import { ThemeProvider } from '@material-tailwind/react'
 
 function AdminPanel() {
     return (
-        <div>AdminPanel</div>
+        <ThemeProvider>
+            <AdminPageContainer />
+        </ThemeProvider>
     )
 }
 
