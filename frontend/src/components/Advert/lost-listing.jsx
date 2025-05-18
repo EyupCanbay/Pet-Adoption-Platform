@@ -129,7 +129,7 @@ function LostListingAdvert({ pet }) {
                     <IconButton
                         size="sm"
                         variant="text"
-                        className="!absolute top-0 right-4 rounded-full cursor-pointer"
+                        className="!absolute top-0 right-8 rounded-full cursor-pointer"
                         onClick={(e) => handleBookmark(e, pet?._id)}
                     >
                         {isBookmarked ? (

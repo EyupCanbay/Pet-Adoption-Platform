@@ -20,7 +20,7 @@ export default async function RootLayout({ children }) {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" sizes="32x32" type="image/png" />
             </head>
-            <body className="flex flex-col min-h-screen">
+            <body className="flex flex-col h-screen">
                 <UserProvider user={user}>
                     <LayoutWrapper>
                         {children}
