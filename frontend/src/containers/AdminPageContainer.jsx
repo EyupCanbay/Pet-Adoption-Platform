@@ -9,8 +9,7 @@ import AdminReports from '../components/Admin/AdminReports';
 import AdminSubCategories from '../components/Admin/AdminSubCategories';
 import AdminLogs from '../components/Admin/AdminLogs';
 function AdminPageContainer() {
-
-    const [activeTab, setActiveTab] = useState('users');
+    const [activeTab, setActiveTab] = useState('categories');
 
     const renderContent = () => {
         switch (activeTab) {
@@ -36,13 +35,13 @@ function AdminPageContainer() {
     };
 
     return (
-        <div className="flex w-full h-full bg-zinc-900 text-white">
+        <div className="flex w-full min-h-screen bg-zinc-900 text-white">
             <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-            <div className="flex-1 p-6">
+            <div className="flex-1 h-full p-6 overflow-auto">
                 {renderContent()}
             </div>
         </div>
     );
 }
 
-export default AdminPageContainer
+export default AdminPageContainer;

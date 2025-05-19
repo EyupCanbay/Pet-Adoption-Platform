@@ -39,3 +39,44 @@ export const updateUserRole = async (role, userId) => {
         return { error: error.message };
     }
 };
+
+export const banUser = async (userId, banDuration) => {
+    try {
+        const response = await fetch(`${backend_url}/users/report/admin/${userId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({ banDuration }),
+        });
+        if (response) {
+            const data = await response.json();
+            console.log("data", data);
+            return data;
+        }
+        throw new Error("Error in response when banning user ");
+    } catch (error) {
+        console.log("Error banning user");
+    }
+}
+
+
+export const fetchUsersReports = async () => {
+    try {
+        const response = await fetch(`${backend_url}/users/report/admin`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        });
+        const data = await response.json();
+        // console.log("data", data);
+        return data;
+    } catch (error) {
+        console.error("Error fetching users reports:", error);
+        throw error;
+    }
+}
+
