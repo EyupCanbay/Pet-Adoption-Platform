@@ -71,7 +71,7 @@ export function Sidebar() {
 
             {/* Sidebar Drawer */}
             <Drawer open={isDrawerOpen} onClose={toggleDrawer} placement="left" className="z-50">
-                <Card color="transparent" shadow={false} className="h-full w-full p-4">
+                <Card color="transparent" shadow={false} className="h-full w-full p-4 ">
                     <div className="flex justify-between items-center mb-4">
                         <Typography variant="h5">Tüm Kategoriler</Typography>
                         <IconButton variant="text" onClick={toggleDrawer}>
