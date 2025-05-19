@@ -231,9 +231,9 @@ function AdvertDetails() {
                     </div>
                 </div>
             </div>
-            <div>
+            {/* <div>
                 {comments.length > 0 && <Comments comment={comments} />}
-            </div>
+            </div> */}
         </div>
     );
 }
