@@ -52,11 +52,8 @@ export const updateSubCategory = async (id, formData) => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(formData),
+            credentials: "include",
         });
-
-        if (!response.ok) {
-            throw new Error("Failed to update subcategory");
-        }
 
         const data = await response.json();
         console.log("Subcategory updated successfully:", data);
@@ -85,6 +82,25 @@ export const deleteSubCategory = async (id) => {
         return data;
     } catch (error) {
         console.error("Error deleting subcategory:", error);
+        throw error;
+    }
+}
+
+export const createSubCategoryByCategoryId = async (categoryId, formData) => {
+    try {
+        const response = await fetch(`${backend_url}/category/${categoryId}/subcategory`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+            credentials: 'include',
+        });
+        const data = await response.json();
+        console.log("Subcategory created successfully:", data);
+        return data;
+    } catch (error) {
+        console.error("Error creating subcategory:", error);
         throw error;
     }
 }

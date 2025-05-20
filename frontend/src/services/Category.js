@@ -86,23 +86,3 @@ export const deleteCategory = async (id) => {
     }
 }
 
-export const createSubCategoryByCategoryId = async (categoryId, formData) => {
-    try {
-        const response = await fetch(`${backend_url}/category/${categoryId}/subcategory`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        });
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status} ${response.message}`);
-        }
-        const data = await response.json();
-        console.log("Subcategory created successfully:", data);
-        return data;
-    } catch (error) {
-        console.error("Error creating subcategory:", error);
-        throw error;
-    }
-}
