@@ -82,7 +82,7 @@ Admin işlemleri
 + PUT /admin/changing_role   -kullanıcı rolunu değiştirme
 
 search
-- GET /search
++ GET /search
 
 
 
