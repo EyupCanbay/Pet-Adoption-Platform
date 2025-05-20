@@ -91,30 +91,30 @@ function AdminUserPanel() {
                 <div>
                     <h2 className="text-2xl font-bold mb-4">Kullanıcılar</h2>
                     <table className="min-w-full table-auto border border-gray-300 rounded-lg shadow-sm">
-                        <thead>
+                        <thead className="bg-gray-700">
                             <tr>
-                                <th className="border-b border-gray-300 px-5 py-3 text-left text-white font-semibold">Ad</th>
-                                <th className="border-b border-gray-300 px-5 py-3 text-left text-white font-semibold">Soyad</th>
-                                <th className="border-b border-gray-300 px-5 py-3 text-left text-white font-semibold">Kullanıcı Adı</th>
-                                <th className="border-b border-gray-300 px-5 py-3 text-left text-white font-semibold">Email</th>
-                                <th className="border-b border-gray-300 px-5 py-3 text-left text-white font-semibold">Rol</th>
-                                <th className="border-b border-gray-300 px-5 py-3 text-center text-white font-semibold">İşlem</th>
+                                <th className="border-b border-gray-300 px-4 py-3 text-left text-white font-semibold w-[12%]">Ad</th>
+                                <th className="border-b border-gray-300 px-4 py-3 text-left text-white font-semibold w-[12%]">Soyad</th>
+                                <th className="border-b border-gray-300 px-4 py-3 text-left text-white font-semibold w-[15%]">Kullanıcı Adı</th>
+                                <th className="border-b border-gray-300 px-4 py-3 text-left text-white font-semibold w-[25%]">Email</th>
+                                <th className="border-b border-gray-300 px-4 py-3 text-center text-white font-semibold w-[15%]">Rol</th>
+                                <th className="border-b border-gray-300 px-4 py-3 text-center text-white font-semibold w-[15%]">İşlem</th>
                             </tr>
                         </thead>
                         <tbody>
                             {currentItems.map(user => (
                                 <tr key={user._id} className={`${user.is_active === false ? 'bg-gray-800 text-gray-400' : ''}`}>
-                                    <td className="border-b border-gray-200 px-5 py-4">{user.name}</td>
-                                    <td className="border-b border-gray-200 px-5 py-4">{user.surname}</td>
-                                    <td className="border-b border-gray-200 px-5 py-4">{user.userName}</td>
-                                    <td className="border-b border-gray-200 px-5 py-4">{user.email}</td>
-                                    <td className="border-b border-gray-200 px-5 py-4 font-semibold">{user.role}</td>
-                                    <td className="border-b border-gray-200 px-5 py-4 text-center">
-                                        <div className="flex items-center justify-center gap-2">
+                                    <td className="border-b border-gray-200 px-4 py-3 text-left">{user.name}</td>
+                                    <td className="border-b border-gray-200 px-4 py-3 text-left">{user.surname}</td>
+                                    <td className="border-b border-gray-200 px-4 py-3 text-left">{user.userName}</td>
+                                    <td className="border-b border-gray-200 px-4 py-3 text-left break-words">{user.email}</td>
+                                    <td className="border-b border-gray-200 px-4 py-3 text-center font-semibold">{user.role}</td>
+                                    <td className="border-b border-gray-200 px-4 py-3 text-center">
+                                        <div className="flex items-center justify-center gap-3">
                                             <button
                                                 onClick={() => openModal(user)}
                                                 aria-label="Edit Role"
-                                                className="text-blue-600 hover:text-blue-800 transition-colors mr-2"
+                                                className="text-blue-600 hover:text-blue-800 transition-colors"
                                             >
                                                 <FaEdit size={18} />
                                             </button>
@@ -131,13 +131,13 @@ function AdminUserPanel() {
                                                             : "Banlı"
                                                     )}
                                             </button>
-
                                         </div>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
+
 
                     <div className="flex justify-center mt-5 space-x-3">
                         {Array.from({ length: totalPages }, (_, i) => (
