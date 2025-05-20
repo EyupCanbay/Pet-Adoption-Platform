@@ -14,7 +14,6 @@ export const getAllSubCategories = async () => {
         }
 
         const data = await response.json();
-        // console.log("Subcategories fetched successfully:", data);
         return data;
     } catch (error) {
         console.error("Error fetching subcategories:", error);
@@ -36,7 +35,6 @@ export const getSubCategoryById = async (id) => {
         }
 
         const data = await response.json();
-        console.log("Subcategory fetched successfully:", data);
         return data;
     } catch (error) {
         console.error("Error fetching subcategory:", error);
@@ -56,7 +54,6 @@ export const updateSubCategory = async (id, formData) => {
         });
 
         const data = await response.json();
-        console.log("Subcategory updated successfully:", data);
         return data;
     } catch (error) {
         console.error("Error updating subcategory:", error);
@@ -78,7 +75,6 @@ export const deleteSubCategory = async (id) => {
         }
 
         const data = await response.json();
-        console.log("Subcategory deleted successfully:", data);
         return data;
     } catch (error) {
         console.error("Error deleting subcategory:", error);
@@ -97,7 +93,6 @@ export const createSubCategoryByCategoryId = async (categoryId, formData) => {
             credentials: 'include',
         });
         const data = await response.json();
-        console.log("Subcategory created successfully:", data);
         return data;
     } catch (error) {
         console.error("Error creating subcategory:", error);

@@ -2,7 +2,6 @@ import { getListingCommentReplyComment, getListingComments } from "../services/L
 import { getLostListingsCommentReplies, getLostListingsCommentsbyPetId } from "../services/LostListings";
 
 export const fetchPetCommentsWithReplies = async (petId) => {
-    console.log("petId", petId);
     try {
         let commentsData;
         let isLost = false;

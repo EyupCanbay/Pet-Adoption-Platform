@@ -52,12 +52,12 @@ export const banUser = async (userId, banDuration) => {
         });
         if (response) {
             const data = await response.json();
-            console.log("data", data);
             return data;
         }
         throw new Error("Error in response when banning user ");
     } catch (error) {
-        console.log("Error banning user");
+        console.error("Error banning user:", error
+        );
     }
 }
 
@@ -72,7 +72,6 @@ export const fetchUsersReports = async () => {
             credentials: "include",
         });
         const data = await response.json();
-        // console.log("data", data);
         return data;
     } catch (error) {
         console.error("Error fetching users reports:", error);

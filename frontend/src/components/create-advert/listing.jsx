@@ -27,7 +27,6 @@ export default function Listing() {
                 },
             };
 
-            console.log("Creating listing:", formData);
             const response = await createListing(formData);
         } catch (error) {
             console.error("Error creating listing:", error);

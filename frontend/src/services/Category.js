@@ -14,7 +14,6 @@ export const getAllCategories = async () => {
             throw new Error(`Error: ${response.status} ${response.message}`);
         }
         const data = await response.json();
-        // console.log("Categories fetched successfully:", data);
         return data;
     } catch (error) {
         console.error("Error fetching categories:", error);
@@ -37,7 +36,6 @@ export const createCategory = async (formData) => {
             throw new Error(`Error: ${response.status} ${response.message}`);
         }
         const data = await response.json();
-        // console.log("Category created successfully:", data);
         return data;
     } catch (error) {
         console.error("Error creating category:", error);
@@ -58,7 +56,6 @@ export const updateCategory = async (id, formData) => {
             throw new Error(`Error: ${response.status} ${response.message}`);
         }
         const data = await response.json();
-        console.log("Category updated successfully:", data);
         return data;
     } catch (error) {
         console.error("Error updating category:", error);
@@ -78,7 +75,6 @@ export const deleteCategory = async (id) => {
             throw new Error(`Error: ${response.status} ${response.message}`);
         }
         const data = await response.json();
-        console.log("Category deleted successfully:", data);
         return data;
     } catch (error) {
         console.error("Error deleting category:", error);

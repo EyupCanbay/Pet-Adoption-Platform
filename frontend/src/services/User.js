@@ -16,7 +16,7 @@ export const getAllUsers = async () => {
         throw new Error("Error in response when fetching all users ");
     }
     catch (error) {
-        console.log("Error fetching all users");
+        console.error("Error fetching all users:", error);
     }
 }
 
@@ -35,7 +35,7 @@ export const getSingleUser = async (user_id) => {
         throw new Error("Error in response when fetching user by Id ");
     }
     catch (error) {
-        console.log("Error fetching user by Id");
+        console.error("Error fetching user by Id", error);
     }
 }
 
@@ -74,13 +74,12 @@ export const updateCurrentUser = async (formData) => {
         })
         if (response) {
             const data = await response.json();
-            console.log("data", data);
             return data;
         }
         throw new Error("Error in response when updating user ");
     }
     catch (error) {
-        console.log("Error updating user");
+        console.error("Error updating user:", error);
     }
 }
 
@@ -95,13 +94,12 @@ export const getCurrentUsersNotifications = async () => {
         })
         if (response) {
             const data = await response.json();
-            console.log("data", data);
             return data;
         }
         throw new Error("Error in response when fetching user by Id ");
     }
     catch (error) {
-        console.log("Error fetching user by Id");
+        console.error("Error fetching user notifications:", error);
     }
 }
 
@@ -116,13 +114,12 @@ export const deleteCurrentUserNotification = async (notificationId) => {
         })
         if (response) {
             const data = await response.json();
-            console.log("data", data);
             return data;
         }
         throw new Error("Error in response when deleting user notification ");
     }
     catch (error) {
-        console.log("Error deleting user notification");
+        console.error("Error deleting user notification:", error);
     }
 }
 
@@ -141,7 +138,7 @@ export const blockUser = async (userId) => {
         }
         throw new Error("Error in response when blocking user ");
     } catch (error) {
-        console.log("Error blocking user");
+        console.error("Error blocking user:", error);
     }
 }
 
@@ -160,7 +157,7 @@ export const unblockUser = async (userId) => {
         }
         throw new Error("Error in response when unblocking user ");
     } catch (error) {
-        console.log("Error unblocking user");
+        console.error("Error unblocking user:", error);
     }
 }
 
@@ -174,7 +171,6 @@ export const fetchCurrentUserBlockedUsers = async () => {
             credentials: "include",
         });
         const data = await response.json();
-        // console.log("data", data);
         return data;
     } catch (error) {
         console.error("Error fetching current user's blocked users:", error);
@@ -192,15 +188,13 @@ export const reportUser = async (userId, formData) => {
             credentials: "include",
             body: JSON.stringify(formData),
         });
-        console.log("response", response);
         if (response) {
             const data = await response.json();
-            console.log("data", data);
             return data;
         }
         throw new Error("Error in response when reporting user ");
     } catch (error) {
-        console.log("Error reporting user");
+        console.error("Error reporting user:", error);
     }
 }
 
@@ -215,7 +209,6 @@ export const fetchCurrentUsersListings = async () => {
             credentials: "include",
         });
         const data = await response.json();
-        // console.log("data", data);
         return data;
     } catch (error) {
         console.error("Error fetching current user's listings:", error);
@@ -238,7 +231,7 @@ export const deleteCurrentUserBookmarkById = async (listingId) => {
         }
         throw new Error("Error in response when deleting user bookmark ");
     } catch (error) {
-        console.log("Error deleting user bookmark");
+        console.error("Error deleting user bookmark:", error);
     }
 }
 
@@ -252,7 +245,6 @@ export const fetchCurrentUserBookmarks = async () => {
             credentials: "include",
         });
         const data = await response.json();
-        // console.log("data", data);
         return data;
     } catch (error) {
         console.error("Error fetching current user's bookmarks:", error);
@@ -270,7 +262,6 @@ export const fetchListingByUserId = async (userId) => {
             credentials: "include",
         });
         const data = await response.json();
-        // console.log("data", data);
         return data;
     } catch (error) {
         console.error("Error fetching listings by user ID:", error);

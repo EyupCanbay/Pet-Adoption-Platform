@@ -33,7 +33,7 @@ function ReportUser({ currentUser, report, id }) {
             const result = await reportUser(report._id, formData);
             closeModal();
         } catch (error) {
-            console.log('Error performing action');
+            console.error('Error performing action');
         }
     }
 

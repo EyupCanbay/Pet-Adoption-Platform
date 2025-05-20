@@ -65,7 +65,6 @@ export const updateSingleLostListing = async (id, formData) => {
             body: JSON.stringify(formData),
         });
         const data = await response.json();
-        console.log("updating single lost listing", data);
         return data;
     } catch (error) {
         console.error("Error updating single lost listing:", error);
@@ -83,7 +82,6 @@ export const deleteLostListing = async (id) => {
             credentials: "include",
         });
         const data = await response.json();
-        console.log("deleting single lost listing", data);
         return data;
     } catch (error) {
         console.error("Error deleting single lost listing:", error);
@@ -119,7 +117,6 @@ export const getLostListingsCommentsbyPetId = async (id) => {
             credentials: "include",
         });
         const data = await response.json();
-        console.log("fetching lost listings comments by pet id", data);
         return data;
     } catch (error) {
         console.error("Error fetching lost listings comments by pet id:", error);
@@ -138,7 +135,6 @@ export const createLostListingsComment = async (id, formData) => {
             body: JSON.stringify(formData),
         });
         const data = await response.json();
-        console.log("creating lost listings comment", data);
         return data;
     } catch (error) {
         console.error("Error creating lost listings comment:", error);
@@ -157,7 +153,6 @@ export const updateLostListingsComment = async (id, commentId, formData) => {
             body: JSON.stringify(formData),
         });
         const data = await response.json();
-        console.log("updating lost listings comment", data);
         return data;
     } catch (error) {
         console.error("Error updating lost listings comment:", error);
@@ -175,7 +170,6 @@ export const deleteLostListingsComment = async (id, commentId) => {
             credentials: "include",
         });
         const data = await response.json();
-        console.log("deleting lost listings comment", data);
         return data;
     } catch (error) {
         console.error("Error deleting lost listings comment:", error);
@@ -211,7 +205,6 @@ export const updateLostListingsCommentReply = async (id, commentId, replyId, for
             body: JSON.stringify(formData),
         });
         const data = await response.json();
-        console.log("updating lost listings comment reply", data);
         return data;
     } catch (error) {
         console.error("Error updating lost listings comment reply:", error);
@@ -229,7 +222,6 @@ export const deleteLostListingsCommentReply = async (id, commentId, replyId) => 
             credentials: "include",
         });
         const data = await response.json();
-        console.log("deleting lost listings comment reply", data);
         return data;
     } catch (error) {
         console.error("Error deleting lost listings comment reply:", error);
@@ -248,7 +240,6 @@ export const createLostListingsCommentReply = async (id, commentId, formData) =>
             body: JSON.stringify(formData),
         });
         const data = await response.json();
-        console.log("creating lost listings comment reply", data);
         return data;
     } catch (error) {
         console.error("Error creating lost listings comment reply:", error);

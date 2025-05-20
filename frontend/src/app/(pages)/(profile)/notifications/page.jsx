@@ -14,7 +14,6 @@ function Notifications() {
     const [currentUser, setCurrentUser] = useState(null);
     const [notificationId, setNotificationId] = useState(null);
     const user = useUser();
-    // console.log(user);
     useEffect(() => {
         if (user) {
             setCurrentUser(user?.user);

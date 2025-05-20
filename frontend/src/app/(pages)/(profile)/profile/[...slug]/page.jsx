@@ -27,7 +27,6 @@ function AnotherProfile() {
                 setUser(response);
 
                 const listingsResponse = await fetchListingByUserId(id);
-                // console.log("listingsResponse", listingsResponse);
                 if (listingsResponse.status) {
                     const petListings = listingsResponse.data[0].petlisting.map((listing) => ({
                         ...listing,
