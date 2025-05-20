@@ -11,7 +11,6 @@ import { useUser } from "@/src/context/userProvider";
 import { fetchCurrentUsersListings } from "@/src/services/User";
 function ProfilePage() {
     const { user } = useUser();
-    // console.log("user", user);
     const [loading, setLoading] = useState(true);
     const [adverts, setAdverts] = useState([]);
     useEffect(() => {
