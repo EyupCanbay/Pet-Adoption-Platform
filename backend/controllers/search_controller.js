@@ -89,6 +89,7 @@ async function searching(req, res, next) {
         });
     }
 }
+
 module.exports = {
     searching
 }

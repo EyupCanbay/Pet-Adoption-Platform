@@ -82,7 +82,7 @@ async function getPetListing(req, res, next) {
                     as: "address"
                 }
             },
-            { $unwind: { path: "$address", preserveNullAndEmptyArrays: false } },
+            { $unwind: { path: "$address", preserveNullAndEmptyArrays: true } },
             {
                 $lookup: {
                     from: "comments",
@@ -168,7 +168,6 @@ async function getAllPetListing(req, res, next) {
                 }
             },
             { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } }, // Eğer kullanıcı yoksa `null` bırakır burası
-  
             {
                 $lookup: {
                     from: "addresses",
@@ -178,7 +177,6 @@ async function getAllPetListing(req, res, next) {
                 }
             },
             { $unwind: { path: "$userAddress", preserveNullAndEmptyArrays: true } },
-  
             {
                 $project: {
                     "_id": 1,
@@ -193,7 +191,6 @@ async function getAllPetListing(req, res, next) {
                     "createdAt": 1,
                     "updatedAt": 1,
                     "user_id": 1,
-  
                     "user": {
                         "_id": { $ifNull: ["$user._id", null] }, // if user did not have,  doing null on this feild
                         "userName": { $ifNull: ["$user.userName", null] },
@@ -207,7 +204,6 @@ async function getAllPetListing(req, res, next) {
                     }
                 }
             },
-  
             { $sort: { createdAt: -1 } },
             { $skip: skip },
             { $limit: limit }
@@ -340,8 +336,6 @@ async function addPetListingBookmarks(req, res, next) {
         session.endSession();
     }
 }
-
-
 
 module.exports = {
     createLostListing,

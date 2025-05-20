@@ -45,7 +45,6 @@ async function forbiddenUser(req,res,next) {
         await User.findByIdAndUpdate(user_id, {
             is_active: false,
             forbiddenTime: forbiddenUntil,
-            banCount: banCount + 1
         });
         
         Auditlog.info(req.user?.userName,"Report","Put","Foebidden the user on system")
