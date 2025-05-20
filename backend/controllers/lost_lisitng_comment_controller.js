@@ -1,7 +1,7 @@
 const Enum = require("../config/enum.js")
 const responseHandler = require("../utils/responseHandler.js")
 const Auditlog  = require('../utils/auditlog_save.js');
-const { LostPetListing, Comment, ReplyComment } = require('../models/index.js')
+const { LostPetListing, Comment, ReplyComment,Notification } = require('../models/index.js')
 const { validateObjectId } = require('../validators/object_validate.js')
 const mongoose = require("mongoose");
 
@@ -38,6 +38,16 @@ async function createComment(req,res,next) {
             { session }
         );
 
+            const resipent = await LostPetListing.find({_id : listingId}) 
+    
+            const notification = await Notification.create({
+                recipient_id: resipent[0].user_id,
+                initiator_id: userId,
+                lostPetListing_id: listingId,
+                type: "comment",
+                message: lostListingComment[0].content
+            })
+                
         await session.commitTransaction();
         session.endSession();
         
@@ -63,11 +73,14 @@ async function createComment(req,res,next) {
 
 async function getAllComments(req,res,next) {
     try {
-        const userId = validateObjectId(req.user._id)
+
         const listingId = validateObjectId(req.params.listing_id)
+        console.log("rsgdsdfsdf")
+
         const page = Number(req.query.page) || 1;
         const limit = Number(req.query.limit) || 10;
         const skip = (page - 1) * limit;
+
 
         const comments = await LostPetListing.aggregate([
             { $match: {_id: listingId}},
@@ -221,9 +234,10 @@ async function createReplyComment(req, res, next) {
 
         const userId = req.user?._id;
         const commentId = req.params.comment_id; 
-        const lostListing = req.params.listing_id;
+        const lostListing = req.params.lisitng_id;
         const content = req.body.content; 
 
+        console.log(lostListing)
         if (!userId || !commentId || !content) {
             return responseHandler.error({
                 res,
@@ -248,6 +262,20 @@ async function createReplyComment(req, res, next) {
             { $push: { reply_comment_id: replyComment[0]._id } }, 
             { session }
         );
+
+        const resipent = await LostPetListing.find({_id : lostListing}) 
+    
+        console.log(resipent[0].user_id)
+        const notification = await Notification.create({
+            recipient_id: resipent[0].user_id,
+            initiator_id: userId,
+            lostPetListing_id: lostListing,
+            type: "reply",
+            message: replyComment[0].content
+        })
+
+        console.log(notification)
+       
 
         await session.commitTransaction();
         session.endSession();

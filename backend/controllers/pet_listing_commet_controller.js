@@ -311,7 +311,6 @@ async function createReplyComment(req, res, next) {
 
         const resipent = await PetListing.find({_id : listingId}) 
 
-        console.log(resipent)
         const notification = await Notification.create({
             recipient_id: resipent[0].user_id,
             initiator_id: userId,
@@ -320,7 +319,6 @@ async function createReplyComment(req, res, next) {
             message: replyComment[0].content
         })
 
-        console.log(notification)
         await session.commitTransaction();
         session.endSession();
 
