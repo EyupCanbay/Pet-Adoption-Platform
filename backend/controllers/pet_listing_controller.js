@@ -39,6 +39,7 @@ async function createLostListing(req, res, next) {
         await newListing.save({ session });
         await session.commitTransaction();
         session.endSession();
+        Auditlog.info(req.user?.userName, "PetListing", "POST", "Create pet listing")
 
         return responseHandler.success({
             res,
@@ -135,6 +136,8 @@ async function getPetListing(req, res, next) {
             message: "Listing not found"
         });
 
+        Auditlog.info(req.user?.userName, "PetListing", "GET", "pet listing")
+
         return responseHandler.success({
             res,
             statusCode: Enum.HTTP_CODES.OK,
@@ -209,6 +212,8 @@ async function getAllPetListing(req, res, next) {
             { $limit: limit }
         ]);
   
+        Auditlog.info(req.user?.userName, "PetListing", "GET", "All pet listing")
+
         return responseHandler.success({
             res,
             statusCode: Enum.HTTP_CODES.OK,
@@ -256,6 +261,8 @@ async function deletePetListing(req, res, next) {
         // Örnek olarak, yourml ve subYourml koleksiyonlarını sildiğini varsayıyoruz. 
         // İlgili verileri kendi koleksiyon adlarına göre düzenle.
 
+        Auditlog.info(req.user?.userName, "PetListing", "DELETE", "Delete pet listing")
+
         return responseHandler.success({
             res,
             statusCode: Enum.HTTP_CODES.OK,
@@ -285,6 +292,8 @@ async function updatePetListing(req,res,next) {
         if (!updatedListing) {
             return responseHandler.error({res, statusCode: Enum.HTTP_CODES.NOT_FOUND, message: "Pet listing not found"})
         }
+
+        Auditlog.info(req.user?.userName, "PetListing", "PUT", "Update pet listing")
 
         responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "succesfuly update the listing", data: updatedListing })
     } catch (error) {
@@ -317,6 +326,8 @@ async function addPetListingBookmarks(req, res, next) {
         await user.save({ session });
 
         await session.commitTransaction();
+
+        Auditlog.info(req.user?.userName, "PetListing", "PUT", "add pet listing bookmarks")
 
         return responseHandler.success({
             res,

@@ -241,7 +241,7 @@ async function getUserBookmarks(req,res,next){
         if (!bookmarks.length) {
             return responseHandler.error({res, statusCode:Enum.HTTP_CODES.INT_SERVER_ERROR, message: "User did not have bookmarks"})
         }
-        console.log(bookmarks)
+        Auditlog.info(req.user?.userName, "Users", "GET", "Get all bookmarks")
     
         return responseHandler.success({res,statusCode:Enum.HTTP_CODES.OK, message:"Successfuly fetched the listing in bookmarks", data:bookmarks})
     } catch (err) {
@@ -264,6 +264,8 @@ async function deleteUserBookmarks(req,res,next) {
         if (!user) {
             return responseHandler.error({ res, statusCode: Enum.HTTP_CODES.NOT_FOUND, message: "User not found" });
         }
+        Auditlog.info(req.user?.userName, "Users", "DELETE", "Delete bookmarks")
+
 
         return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly removing the listing in bookmarks"})
     }catch(error) {
@@ -302,6 +304,8 @@ async function getAllListing(req,res,next) {
                 }
             }
         ]) 
+        Auditlog.info(req.user?.userName, "Users", "GET", "All listing")
+
         return responseHandler.success({res, statusCode:Enum.HTTP_CODES.OK, message:"fetch all listing",data: listings })
     } catch (error) {
         return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "all listing do not fetch" , error })
@@ -338,6 +342,8 @@ async function getAllListingForUsers(req,res,next) {
                 }
             }
         ]) 
+        Auditlog.info(req.user?.userName, "Users", "GET", "All listing for a user")
+
         return responseHandler.success({res, statusCode:Enum.HTTP_CODES.OK, message:"fetch all listing",data: listings })
     } catch (error) {
         return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "all listing do not fetch" , error })

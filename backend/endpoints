@@ -11,8 +11,8 @@ USERS (kullanıcı işlemleri)
 + GET        /users/me       -kullanıcı bilgilerini göster (admin,  kendisi)
 + PUT        /users/me       -kullanıcı bilgilerini güncelle (kendisi)
 
-- GET        /users/me/notifications            -kullanıcının bütün bildirimlerini getir
-- DELETE       /users/me/notifications/:notification_id   -kullanıcının bildirimini sil
++ GET        /users/me/notifications            -kullanıcının bütün bildirimlerini getir
++ DELETE       /users/me/notifications/:notification_id   -kullanıcının bildirimini sil
 
 + PUT       /users/block/:user_id          -kullanıcı engelleme (kullanıcı)
 + DELETE     /users/block/:user_id          engeli kaldır(user)  --engellediği kullanıcının id sini bana paramsta döndür
