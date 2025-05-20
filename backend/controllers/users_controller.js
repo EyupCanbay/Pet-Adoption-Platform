@@ -9,6 +9,7 @@ const lostPetListing = require("../models/lostPetListing")
  
 
 async function getAllUsers(req,res,next) {
+    console.log("kjsfddflk")
     try{
         const userId = req.user._id; 
         const user = await User.findById(userId).select('blockedUser role');

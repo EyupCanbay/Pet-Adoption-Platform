@@ -1,7 +1,7 @@
 const Enum = require("../config/enum.js")
 const responseHandler = require("../utils/responseHandler.js")
 const Auditlog  = require('../utils/auditlog_save.js');
-const { PetListing, Comment, ReplyComment } = require('../models/index.js')
+const { PetListing, Comment, ReplyComment, Notification} = require('../models/index.js')
 const { validateObjectId } = require('../validators/object_validate.js')
 const mongoose = require("mongoose");
 
@@ -40,11 +40,21 @@ async function createPetListingComment(req, res, next) {
             { session }
         );
         
+        const resipent = await PetListing.find({_id : listingId}) 
+
+ 
+        const notification = await Notification.create({
+            recipient_id: resipent[0].user_id,
+            initiator_id: userId,
+            petListing_id: listingId,
+            type: "comment",
+            message: petListingComment[0].content
+        })
         await session.commitTransaction();
         session.endSession();
         
         Auditlog.info(req.user?.userName, "Comment", "Post", "Create a comment for pet listing");
-        
+
         return responseHandler.success({
             res,
             statusCode: Enum.HTTP_CODES.OK,
@@ -299,6 +309,18 @@ async function createReplyComment(req, res, next) {
             { session }
         );
 
+        const resipent = await PetListing.find({_id : listingId}) 
+
+        console.log(resipent)
+        const notification = await Notification.create({
+            recipient_id: resipent[0].user_id,
+            initiator_id: userId,
+            petListing_id: listingId,
+            type: "reply",
+            message: replyComment[0].content
+        })
+
+        console.log(notification)
         await session.commitTransaction();
         session.endSession();
 

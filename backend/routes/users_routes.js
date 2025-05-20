@@ -6,7 +6,7 @@ const { validateUserData, validateAddressData } = require('../validators/user_va
 const { validateReportData } = require('../validators/report_ validator')
 const router = express.Router()
 
-router.get('/', userController.getAllUsers)
+router.get('/',checkUser, userController.getAllUsers)
 router.get('/me',checkUser, userController.getUserMe)
 router.put('/me', checkUser ,userController.putUserMe)
 router.get('/me/listing/', checkUser, userController.getAllListing)
