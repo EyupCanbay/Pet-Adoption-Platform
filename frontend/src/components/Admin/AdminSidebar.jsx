@@ -27,7 +27,6 @@ import { useUser } from "@/src/context/userProvider";
 import { LogoutUser } from "@/src/services/Auth";
 
 const MENU_ITEMS = [
-    { label: "Dashboard", value: "dashboard", icon: <PresentationChartBarIcon className="h-5 w-5" /> },
     { label: "Kullanıcılar", value: "users", icon: <UsersIcon className="h-5 w-5" /> },
     { label: "İlanlar", value: "listings", icon: <ShoppingBagIcon className="h-5 w-5" /> },
     { label: "Kayıp İlanlar", value: "lostlistings", icon: <InboxIcon className="h-5 w-5" /> },

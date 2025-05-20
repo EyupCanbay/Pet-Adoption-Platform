@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { AdminSidebar } from '../components/Admin/AdminSidebar';
-import AdminDashboard from '../components/Admin/AdminDashboard';
 import AdminUserPanel from '../components/Admin/AdminUserPanel';
 import AdminCategories from '../components/Admin/AdminCategories';
 import AdminListings from '../components/Admin/AdminListings';
@@ -9,12 +8,10 @@ import AdminReports from '../components/Admin/AdminReports';
 import AdminSubCategories from '../components/Admin/AdminSubCategories';
 import AdminLogs from '../components/Admin/AdminLogs';
 function AdminPageContainer() {
-    const [activeTab, setActiveTab] = useState('categories');
+    const [activeTab, setActiveTab] = useState('users');
 
     const renderContent = () => {
         switch (activeTab) {
-            case 'dashboard':
-                return <AdminDashboard />;
             case 'users':
                 return <AdminUserPanel />;
             case 'categories':
