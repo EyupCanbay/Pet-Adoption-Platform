@@ -1,5 +1,5 @@
 "use client"
-import { deleteListing } from '@/src/services/Listings' // İki delete fonksiyon
+import { deleteListing } from '@/src/services/Listings'
 import { deleteLostListing, fetchSingleLostListing } from '@/src/services/LostListings'
 import { Button } from '@material-tailwind/react'
 import Link from 'next/link'
@@ -12,6 +12,7 @@ function Pet({ pet, isLost, onDelete }) {
     const [isDeleting, setIsDeleting] = useState(false)
     const [singlePet, setSinglePet] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [imageError, setImageError] = useState(false)
 
     const openModal = () => setIsModalOpen(true)
     const closeModal = () => setIsModalOpen(false)
@@ -41,7 +42,7 @@ function Pet({ pet, isLost, onDelete }) {
                 await deleteListing(pet._id)
             }
             toast.success('İlan başarıyla silindi.')
-            onDelete(pet._id)  // Ana komponentte state güncellemesi için callback
+            onDelete(pet._id)
         } catch (error) {
             console.error('İlan silinirken hata oluştu:', error)
             toast.error('İlan silinirken bir hata oluştu.')
@@ -68,9 +69,10 @@ function Pet({ pet, isLost, onDelete }) {
                                 }}
                             >
                                 <img
-                                    src={singlePet.images?.[0] || '/placeholder.jpg'}
+                                    src={imageError || !singlePet?.images[0] ? '/anonim.png' : singlePet?.images[0]}
                                     alt={singlePet.petName}
                                     className="w-24 h-24 object-cover rounded-lg cursor-pointer"
+                                    onError={() => setImageError(true)}
                                 />
                             </Link>
 

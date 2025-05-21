@@ -26,6 +26,7 @@ function Advert({ pet, userId }) {
     const [owner, setOwner] = useState(null);
     const [loadingOwner, setLoadingOwner] = useState(true);
     const [loadingPet, setLoadingPet] = useState(true);
+    const [imageError, setImageError] = useState(false);
 
     const [isBookmarked, setIsBookmarked] = useState(false);
 
@@ -66,23 +67,25 @@ function Advert({ pet, userId }) {
     }
 
     const handleBookmark = async (e, petId) => {
-        e.stopPropagation();
+        e.stopPropagation(); // Prevents navigating to the advert details page
         try {
             if (isBookmarked) {
                 await deleteCurrentUserBookmarkById(petId);
                 updateUserBookmarks(petId, false);
-                setIsBookmarked(false); // anlık tepki
+                setIsBookmarked(false); // Instant UI reaction
             } else {
                 if (pet?.type === "lost") {
-                    await createLostListingsBookmarksbyPetId(petId);
+                    const res = await createLostListingsBookmarksbyPetId(petId);
                 } else {
-                    await createListingToBookmarkByUser(petId);
+                    const res = await createListingToBookmarkByUser(petId);
                 }
                 updateUserBookmarks(petId, true);
-                setIsBookmarked(true); // anlık tepki
+                setIsBookmarked(true); // Instant UI reaction
             }
         } catch (err) {
-            console.error("Bookmark işleminde hata:", err);
+            console.error("Bookmark operation error:", err);
+            // Optionally, revert the UI state if the API call fails
+            setIsBookmarked(prevState => !prevState);
         }
     };
 
@@ -121,7 +124,11 @@ function Advert({ pet, userId }) {
                         </div>
                     )}
                     <Image
-                        src={pet?.images[0] || "/default-pet.jpg"}
+                        src={imageError || !pet?.images[0]
+                            ? "/anonim.png"
+                            : pet?.images[0]
+                        }
+                        onError={() => setImageError(true)}
                         alt="advert"
                         width={100}
                         height={100}
@@ -129,42 +136,41 @@ function Advert({ pet, userId }) {
                         priority
                     />
                 </Link>
-                {user && (
-                    <IconButton
-                        size="sm"
-                        variant="text"
-                        className="!absolute top-0 right-8 rounded-full cursor-pointer"
-                        onClick={(e) => handleBookmark(e, pet?._id)}
-                    >
-                        <span>
-                            {isBookmarked ? (
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="red"
-                                    className="h-6 w-6"
-                                >
-                                    <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
-                                </svg>
-                            ) : (
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="white"
-                                    className="h-6 w-6"
-                                >
-                                    <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
-                                </svg>
-                            )}
-                        </span>
-                    </IconButton>
-                )}
+                <button
+                    // Use Tailwind CSS to replicate the positioning and styling
+                    className="!absolute top-2 right-2 w-10 h-10 rounded-full cursor-pointer flex items-center justify-center z-20"
+                    style={{ background: 'transparent', border: 'none', padding: 0 }} // Ensure no default button styles
+                    onClick={(e) => handleBookmark(e, pet._id)}
+                    aria-label="Bookmark"
+                >
+                    {isBookmarked ? (
+                        // Red filled heart icon
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="red"
+                            className="h-6 w-6"
+                        >
+                            <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+                        </svg>
+                    ) : (
+                        // White outline heart icon
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="white"
+                            className="h-6 w-6"
+                        >
+                            <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+                        </svg>
+                    )}
+                </button>
             </CardHeader>
 
             <CardBody className="flex-grow">
                 <div className="mb-3 flex items-center justify-between">
-                    <Typography variant="h6" color="blue-gray" className="text-sm">
-                        <span className="font-bold">{pet?.petName}</span> <span className="text-gray-400 text-xs">{pet?.sub_category_name}</span>
+                    <Typography variant="h6" color="blue-gray">
+                        <span className="font-bold text-md">{pet?.petName}</span> <span className="text-gray-900 text-xs">{pet?.sub_category_name}</span>
                     </Typography>
                 </div>
                 <Typography color="gray" className="text-xs">
@@ -178,8 +184,8 @@ function Advert({ pet, userId }) {
                 <div className="flex items-center gap-3">
                     <Avatar
                         src={
-                            ownerImageError
-                                ? "/ahmet.jpg"
+                            ownerImageError || !owner?.profilePhoto
+                                ? "/default-avatar.jpg"
                                 : owner?.profilePhoto
                         }
                         onError={() => setOwnerImageError(true)}
@@ -201,7 +207,6 @@ function Advert({ pet, userId }) {
                 </Typography>
             </CardFooter>
         </Card>
-
     );
 }
 

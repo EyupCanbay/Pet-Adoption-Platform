@@ -17,7 +17,7 @@ router.get('/:user_id', userController.getUser)
 router.get('/:user_id/listing', checkUser, userController.getAllListingForUsers)
 
 router.delete('/block/:user_id', checkUser, userController.deleteUserBlock)
-router.put('/block/:user_id', checkUser, checkRole(["USER"]), userController.blockedUser)
+router.put('/block/:user_id', checkUser, userController.blockedUser)
 
 router.post('/report/:user_id', checkUser, validateReportData, reportController.reportUser)
 router.get('/report/admin', checkUser, reportController.getAllReport)

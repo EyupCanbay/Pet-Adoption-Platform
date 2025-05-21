@@ -18,7 +18,7 @@ import {
 
 function UserInfo({ currentUser, location }) {
     const { user } = useUser();
-    const [imgSrc, setImgSrc] = React.useState(currentUser?.profilePicture || "/ahmet.jpg");
+    const [imageError, setImageError] = React.useState(false);
 
     const permissionColors = {
         Admin: "text-sm px-2 py-1 bg-red-200 text-red-700 rounded-md",
@@ -31,10 +31,10 @@ function UserInfo({ currentUser, location }) {
             <Card className="w-3/4 max-w-md shadow-none border border-gray-200 rounded-md">
                 <CardHeader floated={false} className="h-80">
                     <img
-                        src={imgSrc}
+                        src={imageError || !currentUser?.profilePicture ? "/default-avatar.jpg" : currentUser?.profilePicture}
+                        onError={() => setImageError(true)}
                         alt="profile-picture"
                         className="w-full h-full object-cover"
-                        onError={() => setImgSrc("/ahmet.jpg")}
                     />
                 </CardHeader>
                 <CardBody className="text-center">

@@ -19,7 +19,7 @@ function AnotherProfile() {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [direction, setDirection] = useState(1);
-
+    const [imageError, setImageError] = useState(false);
     useEffect(() => {
         const fetchUser = async () => {
             try {

@@ -96,7 +96,7 @@ function ProfileSection() {
             </Button>
 
             <Link href="/notifications" className="relative">
-                <BellIcon className="h-6 w-6 text-orange-400" />
+                <BellIcon className="h-6 w-6 text-orange-400" aria-label="Notifications" />
                 {notificationCount > 0 && (
                     <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 text-xs font-semibold text-white bg-red-500 rounded-full">
                         {notificationCount}
@@ -114,8 +114,8 @@ function ProfileSection() {
                             size="sm"
                             variant="circular"
                             src={
-                                !ownerImageError
-                                    ? "/ahmet.jpg"
+                                ownerImageError || !user?.data?.user?.profilePhoto
+                                    ? "/default-avatar.jpg"
                                     : user?.data?.user?.profilePhoto
                             }
                             onError={() => setOwnerImageError(true)}

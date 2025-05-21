@@ -29,6 +29,7 @@ function LostListingAdvert({ pet }) {
     const [loadingPhoto, setLoadingPhoto] = useState(true);
     const [loadingPet, setLoadingPet] = useState(true);
     const [singlePet, setSinglePet] = useState(null);
+    const [imageError, setImageError] = useState(false);
     const fetchPetDetails = async () => {
         try {
             const response = await fetchSingleLostListing(pet._id);
@@ -115,7 +116,8 @@ function LostListingAdvert({ pet }) {
                         </div>
                         {!loadingPhoto && (
                             <Image
-                                src={singlePet?.images?.[0] || "/default-pet.jpg"}
+                                src={imageError || !singlePet?.images[0] ? "/anonim.png" : singlePet?.images[0]}
+                                onError={() => setImageError(true)}
                                 alt="advert"
                                 width={100}
                                 height={100}
@@ -173,7 +175,9 @@ function LostListingAdvert({ pet }) {
                 <div className="flex items-center gap-3">
                     <Avatar
                         src={
-                            ownerImageError ? "/ahmet.jpg" : pet?.user?.profilePhoto
+                            ownerImageError || !pet?.user?.profilePhoto
+                                ? "/default-avatar.jpg"
+                                : pet?.user?.profilePhoto
                         }
                         onError={() => setOwnerImageError(true)}
                         alt={pet?.user?.userName || "User"}

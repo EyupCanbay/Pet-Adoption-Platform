@@ -2,17 +2,73 @@
 
 import { useLostListingStore } from "@/src/store/useLostListingStore";
 import { Button } from "@material-tailwind/react";
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Import useEffect
 import { createLostListing } from "@/src/services/LostListings";
 import { useUser } from "@/src/context/userProvider";
+import { getAllCategories } from "@/src/services/Category"; // Import Category service
+import { getAllSubCategories } from "@/src/services/SubCategory"; // Import SubCategory service
+import { useRouter } from "next/navigation"; // Import useRouter
 
 export default function LostListing() {
     const { user } = useUser();
+    const router = useRouter(); // Initialize useRouter
+    const [categories, setCategories] = useState([]);
+    const [subCategories, setSubCategories] = useState([]);
+    const [filteredSubCategories, setFilteredSubCategories] = useState([]); // State to hold filtered subcategories
+
     const {
         lostListing,
         updateLostListingField,
         updateLostAdditionalInfoField,
     } = useLostListingStore();
+
+    // Fetch categories and subcategories on component mount
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await getAllCategories();
+                setCategories(response.data);
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+            }
+        };
+        const fetchSubCategories = async () => {
+            try {
+                const response = await getAllSubCategories();
+                setSubCategories(response.data);
+            } catch (error) {
+                console.error("Error fetching subcategories:", error);
+            }
+        };
+        fetchSubCategories();
+        fetchCategories();
+    }, []);
+
+    // Effect to filter subcategories when category changes
+    useEffect(() => {
+        if (lostListing.category_name && categories.length > 0 && subCategories.length > 0) {
+            const selectedCategory = categories.find(
+                (cat) => cat.name === lostListing.category_name
+            );
+            if (selectedCategory) {
+                const newFilteredSubCategories = subCategories.filter(
+                    (subCat) => subCat.category_id === selectedCategory._id
+                );
+                setFilteredSubCategories(newFilteredSubCategories);
+                // Reset sub_category_name if it's not valid for the new category
+                if (!newFilteredSubCategories.some(subCat => subCat.breed === lostListing.sub_category_name)) {
+                    updateLostListingField("sub_category_name", "");
+                }
+            } else {
+                setFilteredSubCategories([]);
+                updateLostListingField("sub_category_name", "");
+            }
+        } else {
+            setFilteredSubCategories([]);
+            updateLostListingField("sub_category_name", "");
+        }
+    }, [lostListing.category_name, categories, subCategories, updateLostListingField]);
+
 
     const handleChange = (field, value) => updateLostListingField(field, value);
     const handleAdditionalChange = (field, value) =>
@@ -24,17 +80,19 @@ export default function LostListing() {
         try {
             const formData = {
                 ...lostListing,
+                owner_id: user._id,
                 additionalInfo: {
                     ...lostListing.additionalInfo,
                 },
             };
 
             const response = await createLostListing(formData);
+            console.log("Lost listing created:", response);
+            // router.push("/"); // Redirect after successful creation
         } catch (error) {
             console.error("Error creating lost listing:", error);
         }
     };
-
 
     return (
         <form
@@ -43,67 +101,47 @@ export default function LostListing() {
         >
             {/* Ana Bilgiler */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label className="block mb-1 text-sm font-medium text-gray-700">Hayvan Adı</label>
-                    <input
-                        type="text"
-                        value={lostListing.petName || ""}
-                        onChange={(e) => handleChange("petName", e.target.value)}
-                        className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
-                    />
-                </div>
-                <div>
-                    <label className="block mb-1 text-sm font-medium text-gray-700">Yaş</label>
-                    <input
-                        min="0"
-                        type="number"
-                        value={lostListing.age ?? ""}
-                        onChange={(e) => {
-                            const value = e.target.value === "" ? null : parseInt(e.target.value);
-                            handleChange("age", value);
-                        }}
-                        className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
-                    />
-                </div>
+                <InputField
+                    label="Hayvan Adı"
+                    value={lostListing.petName}
+                    onChange={(val) => handleChange("petName", val)}
+                />
+                <InputField
+                    label="Yaş"
+                    type="number"
+                    value={lostListing.age}
+                    onChange={(val) => handleChange("age", parseInt(val))}
+                />
 
-                <div>
-                    <label className="block mb-1 text-sm font-medium text-gray-700">Cinsiyet</label>
-                    <select
-                        value={lostListing.gender ? "Erkek" : "Dişi"}
-                        onChange={(e) => handleChange("gender", e.target.value === "Erkek")}
-                        className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
-                    >
-                        <option>Erkek</option>
-                        <option>Dişi</option>
-                    </select>
-                </div>
-                <div>
-                    <label className="block mb-1 text-sm font-medium text-gray-700">Kategori</label>
-                    <input
-                        type="text"
-                        value={lostListing.category_name || ""}
-                        onChange={(e) => handleChange("category_name", e.target.value)}
-                        className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
-                    />
-                </div>
-                <div>
-                    <label className="block mb-1 text-sm font-medium text-gray-700">Alt Kategori</label>
-                    <input
-                        type="text"
-                        value={lostListing.sub_category_name || ""}
-                        onChange={(e) => handleChange("sub_category_name", e.target.value)}
-                        className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
-                    />
-                </div>
-                <div>
-                    <label className="block mb-1 text-sm font-medium text-gray-700">Resimler (virgülle ayır)</label>
-                    <input
-                        type="text"
-                        value={lostListing.images?.join(",") || ""}
-                        onChange={(e) => handleChange("images", e.target.value.split(","))}
-                        className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
-                    />
-                </div>
+                <SelectField
+                    label="Cinsiyet"
+                    value={lostListing.gender ? "Erkek" : "Dişi"}
+                    onChange={(val) => handleChange("gender", val === "Erkek")}
+                    options={["Erkek", "Dişi"]}
+                />
+
+                {/* Kategori Select Field */}
+                <SelectField
+                    label="Kategori"
+                    value={lostListing.category_name}
+                    onChange={(val) => handleChange("category_name", val)}
+                    options={categories.map((cat) => ({ label: cat.name, value: cat.name, _id: cat._id }))}
+                />
+
+                {/* Alt Kategori Select Field - Enabled only if a category is selected */}
+                <SelectField
+                    label="Alt Kategori"
+                    value={lostListing.sub_category_name}
+                    onChange={(val) => handleChange("sub_category_name", val)}
+                    options={filteredSubCategories.map((subCat) => ({ label: subCat.breed, value: subCat.breed, _id: subCat._id }))}
+                    disabled={!lostListing.category_name} // Disable until a category is chosen
+                />
+
+                <InputField
+                    label="Resimler (virgülle ayır)"
+                    value={lostListing.images?.join(",")}
+                    onChange={(val) => handleChange("images", val.split(","))}
+                />
             </div>
 
             {/* Açıklama */}
@@ -125,81 +163,57 @@ export default function LostListing() {
                 <InputField label="Göz Rengi" value={lostListing.additionalInfo?.eyeColor} onChange={(val) => handleAdditionalChange("eyeColor", val)} />
                 <InputField label="Tüy Tipi" value={lostListing.additionalInfo?.furType} onChange={(val) => handleAdditionalChange("furType", val)} />
 
-                <div>
-                    <label className="block mb-1 text-sm font-medium text-gray-700">Ebat</label>
-                    <select
-                        value={lostListing.additionalInfo?.size || ""}
-                        onChange={(e) => handleAdditionalChange("size", e.target.value)}
-                        className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
-                    >
-                        <option>small</option>
-                        <option>medium</option>
-                        <option>large</option>
-                    </select>
-                </div>
+                {/* Ebat Select Field with Turkish Labels and English Values */}
+                <SelectField
+                    label="Ebat"
+                    value={lostListing.additionalInfo?.size}
+                    onChange={(val) => handleAdditionalChange("size", val)}
+                    options={[
+                        { label: "Küçük", value: "small" },
+                        { label: "Orta", value: "medium" },
+                        { label: "Büyük", value: "large" },
+                    ]}
+                />
 
-                <div>
-                    <label className="block mb-1 text-sm font-medium text-gray-700">Ağırlık (kg)</label>
-                    <input
-                        min="0"
-                        type="number"
-                        value={lostListing.additionalInfo?.weight ?? ""}
-                        onChange={(e) => {
-                            const value = e.target.value === "" ? null : parseFloat(e.target.value);
-                            handleAdditionalChange("weight", value);
-                        }}
-                        className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
-                    />
-                </div>
+                <InputField
+                    label="Ağırlık (kg)"
+                    type="number"
+                    value={lostListing.additionalInfo?.weight}
+                    onChange={(val) => handleAdditionalChange("weight", parseFloat(val))}
+                />
 
-                <div className="flex items-center gap-3 mt-2">
-                    <input
-                        type="checkbox"
-                        checked={lostListing.additionalInfo?.vaccinated || false}
-                        onChange={(e) => handleAdditionalChange("vaccinated", e.target.checked)}
-                        id="vaccinated"
-                        className="h-5 w-5 text-blue-600"
-                    />
-                    <label htmlFor="vaccinated" className="text-sm text-gray-700">Aşılı</label>
-                </div>
+                <CheckboxField
+                    label="Aşılı"
+                    checked={lostListing.additionalInfo?.vaccinated || false}
+                    onChange={(val) => handleAdditionalChange("vaccinated", val)}
+                />
 
-                <div>
-                    <label className="block mb-1 text-sm font-medium text-gray-700">Eğitilebilirlik</label>
-                    <select
-                        value={lostListing.additionalInfo?.trainability ?? ""}
-                        onChange={(e) => {
-                            const value = e.target.value === "" ? null : e.target.value;
-                            handleAdditionalChange("trainability", value);
-                        }}
-                        className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
-                    >
-                        <option value="" disabled>Seçiniz</option>
-                        <option value="easy">easy</option>
-                        <option value="medium">medium</option>
-                        <option value="hard">hard</option>
-                    </select>
-                </div>
+                {/* Eğitilebilirlik Select Field with Turkish Labels and English Values */}
+                <SelectField
+                    label="Eğitilebilirlik"
+                    value={lostListing.additionalInfo?.trainability}
+                    onChange={(val) => handleAdditionalChange("trainability", val)}
+                    options={[
+                        { label: "Kolay", value: "easy" },
+                        { label: "Orta", value: "medium" },
+                        { label: "Zor", value: "hard" },
+                    ]}
+                />
 
-                <div>
-                    <label className="block mb-1 text-sm font-medium text-gray-700">Sosyallik</label>
-                    <select
-                        value={lostListing.additionalInfo?.sociality ?? ""}
-                        onChange={(e) => {
-                            const value = e.target.value === "" ? null : e.target.value;
-                            handleAdditionalChange("sociality", value);
-                        }}
-                        className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
-                    >
-                        <option value="" disabled>Seçiniz</option>
-                        <option value="low">low</option>
-                        <option value="medium">medium</option>
-                        <option value="high">high</option>
-                    </select>
-                </div>
-
+                {/* Sosyallik Select Field with Turkish Labels and English Values */}
+                <SelectField
+                    label="Sosyallik"
+                    value={lostListing.additionalInfo?.sociality}
+                    onChange={(val) => handleAdditionalChange("sociality", val)}
+                    options={[
+                        { label: "Düşük", value: "low" },
+                        { label: "Orta", value: "medium" },
+                        { label: "Yüksek", value: "high" },
+                    ]}
+                />
             </div>
 
-            {/* Slider */}
+            {/* Oyunculuk Slider */}
             <div className="mt-4">
                 <label className="block mb-1 text-sm font-medium text-gray-700">Oyunculuk (1-5)</label>
                 <input
@@ -213,14 +227,13 @@ export default function LostListing() {
                 />
             </div>
 
-            {/* Submit */}
+            {/* Gönder */}
             <div className="flex justify-end pt-4">
                 <Button
                     variant="outlined"
                     type="submit"
                     color="blue"
                     className="font-semibold cursor-pointer hover:bg-blue-400 hover:text-white rounded-md shadow-md transition duration-200"
-                    onClick={handleSubmit}
                 >
                     Kaydet
                 </Button>
@@ -229,17 +242,68 @@ export default function LostListing() {
     );
 }
 
-// Reusable InputField component
-function InputField({ label, value, onChange }) {
+// Reusable Components (add these at the end of the file or import from a separate file)
+
+function InputField({ label, value, onChange, type = "text" }) {
     return (
         <div>
             <label className="block mb-1 text-sm font-medium text-gray-700">{label}</label>
             <input
-                type="text"
+                type={type}
                 value={value || ""}
                 onChange={(e) => onChange(e.target.value)}
                 className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
             />
+        </div>
+    );
+}
+
+function SelectField({ label, value, onChange, options, disabled = false }) {
+    return (
+        <div>
+            <label className="block mb-1 text-sm font-medium text-gray-700">{label}</label>
+            <select
+                value={value || ""}
+                onChange={(e) => onChange(e.target.value)}
+                className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
+                disabled={disabled}
+            >
+                <option value="">Seçiniz...</option>
+                {options.map((opt) => {
+                    const optionValue = typeof opt === 'object' && opt !== null && opt.hasOwnProperty('value')
+                        ? opt.value
+                        : opt;
+
+                    const optionLabel = typeof opt === 'object' && opt !== null && opt.hasOwnProperty('label')
+                        ? opt.label
+                        : opt;
+
+                    const optionKey = typeof opt === 'object' && opt !== null && opt.hasOwnProperty('_id')
+                        ? opt._id
+                        : optionValue;
+
+                    return (
+                        <option key={optionKey} value={optionValue}>
+                            {optionLabel}
+                        </option>
+                    );
+                })}
+            </select>
+        </div>
+    );
+}
+
+function CheckboxField({ label, checked, onChange }) {
+    return (
+        <div className="flex items-center gap-3 mt-2">
+            <input
+                type="checkbox"
+                checked={checked}
+                onChange={(e) => onChange(e.target.checked)}
+                id={label}
+                className="h-5 w-5 text-blue-600"
+            />
+            <label htmlFor={label} className="text-sm text-gray-700">{label}</label>
         </div>
     );
 }

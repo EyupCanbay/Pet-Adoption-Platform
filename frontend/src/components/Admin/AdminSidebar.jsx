@@ -25,6 +25,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useUser } from "@/src/context/userProvider";
 import { LogoutUser } from "@/src/services/Auth";
+import { useState } from "react";
 
 const MENU_ITEMS = [
     { label: "Kullanıcılar", value: "users", icon: <UsersIcon className="h-5 w-5" /> },
@@ -39,6 +40,7 @@ const MENU_ITEMS = [
 export function AdminSidebar({ activeTab, setActiveTab }) {
     const user = useUser();
     const router = useRouter();
+    const [ownerImageError, setOwnerImageError] = useState(false);
 
     const handleLogout = async () => {
         await LogoutUser();
@@ -87,7 +89,10 @@ export function AdminSidebar({ activeTab, setActiveTab }) {
                     <PopoverHandler>
                         <div className="flex items-center gap-3 cursor-pointer">
                             <Avatar
-                                src={user?.user?.data?.user?.profilePicture || "/ahmet.jpg"}
+                                src={ownerImageError || !user?.user?.data?.user?.profilePicture
+                                    ? "/default-avatar.jpg"
+                                    : user?.user?.data?.user?.profilePicture}
+                                onError={() => setOwnerImageError(true)}
                                 alt="Profile Picture"
                                 className="w-12 h-12"
                             />
