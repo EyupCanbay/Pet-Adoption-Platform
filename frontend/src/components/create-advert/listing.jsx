@@ -1,17 +1,75 @@
+// src/components/create-advert/listing.jsx
+
 "use client";
 
 import { useListingStore } from "@/src/store/useListingStore";
 import { useUser } from "@/src/context/userProvider";
 import { Button } from "@material-tailwind/react";
 import { createListing } from "@/src/services/Listings";
+import { getAllCategories } from "@/src/services/Category";
+import { useEffect, useState } from "react";
+import { getAllSubCategories } from "@/src/services/SubCategory";
+import { useRouter } from "next/navigation";
 
 export default function Listing() {
+    const [categories, setCategories] = useState([]);
+    const [subCategories, setSubCategories] = useState([]);
+    const [filteredSubCategories, setFilteredSubCategories] = useState([]);
     const { user } = useUser();
+    const router = useRouter();
     const {
         listing,
         updateListingField,
         updateAdditionalInfoField,
     } = useListingStore();
+
+    // Destructure additionalInfo with a default empty object
+    // This is the key change to prevent the TypeError
+    const { additionalInfo = {} } = listing;
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await getAllCategories();
+                setCategories(response.data);
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+            }
+        };
+        const fetchSubCategories = async () => {
+            try {
+                const response = await getAllSubCategories();
+                setSubCategories(response.data);
+            } catch (error) {
+                console.error("Error fetching subcategories:", error);
+            }
+        };
+        fetchSubCategories();
+        fetchCategories();
+    }, []);
+
+    useEffect(() => {
+        if (listing.category_name && categories.length > 0 && subCategories.length > 0) {
+            const selectedCategory = categories.find(
+                (cat) => cat.name === listing.category_name
+            );
+            if (selectedCategory) {
+                const newFilteredSubCategories = subCategories.filter(
+                    (subCat) => subCat.category_id === selectedCategory._id
+                );
+                setFilteredSubCategories(newFilteredSubCategories);
+                if (!newFilteredSubCategories.some(subCat => subCat.name === listing.sub_category_name)) {
+                    updateListingField("sub_category_name", "");
+                }
+            } else {
+                setFilteredSubCategories([]);
+                updateListingField("sub_category_name", "");
+            }
+        } else {
+            setFilteredSubCategories([]);
+            updateListingField("sub_category_name", "");
+        }
+    }, [listing.category_name, categories, subCategories, updateListingField]);
 
     const handleChange = (field, value) => updateListingField(field, value);
     const handleAdditionalChange = (field, value) =>
@@ -22,13 +80,18 @@ export default function Listing() {
         try {
             const formData = {
                 ...listing,
+                owner_id: user._id,
                 additionalInfo: {
-                    ...listing.additionalInfo,
+                    ...additionalInfo, // Use the destructured additionalInfo
                 },
             };
 
-            console.log("Creating listing:", formData);
             const response = await createListing(formData);
+            if (response.success) {
+                router.push("/");
+                useListingStore.setState({ listing: {} }); // Clear the store state after successful submission
+            }
+
         } catch (error) {
             console.error("Error creating listing:", error);
         }
@@ -39,10 +102,30 @@ export default function Listing() {
             {/* Temel Bilgiler */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <InputField label="Hayvan Adı" value={listing.petName} onChange={(val) => handleChange("petName", val)} />
-                <InputField label="Yaş" type="number" value={listing.age} onChange={(val) => handleChange("age", parseInt(val))} />
+                <InputField
+                    label="Yaş"
+                    type="number"
+                    value={listing.age ?? ""}
+                    onChange={(val) => handleChange("age", val === "" ? null : parseInt(val))}
+                />
                 <SelectField label="Cinsiyet" value={listing.gender ? "Erkek" : "Dişi"} onChange={(val) => handleChange("gender", val === "Erkek")} options={["Erkek", "Dişi"]} />
-                <InputField label="Kategori" value={listing.category_name} onChange={(val) => handleChange("category_name", val)} />
-                <InputField label="Alt Kategori" value={listing.sub_category_name} onChange={(val) => handleChange("sub_category_name", val)} />
+
+                {/* Category Select Field - Pass objects for label/value/id */}
+                <SelectField
+                    label="Kategori"
+                    value={listing.category_name}
+                    onChange={(val) => handleChange("category_name", val)}
+                    options={categories.map((cat) => ({ label: cat.name, value: cat.name, _id: cat._id }))}
+                />
+
+                {/* Subcategory Select Field - Pass objects for label/value/id and apply disabled prop */}
+                <SelectField
+                    label="Alt Kategori"
+                    value={listing.sub_category_name}
+                    onChange={(val) => handleChange("sub_category_name", val)}
+                    options={filteredSubCategories.map((subCat) => ({ label: subCat.breed, value: subCat.breed, _id: subCat._id }))}
+                    disabled={!listing.category_name}
+                />
                 <InputField label="Resimler (virgülle ayır)" value={listing.images?.join(",")} onChange={(val) => handleChange("images", val.split(","))} />
             </div>
 
@@ -50,7 +133,7 @@ export default function Listing() {
             <div>
                 <label className="block mb-1 text-sm font-medium text-gray-700">Açıklama</label>
                 <textarea
-                    value={listing.description}
+                    value={listing.description || ""}
                     onChange={(e) => handleChange("description", e.target.value)}
                     rows={4}
                     className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
@@ -60,19 +143,37 @@ export default function Listing() {
             {/* Ek Bilgiler */}
             <h3 className="text-xl font-semibold text-blue-700">Ek Bilgiler</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <InputField label="Renk" value={listing.additionalInfo.color} onChange={(val) => handleAdditionalChange("color", val)} />
-                <InputField label="Göz Rengi" value={listing.additionalInfo.eyeColor} onChange={(val) => handleAdditionalChange("eyeColor", val)} />
-                <InputField label="Tüy Tipi" value={listing.additionalInfo.furType} onChange={(val) => handleAdditionalChange("furType", val)} />
-                <SelectField label="Ebat" value={listing.additionalInfo.size} onChange={(val) => handleAdditionalChange("size", val)} options={["small", "medium", "large"]} />
-                <InputField label="Ağırlık (kg)" type="number" value={listing.additionalInfo.weight} onChange={(val) => handleAdditionalChange("weight", parseFloat(val))} />
+                {/* Use the destructured additionalInfo here */}
+                <InputField label="Renk" value={additionalInfo.color} onChange={(val) => handleAdditionalChange("color", val)} />
+                <InputField label="Göz Rengi" value={additionalInfo.eyeColor} onChange={(val) => handleAdditionalChange("eyeColor", val)} />
+                <InputField label="Tüy Tipi" value={additionalInfo.furType} onChange={(val) => handleAdditionalChange("furType", val)} />
+                <SelectField
+                    label="Ebat"
+                    value={additionalInfo.size}
+                    onChange={(val) => handleAdditionalChange("size", val)}
+                    options={[
+                        { label: "Küçük", value: "small" },
+                        { label: "Orta", value: "medium" },
+                        { label: "Büyük", value: "large" },
+                    ]}
+                />
+                <InputField label="Ağırlık (kg)" type="number" value={additionalInfo.weight ?? ""} onChange={(val) => handleAdditionalChange("weight", val === "" ? null : parseFloat(val))} />
 
-                <CheckboxField label="Aşılı" checked={listing.additionalInfo.vaccinated} onChange={(val) => handleAdditionalChange("vaccinated", val)} />
-                <InputField label="Aşı Tarihi" type="date" value={listing.additionalInfo.vaccinated_last_date ?? ""} onChange={(val) => handleAdditionalChange("vaccinated_last_date", val)} />
+                <CheckboxField label="Aşılı" checked={additionalInfo.vaccinated || false} onChange={(val) => handleAdditionalChange("vaccinated", val)} />
+                <InputField label="Aşı Tarihi" type="date" value={additionalInfo.vaccinated_last_date ?? ""} onChange={(val) => handleAdditionalChange("vaccinated_last_date", val)} />
 
-                <CheckboxField label="Kısırlaştırılmış" checked={listing.additionalInfo.neutered} onChange={(val) => handleAdditionalChange("neutered", val)} />
+                <CheckboxField label="Kısırlaştırılmış" checked={additionalInfo.neutered || false} onChange={(val) => handleAdditionalChange("neutered", val)} />
 
-                <SelectField label="Eğitilebilirlik" value={listing.additionalInfo.trainability} onChange={(val) => handleAdditionalChange("trainability", val)} options={["easy", "medium", "hard"]} />
-                <SelectField label="Sosyallik" value={listing.additionalInfo.sociality} onChange={(val) => handleAdditionalChange("sociality", val)} options={["low", "medium", "high"]} />
+                <SelectField label="Eğitilebilirlik" value={additionalInfo.trainability} onChange={(val) => handleAdditionalChange("trainability", val)} options={[
+                    { label: "Kolay", value: "easy" },
+                    { label: "Orta", value: "medium" },
+                    { label: "Zor", value: "hard" },
+                ]} />
+                <SelectField label="Sosyallik" value={additionalInfo.sociality} onChange={(val) => handleAdditionalChange("sociality", val)} options={[
+                    { label: "Düşük", value: "low" },
+                    { label: "Orta", value: "medium" },
+                    { label: "Yüksek", value: "high" },
+                ]} />
             </div>
 
             {/* Oyunculuk */}
@@ -83,7 +184,7 @@ export default function Listing() {
                     min="1"
                     max="5"
                     step="1"
-                    value={listing.additionalInfo.playfulness}
+                    value={additionalInfo.playfulness || 1}
                     onChange={(e) => handleAdditionalChange("playfulness", parseInt(e.target.value))}
                     className="w-full accent-blue-500"
                 />
@@ -104,7 +205,7 @@ export default function Listing() {
     );
 }
 
-// Reusable Components
+// Reusable Components (Keep these outside of the main component or import them)
 function InputField({ label, value, onChange, type = "text" }) {
     return (
         <div>
@@ -119,7 +220,7 @@ function InputField({ label, value, onChange, type = "text" }) {
     );
 }
 
-function SelectField({ label, value, onChange, options }) {
+function SelectField({ label, value, onChange, options, disabled = false }) {
     return (
         <div>
             <label className="block mb-1 text-sm font-medium text-gray-700">{label}</label>
@@ -127,12 +228,28 @@ function SelectField({ label, value, onChange, options }) {
                 value={value || ""}
                 onChange={(e) => onChange(e.target.value)}
                 className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
+                disabled={disabled}
             >
-                {options.map((opt) => (
-                    <option key={opt} value={opt}>
-                        {opt}
-                    </option>
-                ))}
+                <option value="">Seçiniz...</option>
+                {options.map((opt) => {
+                    const optionValue = typeof opt === 'object' && opt !== null && opt.hasOwnProperty('value')
+                        ? opt.value
+                        : opt;
+
+                    const optionLabel = typeof opt === 'object' && opt !== null && opt.hasOwnProperty('label')
+                        ? opt.label
+                        : opt;
+
+                    const optionKey = typeof opt === 'object' && opt !== null && opt.hasOwnProperty('_id')
+                        ? opt._id
+                        : optionValue;
+
+                    return (
+                        <option key={optionKey} value={optionValue}>
+                            {optionLabel}
+                        </option>
+                    );
+                })}
             </select>
         </div>
     );
