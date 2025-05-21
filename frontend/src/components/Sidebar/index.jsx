@@ -52,7 +52,7 @@ export function Sidebar() {
         <>
             {/* Burger Button */}
             <div className="p-4 z-50 relative">
-                <IconButton variant="text" size="lg" onClick={toggleDrawer}>
+                <IconButton variant="text" size="lg" onClick={toggleDrawer} aria-label="Toggle Sidebar">
                     {isDrawerOpen ? (
                         <XMarkIcon className="h-6 w-6 cursor-pointer" />
                     ) : (
@@ -74,7 +74,7 @@ export function Sidebar() {
                 <Card color="transparent" shadow={false} className="h-full w-full p-4 ">
                     <div className="flex justify-between items-center mb-4">
                         <Typography variant="h5">Tüm Kategoriler</Typography>
-                        <IconButton variant="text" onClick={toggleDrawer}>
+                        <IconButton variant="text" onClick={toggleDrawer} aria-label="Close">
                             <XMarkIcon className="h-6 w-6 cursor-pointer" />
                         </IconButton>
                     </div>
