@@ -8,7 +8,6 @@ function BlockUser({ currentUser, block }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [actionType, setActionType] = useState('');
     const [isBlocked, setIsBlocked] = useState(currentUser.blockedUser.includes(block._id));
-    // console.log(currentUser);
     const openModal = (action) => {
         setActionType(action);
         setIsModalOpen(true);
@@ -34,7 +33,7 @@ function BlockUser({ currentUser, block }) {
             }
             closeModal();
         } catch (error) {
-            console.log('Error performing action');
+            console.error('Error performing action');
         }
     };
 

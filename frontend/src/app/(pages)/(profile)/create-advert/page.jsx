@@ -22,7 +22,7 @@ function CreateAdverts() {
                         variant={activeTab === tab.id ? 'filled' : 'outlined'}
                         color="blue"
                         onClick={() => setActiveTab(tab.id)}
-                        className={`transition duration-300 ${activeTab === tab.id ? 'bg-orange-500 text-white' : 'text-orange-500 border-orange-500'}`}
+                        className={`transition duration-300 cursor-pointer ${activeTab === tab.id ? 'bg-orange-500 text-white' : 'text-orange-500 border-orange-500'}`}
                     >
                         {tab.label}
                     </Button>

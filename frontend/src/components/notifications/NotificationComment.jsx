@@ -12,12 +12,6 @@ const NotificationComment = ({ notification, user }) => {
         }
     }, [notification]);
 
-    useEffect(() => {
-        if (initiator) {
-            console.log("Initiator:", initiator);
-        }
-    }, [initiator]);
-
     return (
         <div className="border p-4 rounded shadow-sm">
             <p><strong>{initiator?.userName}</strong> bir gönderinize yorum yaptı:</p>

@@ -78,14 +78,6 @@ function AdminSubCategories() {
         setOpenModal(true);
     };
 
-    useEffect(() => {
-        if (selectedCategory) {
-            console.log("Selected category ID:", selectedCategory);
-        } else {
-            console.log("No category selected");
-        }
-    }, [selectedCategory]);
-
     const handleSave = async () => {
         try {
             if (isEditing && editingId) {

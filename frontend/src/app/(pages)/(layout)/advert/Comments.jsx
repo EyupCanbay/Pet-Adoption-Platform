@@ -1,7 +1,6 @@
 import React from "react";
 
 function Comments({ comment }) {
-    console.log("comment", comment);
 
     return (
         <div className="mt-4 space-y-4">

@@ -11,7 +11,6 @@ export const getAllListings = async () => {
         });
 
         const data = await response.json();
-        // console.log("All listings fetched:", data);
         return data;
     } catch (error) {
         console.error("Error fetching listings:", error);
@@ -47,7 +46,6 @@ export const createListing = async (listingData) => {
             body: JSON.stringify(listingData),
         });
         const data = await response.json();
-        console.log("Listing created:", data);
         return data;
     } catch (error) {
         console.error("Error creating listing:", error);
@@ -66,7 +64,6 @@ export const updateListing = async (id, listingData) => {
             body: JSON.stringify(listingData),
         });
         const data = await response.json();
-        console.log("Listing updated:", data);
         return data;
     } catch (error) {
         console.error("Error updating listing:", error);
@@ -84,7 +81,6 @@ export const deleteListing = async (id) => {
             credentials: "include",
         });
         const data = await response.json();
-        console.log("Listing deleted:", data);
         return data;
     } catch (error) {
         console.error("Error deleting listing:", error);
@@ -119,7 +115,6 @@ export const getListingComments = async (id) => {
             credentials: "include",
         });
         const data = await response.json();
-        console.log("Listing comments fetched:", data);
         return data;
     } catch (error) {
         console.error("Error fetching listing comments:", error);
@@ -138,7 +133,6 @@ export const createListingComment = async (id, commentData) => {
             body: JSON.stringify(commentData),
         });
         const data = await response.json();
-        console.log("Listing comment created:", data);
         return data;
     } catch (error) {
         console.error("Error creating listing comment:", error);
@@ -156,7 +150,6 @@ export const getListingSingleComment = async (listingId, commentId) => {
             credentials: "include",
         });
         const data = await response.json();
-        console.log("Single listing comment fetched:", data);
         return data;
     } catch (error) {
         console.error("Error fetching single listing comment:", error);
@@ -175,7 +168,6 @@ export const updateListingComment = async (listingId, commentId, commentData) =>
             body: JSON.stringify(commentData),
         });
         const data = await response.json();
-        console.log("Listing comment updated:", data);
         return data;
     } catch (error) {
         console.error("Error updating listing comment:", error);
@@ -193,7 +185,6 @@ export const deleteListingComment = async (listingId, commentId) => {
             credentials: "include",
         });
         const data = await response.json();
-        console.log("Listing comment deleted:", data);
         return data;
     } catch (error) {
         console.error("Error deleting listing comment:", error);
@@ -229,7 +220,6 @@ export const createListingCommentReplyComment = async (listingId, commentId, rep
             body: JSON.stringify(replyCommentData),
         });
         const data = await response.json();
-        console.log("Listing comment reply comment created:", data);
         return data;
     } catch (error) {
         console.error("Error creating listing comment reply comment:", error);
@@ -248,7 +238,6 @@ export const updateListingCommentReplyComment = async (listingId, commentId, rep
             body: JSON.stringify(replyCommentData),
         });
         const data = await response.json();
-        console.log("Listing comment reply comment updated:", data);
         return data;
     } catch (error) {
         console.error("Error updating listing comment reply comment:", error);
@@ -266,7 +255,6 @@ export const deleteListingCommentReplyComment = async (listingId, commentId, rep
             credentials: "include",
         });
         const data = await response.json();
-        console.log("Listing comment reply comment deleted:", data);
         return data;
     } catch (error) {
         console.error("Error deleting listing comment reply comment:", error);

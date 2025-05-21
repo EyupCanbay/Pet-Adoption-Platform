@@ -10,7 +10,6 @@ export async function Search(query) {
         });
 
         const data = await response.json();
-        console.log("Search results:", data);
         return data;
     } catch (error) {
         console.error("Error fetching search results:", error);

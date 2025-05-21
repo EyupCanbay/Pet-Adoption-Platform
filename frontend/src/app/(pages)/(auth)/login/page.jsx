@@ -26,7 +26,6 @@ export default function Login() {
             setLoading(true);
             const formData = { email, password };
             const response = await LoginUser(formData);
-            console.log(response);
             if (response.success) {
                 toast.success("Giriş başarılı!");
                 window.location.href = "/";

@@ -2,7 +2,6 @@ const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export const LoginUser = async (formData) => {
     try {
-        console.log('backend_url :>> ', backend_url);
         const response = await fetch(`${backend_url}/auth/login`, {
             method: 'POST',
             headers: {
@@ -17,7 +16,6 @@ export const LoginUser = async (formData) => {
         }
 
         const data = await response.json();
-        console.log("data", data);
         return data;
     } catch (error) {
         console.error('Error logging in:', error.message);
@@ -40,8 +38,6 @@ export const RegisterUser = async (formData) => {
         }
 
         const data = await response.json();
-        console.log("data", data);
-        console.log(data);
         return data;
     } catch (error) {
         console.error('Error registering:', error);
@@ -60,7 +56,6 @@ export const LogoutUser = async () => {
             credentials: 'include',
         });
 
-        console.log("response", response);
         if (!response.ok) {
             throw new Error('Logout failed');
         }

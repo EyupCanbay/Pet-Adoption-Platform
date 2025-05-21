@@ -42,7 +42,6 @@ function Advert({ pet, userId }) {
         const fetchOwner = async () => {
             try {
                 const response = await getSingleUser(userId);
-                // console.log("response", response);
                 if (response.status === "Success") {
                     setOwner(response?.data?.user);
                     setLoadingPet(false);
