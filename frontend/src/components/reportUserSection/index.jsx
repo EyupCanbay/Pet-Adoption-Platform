@@ -47,7 +47,11 @@ function ReportUser({ currentUser, reportedItem, petOwner, isLostListing }) {
             const result = await reportUser(petOwner._id, formData);
             closeModal();
         } catch (error) {
+<<<<<<< HEAD
             console.error('Error reporting advert:', error);
+=======
+            console.error('Error performing action');
+>>>>>>> adf3a062938d2529c5b7378d8b8cc90236169dbc
         }
     };
 
