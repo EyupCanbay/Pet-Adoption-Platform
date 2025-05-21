@@ -7,7 +7,7 @@ function Logo() {
 
     return (
         <button
-            className='lg:text-3xl md:text-2xl text-lg cursor-pointer font-bold italic text-gray-300'
+            className='lg:text-3xl md:text-2xl text-lg cursor-pointer font-bold italic text-gray-600'
             onClick={() => router.push('/')}
         >
             PET ADOPTION

@@ -11,13 +11,13 @@ function Footer() {
                     © 2025 Pet Adoption Platform. All rights reserved.
                 </p>
                 <div className="flex justify-center mt-4">
-                    <a href="https://www.instagram.com" target="_blank" rel="noreferrer">
+                    <a href="https://www.instagram.com" aria-label='Instagram' target="_blank" rel="noreferrer">
                         <FaInstagram className="text-3xl text-pink-400 mx-4 hover:text-pink-700 transition duration-300" />
                     </a>
-                    <a href="https://www.github.com" target="_blank" rel="noreferrer">
+                    <a href="https://www.github.com" aria-label='GitHub' target="_blank" rel="noreferrer">
                         <FaGithub className="text-3xl text-gray-500 mx-4 hover:text-black transition duration-300" />
                     </a>
-                    <a href="https://www.linkedin.com" target="_blank" rel="noreferrer">
+                    <a href="https://www.linkedin.com" aria-label='LinkedIn' target="_blank" rel="noreferrer">
                         <FaLinkedin className="text-3xl text-blue-500 mx-4 hover:text-blue-700 transition duration-300" />
                     </a>
                 </div>

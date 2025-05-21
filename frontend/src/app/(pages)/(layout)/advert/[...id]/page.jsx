@@ -165,10 +165,12 @@ function AdvertDetails() {
                 {/* Image Gallery - Left */}
                 <div className="lg:col-span-5 flex flex-col items-center">
                     <img
-                        src={selectedImage || "/images/default-pet.jpg"}
+                        src={errorImage || !pet?.images[0]
+                            ? "/anonim.png"
+                            : selectedImage}
                         alt={pet?.petName}
                         className="w-full h-96 object-cover rounded-xl shadow-md"
-                        onError={(e) => { e.target.onerror = null; e.target.src = "/images/default-pet.jpg"; }} // Fallback for main image
+                        onError={() => setErrorImage(true)}
                     />
                     <div className="flex flex-wrap w-full gap-3 mt-4">
                         {pet?.images?.map((image, idx) => (
@@ -177,7 +179,7 @@ function AdvertDetails() {
                                 src={image}
                                 className="w-16 h-16 object-cover rounded-lg cursor-pointer hover:scale-105 transition-transform"
                                 onClick={() => setSelectedImage(image)}
-                                onError={(e) => { e.target.onerror = null; e.target.src = "/images/default-pet.jpg"; }} // Fallback for thumbnails
+                                onError={(e) => { e.target.onerror = null; e.target.src = "/anonim.png"; }} // Fallback for thumbnails
                                 alt={`Pet image ${idx + 1}`}
                             />
                         ))}
@@ -232,7 +234,7 @@ function AdvertDetails() {
                         src={
                             !ownerImageError && petOwner?.profilePhoto
                                 ? petOwner?.profilePhoto
-                                : "/ahmet.jpg" // Fallback image for owner
+                                : "/default-avatar.jpg" // Fallback image for owner
                         }
                         onError={() => setOwnerImageError(true)}
                         alt={petOwner?.name || "Pet Owner"}
