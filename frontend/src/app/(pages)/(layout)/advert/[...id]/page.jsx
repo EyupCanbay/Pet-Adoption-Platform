@@ -28,16 +28,15 @@ function AdvertDetails() {
     const [selectedImage, setSelectedImage] = useState(null);
     const [ownerImageError, setOwnerImageError] = useState(false);
     const [comments, setComments] = useState([]);
-    const [isLostAdvert, setIsLostAdvert] = useState(false); // New state to track advert type
+    const [isLostAdvert, setIsLostAdvert] = useState(false); 
 
     useEffect(() => {
         const fetchPetDetails = async () => {
-            setLoading(true); // Ensure loading is true at the start of fetch
+            setLoading(true); 
             try {
                 let foundListing = null;
                 let isLost = false;
 
-                // Try fetching as a regular listing first
                 const regularResponse = await fetchSingleListing(id);
                 if (regularResponse?.data) {
                     const data = Array.isArray(regularResponse.data) ? regularResponse.data[0] : regularResponse.data;
@@ -47,7 +46,6 @@ function AdvertDetails() {
                     }
                 }
 
-                // If not found as regular, try as a lost listing
                 if (!foundListing) {
                     const lostResponse = await fetchSingleLostListing(id);
                     if (lostResponse?.data) {
@@ -62,12 +60,12 @@ function AdvertDetails() {
                 if (foundListing) {
                     setPet(foundListing);
                     setSelectedImage(foundListing?.images?.[0]);
-                    setIsLostAdvert(isLost); // Set the type of advert
+                    setIsLostAdvert(isLost);
 
                     const owner = await getSingleUser(foundListing.user_id);
                     if (owner?.data?.user) {
                         setPetOwner(owner.data.user);
-                        setPetLocation(owner.data.location?.[0]); // Use optional chaining for location
+                        setPetLocation(owner.data.location?.[0]);
                     } else {
                         console.warn("Pet owner not found or incomplete data.");
                         setPetOwner(null);
@@ -81,11 +79,11 @@ function AdvertDetails() {
                 }
             } catch (error) {
                 console.error("Error fetching pet details:", error);
-                setPet(null); // Clear pet on error
+                setPet(null); 
                 setPetOwner(null);
                 setPetLocation(null);
             } finally {
-                setLoading(false); // Always set loading to false in finally block
+                setLoading(false);
             }
         };
         fetchPetDetails();
@@ -99,7 +97,7 @@ function AdvertDetails() {
     }, [pet]);
 
     if (loading) return <Loading />;
-    if (!pet) return <div className="text-center text-red-500 py-10">İlan bulunamadı veya bir hata oluştu.</div>; // Handle case where pet is null after loading
+    if (!pet) return <div className="text-center text-red-500 py-10">İlan bulunamadı veya bir hata oluştu.</div>; 
 
     const formattedPhoneNumber = petOwner?.phoneNumber
         ? `9${petOwner.phoneNumber.replace(/\D/g, '')}`
@@ -123,7 +121,6 @@ function AdvertDetails() {
         high: "Yüksek",
     };
 
-    // Ensure additionalInfo is an object to prevent errors if it's null/undefined
     const additionalInfo = pet.additionalInfo || {};
 
     const rows = [
@@ -147,7 +144,6 @@ function AdvertDetails() {
             label: "Aşı Durumu",
             value: additionalInfo.vaccinated ? "Aşılı" : "Aşısız",
         },
-        // Add more rows for lost listing specific details if needed, e.g., lostDate, lostLocation
         {
             label: "Kayıp Tarihi",
             value: isLostAdvert && pet.lostDate ? new Date(pet.lostDate).toLocaleDateString("tr-TR") : "Uygulanamaz",
@@ -162,7 +158,6 @@ function AdvertDetails() {
     return (
         <div className="max-w-6xl mx-auto px-4 py-6 space-y-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                {/* Image Gallery - Left */}
                 <div className="lg:col-span-5 flex flex-col items-center">
                     <img
                         src={errorImage || !pet?.images[0]
@@ -179,14 +174,13 @@ function AdvertDetails() {
                                 src={image}
                                 className="w-16 h-16 object-cover rounded-lg cursor-pointer hover:scale-105 transition-transform"
                                 onClick={() => setSelectedImage(image)}
-                                onError={(e) => { e.target.onerror = null; e.target.src = "/anonim.png"; }} // Fallback for thumbnails
+                                onError={(e) => { e.target.onerror = null; e.target.src = "/anonim.png"; }} 
                                 alt={`Pet image ${idx + 1}`}
                             />
                         ))}
                     </div>
                 </div>
 
-                {/* Pet Details Table - Middle */}
                 <Card className="w-full lg:col-span-4 p-4 shadow-md rounded-xl">
                     <table className="w-full min-w-max table-auto text-left">
                         <thead>
@@ -208,8 +202,8 @@ function AdvertDetails() {
                             {rows.map((row, index) => {
                                 return (
                                     <tr
-                                        key={row.label || index} // Use label as key if unique, otherwise index
-                                        className={index % 2 === 0 ? "bg-blue-gray-50/50" : ""} // Zebra striping
+                                        key={row.label || index} 
+                                        className={index % 2 === 0 ? "bg-blue-gray-50/50" : ""} 
                                     >
                                         <td className="px-4 py-2 border-r border-gray-200">
                                             <Typography variant="small" color="blue-gray" className="font-normal">
@@ -228,13 +222,12 @@ function AdvertDetails() {
                     </table>
                 </Card>
 
-                {/* Pet Owner Info - Right */}
                 <div className="lg:col-span-3 bg-white flex flex-col items-center text-center bg-gray-100 pt-10 px-4 pb-6 rounded-xl shadow-md">
                     <img
                         src={
                             !ownerImageError && petOwner?.profilePhoto
                                 ? petOwner?.profilePhoto
-                                : "/default-avatar.jpg" // Fallback image for owner
+                                : "/default-avatar.jpg" 
                         }
                         onError={() => setOwnerImageError(true)}
                         alt={petOwner?.name || "Pet Owner"}
@@ -252,7 +245,7 @@ function AdvertDetails() {
                             <p className="text-xs text-gray-500">{petOwner?.job}</p>
                         </div>
 
-                        {petOwner?.phoneNumber && ( // Only show button if phone number exists
+                        {petOwner?.phoneNumber && ( 
                             <Button
                                 variant="outlined"
                                 color="green"
@@ -267,20 +260,19 @@ function AdvertDetails() {
                             </Button>
                         )}
 
-                        {petLocation?.city && petLocation?.country && ( // Only show location if data exists
+                        {petLocation?.city && petLocation?.country && ( 
                             <div className="flex items-center justify-center gap-2 px-3 py-2 rounded-md bg-blue-500 text-white text-xs shadow-sm mt-2">
                                 <FiMapPin className="text-base" />
                                 <span>{petLocation.city}, {petLocation.country}</span>
                             </div>
                         )}
-                        {pet?.createdAt && ( // Only show creation date if it exists
+                        {pet?.createdAt && ( 
                             <div className="flex items-center justify-center gap-2 px-3 py-2 rounded-md bg-cyan-500 text-white text-xs shadow-sm mt-2">
                                 İlan Oluşturma Tarihi: {new Date(pet.createdAt).toLocaleDateString("tr-TR")}
                             </div>
                         )}
 
-                        {/* Report Advert Button */}
-                        {user && petOwner && pet && ( // Only show report button if user is logged in, owner and pet data is available
+                        {user && petOwner && pet && ( 
                             <div className="mt-4">
                                 <ReportUser
                                     currentUser={user}

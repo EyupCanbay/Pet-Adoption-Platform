@@ -37,21 +37,17 @@ function ReportUser({ currentUser, reportedItem, petOwner, isLostListing }) {
 
         if (isLostListing) {
             formData.reportedLostPetListing_id = reportedItem._id;
-            formData.reportedPetListing_id = null; 
+            formData.reportedPetListing_id = null;
         } else {
             formData.reportedPetListing_id = reportedItem._id;
-            formData.reportedLostPetListing_id = null; 
+            formData.reportedLostPetListing_id = null;
         }
 
         try {
             const result = await reportUser(petOwner._id, formData);
             closeModal();
         } catch (error) {
-<<<<<<< HEAD
-            console.error('Error reporting advert:', error);
-=======
-            console.error('Error performing action');
->>>>>>> adf3a062938d2529c5b7378d8b8cc90236169dbc
+            console.error('Error reporting user:', error);
         }
     };
 

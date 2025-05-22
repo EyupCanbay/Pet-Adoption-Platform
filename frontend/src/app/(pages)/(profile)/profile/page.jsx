@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Advert from "@/src/components/Advert";
 import Loading from "@/src/components/Loading";
@@ -9,6 +9,7 @@ import Link from "next/link";
 import slugify from "slugify";
 import { useUser } from "@/src/context/userProvider";
 import { fetchCurrentUsersListings } from "@/src/services/User";
+import { CardPlacehoderSkeleton } from "@/src/components/Advert/advertSkeleton";
 function ProfilePage() {
     const { user } = useUser();
     const [loading, setLoading] = useState(true);
@@ -87,7 +88,9 @@ function ProfilePage() {
                                 {
                                     displayedAdverts.length > 0 ?
                                         displayedAdverts.map((advert) => (
-                                            <Advert userId={advert.user_id} key={advert._id} pet={advert} />
+                                            <Suspense key={advert._id} fallback={<CardPlacehoderSkeleton />}>
+                                                <Advert userId={advert.user_id} key={advert._id} pet={advert} />
+                                            </Suspense>
                                         ))
                                         :
                                         <div className="flex flex-col items-center justify-center h-full w-full">

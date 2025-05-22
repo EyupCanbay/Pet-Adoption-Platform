@@ -67,7 +67,6 @@ function UserInfo({ currentUser, location }) {
                             <span>{currentUser.job || "Meslek belirtilmedi"}</span>
                         </div>
 
-                        {/* Location Section */}
                         {location && (
                             <div className="flex items-start gap-2">
                                 <MdLocationOn className="text-red-500 mt-0.5" />
@@ -80,7 +79,6 @@ function UserInfo({ currentUser, location }) {
                             </div>
                         )}
 
-                        {/* Role */}
                         <div className="flex items-center gap-2">
                             <SiAuth0 className="text-purple-500" />
                             <ul className="flex gap-2">

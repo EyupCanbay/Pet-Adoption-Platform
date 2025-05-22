@@ -105,7 +105,6 @@ function Pet({ pet, isLost, onDelete }) {
                                 </div>
                             </div>
 
-                            {/* Delete butonu */}
                             <div>
                                 <Button
                                     color="red"

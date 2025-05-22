@@ -19,7 +19,6 @@ function AdminCategories() {
   const [editingId, setEditingId] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  // Yeni: Silme onay modalı için state
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
   const fetchCategories = async () => {
@@ -81,12 +80,10 @@ function AdminCategories() {
     }
   };
 
-  // Yeni: Silme onay modalını açan fonksiyon
   const handleDeleteClick = (id) => {
     setConfirmDeleteId(id);
   };
 
-  // Yeni: Silme işlemini onayla
   const confirmDelete = async () => {
     if (!confirmDeleteId) return;
     try {
@@ -98,7 +95,6 @@ function AdminCategories() {
     }
   };
 
-  // Yeni: Silme iptal
   const cancelDelete = () => {
     setConfirmDeleteId(null);
   };

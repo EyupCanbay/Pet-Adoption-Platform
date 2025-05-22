@@ -23,8 +23,6 @@ export default function Listing() {
         updateAdditionalInfoField,
     } = useListingStore();
 
-    // Destructure additionalInfo with a default empty object
-    // This is the key change to prevent the TypeError
     const { additionalInfo = {} } = listing;
 
     useEffect(() => {
@@ -82,14 +80,14 @@ export default function Listing() {
                 ...listing,
                 owner_id: user._id,
                 additionalInfo: {
-                    ...additionalInfo, // Use the destructured additionalInfo
+                    ...additionalInfo, 
                 },
             };
 
             const response = await createListing(formData);
             if (response.success) {
                 router.push("/");
-                useListingStore.setState({ listing: {} }); // Clear the store state after successful submission
+                useListingStore.setState({ listing: {} });
             }
 
         } catch (error) {
@@ -99,7 +97,6 @@ export default function Listing() {
 
     return (
         <form onSubmit={handleSubmit} className="max-w-5xl mx-auto p-6 space-y-6 bg-white">
-            {/* Temel Bilgiler */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <InputField label="Hayvan Adı" value={listing.petName} onChange={(val) => handleChange("petName", val)} />
                 <InputField
@@ -110,7 +107,6 @@ export default function Listing() {
                 />
                 <SelectField label="Cinsiyet" value={listing.gender ? "Erkek" : "Dişi"} onChange={(val) => handleChange("gender", val === "Erkek")} options={["Erkek", "Dişi"]} />
 
-                {/* Category Select Field - Pass objects for label/value/id */}
                 <SelectField
                     label="Kategori"
                     value={listing.category_name}
@@ -118,7 +114,6 @@ export default function Listing() {
                     options={categories.map((cat) => ({ label: cat.name, value: cat.name, _id: cat._id }))}
                 />
 
-                {/* Subcategory Select Field - Pass objects for label/value/id and apply disabled prop */}
                 <SelectField
                     label="Alt Kategori"
                     value={listing.sub_category_name}
@@ -129,7 +124,6 @@ export default function Listing() {
                 <InputField label="Resimler (virgülle ayır)" value={listing.images?.join(",")} onChange={(val) => handleChange("images", val.split(","))} />
             </div>
 
-            {/* Açıklama */}
             <div>
                 <label className="block mb-1 text-sm font-medium text-gray-700">Açıklama</label>
                 <textarea
@@ -140,10 +134,8 @@ export default function Listing() {
                 />
             </div>
 
-            {/* Ek Bilgiler */}
             <h3 className="text-xl font-semibold text-blue-700">Ek Bilgiler</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Use the destructured additionalInfo here */}
                 <InputField label="Renk" value={additionalInfo.color} onChange={(val) => handleAdditionalChange("color", val)} />
                 <InputField label="Göz Rengi" value={additionalInfo.eyeColor} onChange={(val) => handleAdditionalChange("eyeColor", val)} />
                 <InputField label="Tüy Tipi" value={additionalInfo.furType} onChange={(val) => handleAdditionalChange("furType", val)} />
@@ -176,7 +168,6 @@ export default function Listing() {
                 ]} />
             </div>
 
-            {/* Oyunculuk */}
             <div className="mt-4">
                 <label className="block mb-1 text-sm font-medium text-gray-700">Oyunculuk (1-5)</label>
                 <input
@@ -190,7 +181,6 @@ export default function Listing() {
                 />
             </div>
 
-            {/* Gönder */}
             <div className="flex justify-end pt-4">
                 <Button
                     variant="outlined"
@@ -205,7 +195,6 @@ export default function Listing() {
     );
 }
 
-// Reusable Components (Keep these outside of the main component or import them)
 function InputField({ label, value, onChange, type = "text" }) {
     return (
         <div>

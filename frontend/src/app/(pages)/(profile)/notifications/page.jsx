@@ -26,8 +26,6 @@ function Notifications() {
         }
     }, [currentUser]);
 
-    //! ENDPOİNT HAZIR DEĞİL !!!!!!!!!!!!!!!!!!!
-
     const renderNotificationComponent = (notif) => {
         switch (notif.type) {
             case "comment":

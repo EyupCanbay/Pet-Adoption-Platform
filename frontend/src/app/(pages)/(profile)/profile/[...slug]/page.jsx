@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Advert from "@/src/components/Advert";
@@ -8,6 +8,7 @@ import UserInfo from "@/src/components/UserInfo";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { getSingleUser } from "@/src/services/User";
 import { fetchListingByUserId } from "@/src/services/User";
+import { CardPlacehoderSkeleton } from "@/src/components/Advert/advertSkeleton";
 
 function AnotherProfile() {
     const params = useParams();
@@ -88,7 +89,9 @@ function AnotherProfile() {
                                 transition={{ duration: 0.4, ease: "easeInOut" }}
                             >
                                 {displayedAdverts.map((advert) => (
-                                    <Advert key={advert._id} pet={advert} userId={id} />
+                                    <Suspense key={advert._id} fallback={<CardPlacehoderSkeleton />}>
+                                        <Advert key={advert._id} pet={advert} userId={id} />
+                                    </Suspense>
                                 ))}
                             </motion.div>
                         </AnimatePresence>

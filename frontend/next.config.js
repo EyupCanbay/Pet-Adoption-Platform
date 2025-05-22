@@ -1,25 +1,75 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [
-      "example.com",
-      "loremflickr.com",
-      "picsum.photos",
-      "present-typewriter.biz",
-      "grumpy-fuel.org",
-      "blushing-disappointment.net",
-      "unselfish-brochure.biz",
-      "darling-tennis.info",
-      "supportive-cash.com",
-      "ornery-daughter.name",
-      "taut-tennis.biz",
-      "short-term-fundraising.net",
-      "known-dead.name",
-      "black-and-white-flat.info",
-      "immense-anticodon.net",
-      "concrete-meander.org",
-      "sick-cash.name",
-      
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'example.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'loremflickr.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+      },
+      {
+        protocol: 'https',
+        hostname: 'present-typewriter.biz',
+      },
+      {
+        protocol: 'https',
+        hostname: 'grumpy-fuel.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'blushing-disappointment.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'unselfish-brochure.biz',
+      },
+      {
+        protocol: 'https',
+        hostname: 'darling-tennis.info',
+      },
+      {
+        protocol: 'https',
+        hostname: 'supportive-cash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ornery-daughter.name',
+      },
+      {
+        protocol: 'https',
+        hostname: 'taut-tennis.biz',
+      },
+      {
+        protocol: 'https',
+        hostname: 'short-term-fundraising.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'known-dead.name',
+      },
+      {
+        protocol: 'https',
+        hostname: 'black-and-white-flat.info',
+      },
+      {
+        protocol: 'https',
+        hostname: 'immense-anticodon.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'concrete-meander.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'sick-cash.name',
+      },
     ],
   },
 };

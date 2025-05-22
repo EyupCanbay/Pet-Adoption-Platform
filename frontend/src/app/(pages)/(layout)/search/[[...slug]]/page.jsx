@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import { Frown } from 'lucide-react'; // İkon için
-import { Search } from '@/src/services/Search'; // Arama servisi
+import { Frown } from 'lucide-react'; 
+import { Search } from '@/src/services/Search'; 
 import slugify from 'slugify';
 
 async function SearchPage({ searchParams }) {
@@ -40,7 +40,6 @@ async function SearchPage({ searchParams }) {
         );
     }
 
-    // Model bazlı başlık + link + açıklama gösterimi
     const renderItem = (modelName, item) => {
         let title = '';
         let link = '';

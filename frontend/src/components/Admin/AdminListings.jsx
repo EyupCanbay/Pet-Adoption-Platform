@@ -40,7 +40,6 @@ function AdminListings() {
         ))}
       </ul>
 
-      {/* Pagination */}
       <div className="flex justify-center mt-6 space-x-3">
         {Array.from({ length: totalPages }, (_, i) => (
           <button
