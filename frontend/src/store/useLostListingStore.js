@@ -7,21 +7,21 @@ export const useLostListingStore = create((set) => ({
         comment_id: [],
         petName: "",
         age: 0,
-        gender: true, // true = male, false = female
+        gender: true, 
         description: "",
         images: [],
-        status: false, // found = true, not found = false (optional)
+        status: false, 
         additionalInfo: {
             color: "",
             eyeColor: "",
             furType: "",
-            size: "", // "small" | "medium" | "large"
+            size: "", 
             weight: 0,
             vaccinated: false,
             vaccinated_last_date: null,
-            trainability: "", // optional: "easy" | "medium" | "hard"
-            playfulness: 3, // optional: 1-5
-            sociality: "", // optional: "low" | "medium" | "high"
+            trainability: "", 
+            playfulness: 3,
+            sociality: "", 
         },
         createdAt: "",
     },

@@ -44,10 +44,10 @@ function Settings() {
 
     const handleCancel = () => {
         setIsEditing(false);
-        setUserToStore(userContext); // revert user fields
+        setUserToStore(userContext); 
         const locationData = userContext?.data?.location?.[0];
         if (locationData) {
-            setAddressState(locationData); // revert address
+            setAddressState(locationData); 
         }
     };
 

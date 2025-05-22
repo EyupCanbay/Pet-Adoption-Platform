@@ -59,14 +59,13 @@ function AdminLogs() {
                 <table className="min-w-full bg-gray-800 border border-gray-700 table-fixed">
                     <thead>
                         <tr >
-                            {/* Her th etiketine w-1/6 ve text-left eklendi */}
                             <th className="py-2 px-4 border-b border-gray-600 w-1/6 text-left">ID</th>
                             <th className="py-2 px-4 border-b border-gray-600 w-1/6 text-left">Level</th>
                             <th className="py-2 px-4 border-b border-gray-600 w-1/6 text-left">Location</th>
                             <th className="py-2 px-4 border-b border-gray-600 w-1/6 text-left">Process</th>
                             <th className="py-2 px-4 border-b border-gray-600 w-1/6 text-left">Log</th>
                             <th onClick={toggleSortOrder}
-                                className="py-2 px-4 border-b border-gray-600 cursor-pointer select-none w-1/6 text-left" // w-1/6 ve text-left eklendi
+                                className="py-2 px-4 border-b border-gray-600 cursor-pointer select-none w-1/6 text-left" 
                             >
                                 <div className="flex items-center gap-1">
                                     Zaman
@@ -96,7 +95,6 @@ function AdminLogs() {
                 </table>
             </div>
 
-            {/* Pagination */}
             <div className="flex justify-center items-center gap-2 mt-4">
                 <button
                     onClick={() => goToPage(currentPage - 1)}

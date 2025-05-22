@@ -11,7 +11,7 @@ const ITEMS_PER_PAGE = 5
 function AdminReports() {
   const [reports, setReports] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
-  const [sortOrder, setSortOrder] = useState('desc') // 'asc' veya 'desc'
+  const [sortOrder, setSortOrder] = useState('desc') 
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -28,7 +28,6 @@ function AdminReports() {
     fetchReports()
   }, [])
 
-  // Sort edilmiş raporlar (createdAt'a göre)
   const sortedReports = useMemo(() => {
     return [...reports].sort((a, b) => {
       const dateA = new Date(a.createdAt)
@@ -55,7 +54,7 @@ function AdminReports() {
 
   const toggleSortOrder = () => {
     setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'))
-    setCurrentPage(1) // sıralama değişince sayfayı 1 yap
+    setCurrentPage(1) 
   }
 
   return loading ? (

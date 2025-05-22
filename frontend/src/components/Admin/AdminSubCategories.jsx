@@ -240,7 +240,6 @@ function AdminSubCategories() {
                         )
                     }
 
-                    {/* Silme Onay Modali */}
                     {
                         deleteConfirmOpen && (
                             <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur z-50">

@@ -156,7 +156,6 @@ function AdminUserPanel() {
                 </div>
             )}
 
-            {/* Rol Düzenleme Modalı */}
             {modalOpen && (
                 <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
                     <div className=" p-6 rounded-lg w-[80%] max-w-md">

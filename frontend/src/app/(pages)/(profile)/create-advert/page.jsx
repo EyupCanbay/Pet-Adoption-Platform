@@ -14,7 +14,6 @@ function CreateAdverts() {
 
     return (
         <div className="max-w-5xl mx-auto px-4 py-8">
-            {/* Tab buttons */}
             <div className="flex justify-center gap-4 mb-6">
                 {tabs.map(tab => (
                     <Button

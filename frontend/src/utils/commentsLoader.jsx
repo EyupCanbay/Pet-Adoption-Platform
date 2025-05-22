@@ -6,20 +6,16 @@ export const fetchPetCommentsWithReplies = async (petId) => {
         let commentsData = null;
         let isLost = false;
 
-        // 1. Try fetching comments for a regular listing
         try {
             const regularComments = await getListingComments(petId);
-            console.log("Regular listing comments found:", regularComments);
             if (regularComments?.data && regularComments.data.length > 0) {
                 commentsData = regularComments.data;
                 isLost = false;
             }
         } catch (error) {
             console.warn("Regular listing comments not found or error:", error);
-            // Continue to try lost listing comments if regular failed
         }
 
-        // 2. If no comments found for regular listing, try fetching for a lost listing
         if (!commentsData || commentsData.length === 0) {
             try {
                 const lostComments = await getLostListingsCommentsbyPetId(petId);
@@ -33,12 +29,10 @@ export const fetchPetCommentsWithReplies = async (petId) => {
             }
         }
 
-        // If no comments found after trying both, return an empty array
         if (!commentsData || commentsData.length === 0) {
             return [];
         }
 
-        // 3. Fetch replies for each comment
         const commentsWithReplies = await Promise.all(
             commentsData.map(async (comment) => {
                 let replies = [];
@@ -47,7 +41,6 @@ export const fetchPetCommentsWithReplies = async (petId) => {
                         ? await getLostListingsCommentReplies(petId, comment._id)
                         : await getListingCommentReplyComment(petId, comment._id);
 
-                    // Ensure replies is an array, even if the service returns null/undefined or a non-array
                     replies = response?.data && Array.isArray(response.data) ? response.data : [];
                 } catch (replyError) {
                     console.error(`Yorum yanıtları yüklenemedi for comment ${comment._id}:`, replyError);
@@ -55,7 +48,7 @@ export const fetchPetCommentsWithReplies = async (petId) => {
 
                 return {
                     ...comment,
-                    replies: replies, // Attach the fetched replies to the comment
+                    replies: replies, 
                 };
             })
         );

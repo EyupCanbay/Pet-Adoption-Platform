@@ -2,19 +2,19 @@
 
 import { useLostListingStore } from "@/src/store/useLostListingStore";
 import { Button } from "@material-tailwind/react";
-import { useState, useEffect } from "react"; // Import useEffect
+import { useState, useEffect } from "react"; 
 import { createLostListing } from "@/src/services/LostListings";
 import { useUser } from "@/src/context/userProvider";
-import { getAllCategories } from "@/src/services/Category"; // Import Category service
-import { getAllSubCategories } from "@/src/services/SubCategory"; // Import SubCategory service
-import { useRouter } from "next/navigation"; // Import useRouter
+import { getAllCategories } from "@/src/services/Category"; 
+import { getAllSubCategories } from "@/src/services/SubCategory"; 
+import { useRouter } from "next/navigation"; 
 
 export default function LostListing() {
     const { user } = useUser();
-    const router = useRouter(); // Initialize useRouter
+    const router = useRouter(); 
     const [categories, setCategories] = useState([]);
     const [subCategories, setSubCategories] = useState([]);
-    const [filteredSubCategories, setFilteredSubCategories] = useState([]); // State to hold filtered subcategories
+    const [filteredSubCategories, setFilteredSubCategories] = useState([]); 
 
     const {
         lostListing,
@@ -22,7 +22,6 @@ export default function LostListing() {
         updateLostAdditionalInfoField,
     } = useLostListingStore();
 
-    // Fetch categories and subcategories on component mount
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -44,7 +43,6 @@ export default function LostListing() {
         fetchCategories();
     }, []);
 
-    // Effect to filter subcategories when category changes
     useEffect(() => {
         if (lostListing.category_name && categories.length > 0 && subCategories.length > 0) {
             const selectedCategory = categories.find(
@@ -55,7 +53,6 @@ export default function LostListing() {
                     (subCat) => subCat.category_id === selectedCategory._id
                 );
                 setFilteredSubCategories(newFilteredSubCategories);
-                // Reset sub_category_name if it's not valid for the new category
                 if (!newFilteredSubCategories.some(subCat => subCat.breed === lostListing.sub_category_name)) {
                     updateLostListingField("sub_category_name", "");
                 }
@@ -88,7 +85,6 @@ export default function LostListing() {
 
             const response = await createLostListing(formData);
             console.log("Lost listing created:", response);
-            // router.push("/"); // Redirect after successful creation
         } catch (error) {
             console.error("Error creating lost listing:", error);
         }
@@ -99,7 +95,6 @@ export default function LostListing() {
             onSubmit={handleSubmit}
             className="max-w-5xl mx-auto p-6 space-y-6 bg-white"
         >
-            {/* Ana Bilgiler */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <InputField
                     label="Hayvan Adı"
@@ -120,7 +115,6 @@ export default function LostListing() {
                     options={["Erkek", "Dişi"]}
                 />
 
-                {/* Kategori Select Field */}
                 <SelectField
                     label="Kategori"
                     value={lostListing.category_name}
@@ -128,13 +122,12 @@ export default function LostListing() {
                     options={categories.map((cat) => ({ label: cat.name, value: cat.name, _id: cat._id }))}
                 />
 
-                {/* Alt Kategori Select Field - Enabled only if a category is selected */}
                 <SelectField
                     label="Alt Kategori"
                     value={lostListing.sub_category_name}
                     onChange={(val) => handleChange("sub_category_name", val)}
                     options={filteredSubCategories.map((subCat) => ({ label: subCat.breed, value: subCat.breed, _id: subCat._id }))}
-                    disabled={!lostListing.category_name} // Disable until a category is chosen
+                    disabled={!lostListing.category_name} 
                 />
 
                 <InputField
@@ -144,7 +137,6 @@ export default function LostListing() {
                 />
             </div>
 
-            {/* Açıklama */}
             <div>
                 <label className="block mb-1 text-sm font-medium text-gray-700">Açıklama</label>
                 <textarea
@@ -155,7 +147,6 @@ export default function LostListing() {
                 />
             </div>
 
-            {/* Ek Bilgiler */}
             <h3 className="text-xl font-semibold text-blue-700">Ek Bilgiler</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -163,7 +154,6 @@ export default function LostListing() {
                 <InputField label="Göz Rengi" value={lostListing.additionalInfo?.eyeColor} onChange={(val) => handleAdditionalChange("eyeColor", val)} />
                 <InputField label="Tüy Tipi" value={lostListing.additionalInfo?.furType} onChange={(val) => handleAdditionalChange("furType", val)} />
 
-                {/* Ebat Select Field with Turkish Labels and English Values */}
                 <SelectField
                     label="Ebat"
                     value={lostListing.additionalInfo?.size}
@@ -188,7 +178,6 @@ export default function LostListing() {
                     onChange={(val) => handleAdditionalChange("vaccinated", val)}
                 />
 
-                {/* Eğitilebilirlik Select Field with Turkish Labels and English Values */}
                 <SelectField
                     label="Eğitilebilirlik"
                     value={lostListing.additionalInfo?.trainability}
@@ -200,7 +189,6 @@ export default function LostListing() {
                     ]}
                 />
 
-                {/* Sosyallik Select Field with Turkish Labels and English Values */}
                 <SelectField
                     label="Sosyallik"
                     value={lostListing.additionalInfo?.sociality}
@@ -213,7 +201,6 @@ export default function LostListing() {
                 />
             </div>
 
-            {/* Oyunculuk Slider */}
             <div className="mt-4">
                 <label className="block mb-1 text-sm font-medium text-gray-700">Oyunculuk (1-5)</label>
                 <input
@@ -227,7 +214,6 @@ export default function LostListing() {
                 />
             </div>
 
-            {/* Gönder */}
             <div className="flex justify-end pt-4">
                 <Button
                     variant="outlined"
@@ -241,8 +227,6 @@ export default function LostListing() {
         </form>
     );
 }
-
-// Reusable Components (add these at the end of the file or import from a separate file)
 
 function InputField({ label, value, onChange, type = "text" }) {
     return (

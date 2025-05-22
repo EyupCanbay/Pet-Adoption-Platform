@@ -7,22 +7,22 @@ export const useListingStore = create((set) => ({
         comment_id: [],
         petName: "",
         age: 0,
-        gender: true, // true for male, false for female
+        gender: true,
         description: "",
         images: [],
-        status: false, // false means not adopted
+        status: false, 
         additionalInfo: {
             color: "",
             eyeColor: "",
             furType: "",
-            size: "small", // "small" | "medium" | "large"
+            size: "small", 
             weight: 0,
             vaccinated: true,
             vaccinated_last_date: null,
             neutered: true,
-            trainability: "easy", // "easy" | "medium" | "hard"
-            playfulness: 3, // 1 to 5
-            sociality: "medium", // "low" | "medium" | "high"
+            trainability: "easy",
+            playfulness: 3,
+            sociality: "medium",    
         },
         createdAt: "",
     },

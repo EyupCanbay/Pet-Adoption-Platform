@@ -50,7 +50,6 @@ export function Sidebar() {
 
     return (
         <>
-            {/* Burger Button */}
             <div className="p-4 z-50 relative">
                 <IconButton variant="text" size="lg" onClick={toggleDrawer} aria-label="Toggle Sidebar">
                     {isDrawerOpen ? (
@@ -61,7 +60,6 @@ export function Sidebar() {
                 </IconButton>
             </div>
 
-            {/* Blur Overlay */}
             {isDrawerOpen && (
                 <div
                     className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm transition-all duration-300"
@@ -69,7 +67,6 @@ export function Sidebar() {
                 />
             )}
 
-            {/* Sidebar Drawer */}
             <Drawer open={isDrawerOpen} onClose={toggleDrawer} placement="left" className="z-50">
                 <Card color="transparent" shadow={false} className="h-full w-full p-4 ">
                     <div className="flex justify-between items-center mb-4">
@@ -120,7 +117,6 @@ export function Sidebar() {
                             </Accordion>
                         ))}
 
-                        {/* Kayıp İlanlar */}
                         <ListItem
                             className="p-3 hover:bg-gray-100 cursor-pointer rounded-lg"
                             onClick={() => router.push("/lost-pets")}
