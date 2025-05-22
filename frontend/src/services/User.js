@@ -44,7 +44,6 @@ export const fetchCurrentUser = async (token) => {
         const res = await fetch(`${backend_url}/users/me`, {
             headers: {
                 Cookie: `token=${token}`,
-                Authorization: `Bearer ${token}`,
             },
             cache: 'no-store',
         });
