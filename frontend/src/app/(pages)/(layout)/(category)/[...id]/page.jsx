@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import slugify from "slugify";
 import Advert from "@/src/components/Advert";
@@ -8,6 +8,7 @@ import Loading from "@/src/components/Loading";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
 import { getAllListings } from "@/src/services/Listings";
+import { CardPlacehoderSkeleton } from "@/src/components/Advert/advertSkeleton";
 
 function CategoryPage() {
   const searchParams = useSearchParams();
@@ -81,7 +82,9 @@ function CategoryPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {displayedAdverts.length > 0 ? (
           displayedAdverts.map((pet) => (
-            <Advert key={pet?._id} pet={pet} userId={pet?.user_id} />
+            <Suspense key={pet?._id} fallback={<CardPlacehoderSkeleton/>}>
+              <Advert key={pet?._id} pet={pet} userId={pet?.user_id} />
+            </Suspense>
           ))
         ) : (
           <div className="col-span-full flex flex-col justify-center items-center py-12 text-center">

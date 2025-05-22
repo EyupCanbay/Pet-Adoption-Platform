@@ -17,7 +17,6 @@ import { useUser } from "@/src/context/userProvider";
 import { createLostListingsBookmarksbyPetId } from "@/src/services/LostListings";
 import { createListingToBookmarkByUser } from "@/src/services/Listings";
 import { useUserStore } from "@/src/store/useUserStore";
-import { CardPlacehoderSkeleton } from "./advertSkeleton";
 
 function Advert({ pet, userId }) {
     const { user } = useUser();
@@ -25,7 +24,6 @@ function Advert({ pet, userId }) {
     const [ownerImageError, setOwnerImageError] = useState(false);
     const [owner, setOwner] = useState(null);
     const [loadingOwner, setLoadingOwner] = useState(true);
-    const [loadingPet, setLoadingPet] = useState(true);
     const [imageError, setImageError] = useState(false);
 
     const [isBookmarked, setIsBookmarked] = useState(false);
@@ -45,7 +43,6 @@ function Advert({ pet, userId }) {
                 const response = await getSingleUser(userId);
                 if (response.status === "Success") {
                     setOwner(response?.data?.user);
-                    setLoadingPet(false);
                 }
             } catch (error) {
                 console.error("Error fetching owner details:", error);
@@ -56,23 +53,13 @@ function Advert({ pet, userId }) {
         fetchOwner();
     }, [pet, userId]);
 
-    if (loadingPet) {
-        return (
-            <div className="flex flex-wrap gap-4">
-                {[...Array(6)].map((_, index) => (
-                    <CardPlacehoderSkeleton key={index} />
-                ))}
-            </div>
-        );
-    }
-
     const handleBookmark = async (e, petId) => {
-        e.stopPropagation(); // Prevents navigating to the advert details page
+        e.stopPropagation(); 
         try {
             if (isBookmarked) {
                 await deleteCurrentUserBookmarkById(petId);
                 updateUserBookmarks(petId, false);
-                setIsBookmarked(false); // Instant UI reaction
+                setIsBookmarked(false); 
             } else {
                 if (pet?.type === "lost") {
                     const res = await createLostListingsBookmarksbyPetId(petId);
@@ -80,11 +67,10 @@ function Advert({ pet, userId }) {
                     const res = await createListingToBookmarkByUser(petId);
                 }
                 updateUserBookmarks(petId, true);
-                setIsBookmarked(true); // Instant UI reaction
+                setIsBookmarked(true);
             }
         } catch (err) {
             console.error("Bookmark operation error:", err);
-            // Optionally, revert the UI state if the API call fails
             setIsBookmarked(prevState => !prevState);
         }
     };
@@ -108,7 +94,7 @@ function Advert({ pet, userId }) {
     };
 
     return (
-        <Card className="w-full max-w-[26rem] shadow-lg flex flex-col justify-between h-full min-h-[300px]" >
+        <Card className="w-full max-w-[26rem] shadow-lg flex flex-col justify-between min-h-[300px]" >
             <CardHeader floated={false} color="blue-gray">
                 <Link
                     href={{
@@ -137,14 +123,12 @@ function Advert({ pet, userId }) {
                     />
                 </Link>
                 <button
-                    // Use Tailwind CSS to replicate the positioning and styling
                     className="!absolute top-2 right-2 w-10 h-10 rounded-full cursor-pointer flex items-center justify-center z-20"
-                    style={{ background: 'transparent', border: 'none', padding: 0 }} // Ensure no default button styles
+                    style={{ background: 'transparent', border: 'none', padding: 0 }}
                     onClick={(e) => handleBookmark(e, pet._id)}
                     aria-label="Bookmark"
                 >
                     {isBookmarked ? (
-                        // Red filled heart icon
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
@@ -154,7 +138,6 @@ function Advert({ pet, userId }) {
                             <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
                         </svg>
                     ) : (
-                        // White outline heart icon
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"

@@ -95,8 +95,8 @@ function ProfileSection() {
                 <span className="ml-2 text-sm">İlan Oluştur</span>
             </Button>
 
-            <Link href="/notifications" className="relative">
-                <BellIcon className="h-6 w-6 text-orange-400" aria-label="Notifications" />
+            <Link href="/notifications" className="relative" aria-label="Notifications">
+                <BellIcon className="h-6 w-6 text-orange-400" />
                 {notificationCount > 0 && (
                     <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 text-xs font-semibold text-white bg-red-500 rounded-full">
                         {notificationCount}
@@ -120,7 +120,7 @@ function ProfileSection() {
                             }
                             onError={() => setOwnerImageError(true)}
                             alt="user-avatar"
-                            className="w-12 h-12"
+                            className="w-12 h-12 rounded-full"
                             priority="true"
                         />
                         <ChevronDownIcon className="h-4 w-4 text-gray-600" />
