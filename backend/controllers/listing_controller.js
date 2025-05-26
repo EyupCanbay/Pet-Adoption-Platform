@@ -28,8 +28,6 @@ async function createLostListing(req, res, next) {
         await session.commitTransaction();
         session.endSession();
 
-        Auditlog.info(req.user?.userName, "LostListing", "POST", "Create listing")
-
         return responseHandler.success({ 
             res, 
             statusCode: Enum.HTTP_CODES.CREATED, 
@@ -103,9 +101,6 @@ async function getAllLostListing(req, res, next) {
           { $skip: skip },
           { $limit: limit }
       ]);
-
-      Auditlog.info(req.user?.userName, "LostListing", "GET", "All listing")
-
 
       return responseHandler.success({
           res,
@@ -199,8 +194,6 @@ async function getLostListing(req,res,next) {
         console.log(listing)
     if(!listing[0]) return responseHandler.error({res, statusCode: Enum.HTTP_CODES.NOT_FOUND, message: "Listing not found"})
    
-    Auditlog.info(req.user?.userName, "LostListing", "GET", "A listing")
-
     return responseHandler.success({res, 
         statusCode: Enum.HTTP_CODES.OK,
         message: "Successfuly was fetched a lost listing",
@@ -225,8 +218,6 @@ async function deleteLostListing(req,res,next) {
 
         if(!lostListing) return responseHandler.error({res, statusCode: Enum.HTTP_CODES.NOT_FOUND, message: "The listing not found"})
 
-        Auditlog.info(req.user?.userName, "LostListing", "DELETE", "Delete listing")
-
         return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfully deleted the lostlisting but did not delete sub and major comment for this feild return geting back" })
     } catch (error) {
         return responseHandler.error({res, statusCode: Enum.HTTP_CODES.BAD_REQUEST, message: "Was not deleted the listing", error})
@@ -247,8 +238,6 @@ async function updateLostListing(req,res,next) {
             return responseHandler.error({res, statusCode: Enum.HTTP_CODES.NOT_FOUND, message: "Lost listing not found"})
         }
 
-        Auditlog.info(req.user?.userName, "LostListing", "PUT", "Update Listing")
-        
         responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "succesfuly update the listing", data: updatedListing })
     } catch (error) {
         return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "database error", error})
@@ -279,8 +268,6 @@ async function addBookmarks(req,res,next) {
         await user.save({ session });
 
         await session.commitTransaction();
-        
-        Auditlog.info(req.user?.userName, "LostListing", "PUT", "Add bookmarks")
         
         return responseHandler.success({res, statusCode:Enum.HTTP_CODES.OK, message: "Successfuly added your bookmarks"})
 
