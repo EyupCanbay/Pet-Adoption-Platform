@@ -16,6 +16,9 @@ async function getAuditlogs(req,res,next) {
             .skip(skip) 
             .limit(limit);
 
+        if( !req.user.userName ){
+            req.user.userName = "anonim"
+        }
         Auditlog.info(req.user?.userName,"Auditlog","GET","Fetch auditlogs")
         
         return responseHandler.success({ res, statusCode: Enum.HTTP_CODES.OK, message: "successfuly fetch aouditlogs", data: auditlogs})
@@ -23,7 +26,6 @@ async function getAuditlogs(req,res,next) {
         return responseHandler.error({ res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "face an error fetching auditlogs", error})
     }
 }
-
 
 async function updateRole(req,res,next) {
     const changing_user_id = validateObjectId(req.params.user_id)
@@ -36,11 +38,14 @@ async function updateRole(req,res,next) {
             }
         }, {new: true})
 
+        Auditlog.info(req.user?.userName,"Auditlog","PUT","Update user role")
+
         return responseHandler.success({ res, statusCode: Enum.HTTP_CODES.OK, message: "successfuly changing user role"})
     } catch(error ) {
         return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "face an error updateing user role", error})
     }
 }
+
 module.exports = {
     getAuditlogs,
     updateRole

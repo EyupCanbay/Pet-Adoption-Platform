@@ -1,7 +1,7 @@
 const Enum = require("../config/enum.js")
 const responseHandler = require("../utils/responseHandler.js")
 const Auditlog  = require('../utils/auditlog_save.js');
-const { LostPetListing, Comment, ReplyComment } = require('../models/index.js')
+const { LostPetListing, Comment, ReplyComment,Notification } = require('../models/index.js')
 const { validateObjectId } = require('../validators/object_validate.js')
 const mongoose = require("mongoose");
 
@@ -38,6 +38,16 @@ async function createComment(req,res,next) {
             { session }
         );
 
+            const resipent = await LostPetListing.find({_id : listingId}) 
+    
+            const notification = await Notification.create({
+                recipient_id: resipent[0].user_id,
+                initiator_id: userId,
+                lostPetListing_id: listingId,
+                type: "comment",
+                message: lostListingComment[0].content
+            })
+                
         await session.commitTransaction();
         session.endSession();
         
@@ -63,11 +73,14 @@ async function createComment(req,res,next) {
 
 async function getAllComments(req,res,next) {
     try {
-        const userId = validateObjectId(req.user._id)
+
         const listingId = validateObjectId(req.params.listing_id)
+        console.log("rsgdsdfsdf")
+
         const page = Number(req.query.page) || 1;
         const limit = Number(req.query.limit) || 10;
         const skip = (page - 1) * limit;
+
 
         const comments = await LostPetListing.aggregate([
             { $match: {_id: listingId}},
@@ -103,6 +116,8 @@ async function getAllComments(req,res,next) {
             { $limit: limit }
         ])
 
+        Auditlog.info(req.user?.userName, "LostListingComment", "DELDETETE", "Get all comment")
+
         return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly fetched comments ", data: comments})
     } catch (error) {
         return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "Was not fetched comments", error})
@@ -137,14 +152,20 @@ async function deleteComment(req,res,next) {
 
         if(comment.user_id.toString() === userId.toString()){
             await Comment.findByIdAndDelete({ _id: commentId })
+            Auditlog.info(req.user?.userName, "LostListingComment", "DELETE", "Delete comment")
+
             return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly updated comments "})      
           }
         else if(comment.lostListings.user_id.toString() !== userId.toString()){
             await Comment.findByIdAndDelete({_id: commentId})
+            Auditlog.info(req.user?.userName, "LostListingComment", "DELETE", "Delete comment")
+
             return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly updated comments "}) 
         }
         else if("ADMIN" !== req.user.role){
             await Comment.findByIdAndDelete({_id: commentId})
+
+            Auditlog.info(req.user?.userName, "LostListingComment", "DELETE", "Delete comment")
 
             return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly updated comments "})       
          }
@@ -197,6 +218,8 @@ async function updateLostListingComment(req, res, next) {
         comment.content = content;
         await comment.save();
 
+        Auditlog.info(req.user?.userName, "LostListingComment", "PUT", "Update comment")
+
         return responseHandler.success({
             res,
             statusCode: Enum.HTTP_CODES.OK,
@@ -221,9 +244,10 @@ async function createReplyComment(req, res, next) {
 
         const userId = req.user?._id;
         const commentId = req.params.comment_id; 
-        const lostListing = req.params.listing_id;
+        const lostListing = req.params.lisitng_id;
         const content = req.body.content; 
 
+        console.log(lostListing)
         if (!userId || !commentId || !content) {
             return responseHandler.error({
                 res,
@@ -248,6 +272,16 @@ async function createReplyComment(req, res, next) {
             { $push: { reply_comment_id: replyComment[0]._id } }, 
             { session }
         );
+
+        const resipent = await LostPetListing.find({_id : lostListing}) 
+    
+        const notification = await Notification.create({
+            recipient_id: resipent[0].user_id,
+            initiator_id: userId,
+            lostPetListing_id: lostListing,
+            type: "reply",
+            message: replyComment[0].content
+        })
 
         await session.commitTransaction();
         session.endSession();
@@ -314,6 +348,9 @@ async function getAllSubComments(req, res, next) {
             { $limit: limit } 
         ]);
 
+        Auditlog.info(req.user?.userName, "LostListingSubComment", "GET", "Get all sub comment")
+
+
         return responseHandler.success({
             res,
             statusCode: Enum.HTTP_CODES.OK,
@@ -377,6 +414,8 @@ async function deleteSubComment(req, res, next) {
             req.user.role === "ADMIN" 
         ) {
             await ReplyComment.findByIdAndDelete({ _id: subCommentId }); // Alt yorumu sil
+
+            Auditlog.info(req.user?.userName, "LostListingSubComment", "DELETE", "Delete sub comment")
 
             return responseHandler.success({
                 res,
@@ -486,6 +525,7 @@ async function updateLostListingSubComment(req, res, next) {
 
         
         const updatedSubComment = await ReplyComment.findByIdAndUpdate(subCommentId, { content }, { new: true });
+        Auditlog.info(req.user?.userName, "LostListingSubComment", "PUT", "Update sub comment")
 
         return responseHandler.success({
             res,

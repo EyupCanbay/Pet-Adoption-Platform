@@ -9,36 +9,37 @@ async function createLostListing(req, res, next) {
     session.startTransaction();
 
     try {
-
+        
         let newListing = new PetListing({
-            user_id: req.user._id,
-            category_name: req.body.category_name,
-            sub_category_name: req.body.sub_category_name,
-            petName: req.body.petName,
-            age: req.body.age,
-            gender: req.body.gender,
-            description: req.body.description,
-            images: req.body.images,
-            status: req.body.status,
+            user_id: req.user._id, 
+            category_name: req.body.category_name, 
+            sub_category_name: req.body.sub_category_name, 
+            petName: req.body.petName, 
+            age: req.body.age, 
+            gender: req.body.gender, 
+            description: req.body.description, 
+            images: req.body.images, 
+            status: req.body.status, 
             additionalInfo: {
-                color: req.body.additionalInfo.color,
-                eyeColor: req.body.additionalInfo.eyeColor,
-                furType: req.body.additionalInfo.furType,
-                size: req.body.additionalInfo.size,
-                weight: req.body.additionalInfo.weight,
-                vaccinated: req.body.additionalInfo.vaccinated,
-                neutered: req.body.additionalInfo.neutered,
-                trainability: req.body.additionalInfo.trainability,
-                playfulness: req.body.additionalInfo.playfulness,
-                sociality: req.body.additionalInfo.sociality,
+                color: req.body.additionalInfo.color, 
+                eyeColor: req.body.additionalInfo.eyeColor, 
+                furType: req.body.additionalInfo.furType, 
+                size: req.body.additionalInfo.size, 
+                weight: req.body.additionalInfo.weight, 
+                vaccinated: req.body.additionalInfo.vaccinated, 
+                neutered: req.body.additionalInfo.neutered, 
+                trainability: req.body.additionalInfo.trainability, 
+                playfulness: req.body.additionalInfo.playfulness, 
+                sociality: req.body.additionalInfo.sociality, 
             },
-            createdAt: Date.now()
+            createdAt: Date.now() 
         });
 
-
+        
         await newListing.save({ session });
         await session.commitTransaction();
         session.endSession();
+        Auditlog.info(req.user?.userName, "PetListing", "POST", "Create pet listing")
 
         return responseHandler.success({
             res,
@@ -228,7 +229,7 @@ async function getAllPetListing(req, res, next) {
         });
     }
 }
-
+  
 async function deletePetListing(req, res, next) {
     try {
         const listingId = validateObjectId(req.params.listing_id);
@@ -259,6 +260,8 @@ async function deletePetListing(req, res, next) {
         // Örnek olarak, yourml ve subYourml koleksiyonlarını sildiğini varsayıyoruz. 
         // İlgili verileri kendi koleksiyon adlarına göre düzenle.
 
+        Auditlog.info(req.user?.userName, "PetListing", "DELETE", "Delete pet listing")
+
         return responseHandler.success({
             res,
             statusCode: Enum.HTTP_CODES.OK,
@@ -275,28 +278,30 @@ async function deletePetListing(req, res, next) {
     }
 }
 
-async function updatePetListing(req, res, next) {
+async function updatePetListing(req,res,next) {
     const listingId = validateObjectId(req.params.listing_id);
     const updateData = req.body;
 
     try {
         const updatedListing = await PetListing.findByIdAndUpdate(
-            listingId,
-            updateData,
-            { new: true, runValidators: true }
+            listingId, 
+            updateData, 
+            { new: true, runValidators: true } 
         );
         if (!updatedListing) {
-            return responseHandler.error({ res, statusCode: Enum.HTTP_CODES.NOT_FOUND, message: "Pet listing not found" })
+            return responseHandler.error({res, statusCode: Enum.HTTP_CODES.NOT_FOUND, message: "Pet listing not found"})
         }
 
-        responseHandler.success({ res, statusCode: Enum.HTTP_CODES.OK, message: "succesfuly update the listing", data: updatedListing })
+        Auditlog.info(req.user?.userName, "PetListing", "PUT", "Update pet listing")
+
+        responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "succesfuly update the listing", data: updatedListing })
     } catch (error) {
-        return responseHandler.error({ res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "database error", error })
+        return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "database error", error})
     }
 }
 
 async function addPetListingBookmarks(req, res, next) {
-    const listingId = validateObjectId(req.params.listing_id);
+    const listingId = validateObjectId(req.params.listing_id); 
     const userId = validateObjectId(req.user._id);
 
     const session = await mongoose.startSession();
@@ -321,6 +326,8 @@ async function addPetListingBookmarks(req, res, next) {
 
         await session.commitTransaction();
 
+        Auditlog.info(req.user?.userName, "PetListing", "PUT", "add pet listing bookmarks")
+
         return responseHandler.success({
             res,
             statusCode: Enum.HTTP_CODES.OK,
@@ -339,8 +346,6 @@ async function addPetListingBookmarks(req, res, next) {
         session.endSession();
     }
 }
-
-
 
 module.exports = {
     createLostListing,

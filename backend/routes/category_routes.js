@@ -15,4 +15,4 @@ router.post('/:category_id/subcategory', checkUser, categoryController.createSub
 
 
 
-module.exports = router 
+module.exports = router
