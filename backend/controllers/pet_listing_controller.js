@@ -39,7 +39,6 @@ async function createLostListing(req, res, next) {
         await newListing.save({ session });
         await session.commitTransaction();
         session.endSession();
-        Auditlog.info(req.user?.userName, "PetListing", "POST", "Create pet listing")
 
         return responseHandler.success({
             res,
@@ -61,7 +60,7 @@ async function createLostListing(req, res, next) {
 
 async function getPetListing(req, res, next) {
     try {
-        const listingId = validateObjectId(req.params.listing_id);
+        const listingId = validateObjectId(req.params.listing_id); 
         const listing = await PetListing.aggregate([
             {
                 $match: { _id: listingId }
@@ -129,11 +128,14 @@ async function getPetListing(req, res, next) {
             }
         ]);
 
-        if (!listing) return responseHandler.error({
+
+        if (!listing[0]) return responseHandler.error({
             res,
             statusCode: Enum.HTTP_CODES.NOT_FOUND,
             message: "Listing not found"
         });
+
+        Auditlog.info(req.user?.userName, "PetListing", "GET", "pet listing")
 
         return responseHandler.success({
             res,
@@ -155,9 +157,9 @@ async function getPetListing(req, res, next) {
 async function getAllPetListing(req, res, next) {
     try {
         const page = Number(req.query.page) || 1;
-        const limit = Number(req.query.limit) || 1000000000000;
+        const limit = Number(req.query.limit) || 1000;
         const skip = (page - 1) * limit;
-
+  
         const petListings = await PetListing.aggregate([
             {
                 $lookup: {
@@ -168,7 +170,6 @@ async function getAllPetListing(req, res, next) {
                 }
             },
             { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } }, // Eğer kullanıcı yoksa `null` bırakır burası
-
             {
                 $lookup: {
                     from: "addresses",
@@ -178,7 +179,6 @@ async function getAllPetListing(req, res, next) {
                 }
             },
             { $unwind: { path: "$userAddress", preserveNullAndEmptyArrays: true } },
-
             {
                 $project: {
                     "_id": 1,
@@ -193,7 +193,6 @@ async function getAllPetListing(req, res, next) {
                     "createdAt": 1,
                     "updatedAt": 1,
                     "user_id": 1,
-
                     "user": {
                         "_id": { $ifNull: ["$user._id", null] }, // if user did not have,  doing null on this feild
                         "userName": { $ifNull: ["$user.userName", null] },
@@ -207,24 +206,32 @@ async function getAllPetListing(req, res, next) {
                     }
                 }
             },
-
             { $sort: { createdAt: -1 } },
             { $skip: skip },
             { $limit: limit }
         ]);
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  
+        Auditlog.info(req.user?.userName, "PetListing", "GET", "All pet listing")
+>>>>>>> parent of aceff58 (Add sensiment analizer midleware and sensiment train model and sensiment prediction model)
 
+=======
+  
+>>>>>>> parent of 20f3b27 (Add auditlog for every enspoints)
         return responseHandler.success({
             res,
             statusCode: Enum.HTTP_CODES.OK,
             message: "Successfully fetched pet listings",
             data: petListings
         });
-
+  
     } catch (error) {
         return responseHandler.error({
             res,
             statusCode: Enum.HTTP_CODES.BAD_REQUEST,
-            message: "Did not fetch pet listings",
+            message:"Did not fetch pet listings",
             error
         });
     }
@@ -260,8 +267,6 @@ async function deletePetListing(req, res, next) {
         // Örnek olarak, yourml ve subYourml koleksiyonlarını sildiğini varsayıyoruz. 
         // İlgili verileri kendi koleksiyon adlarına göre düzenle.
 
-        Auditlog.info(req.user?.userName, "PetListing", "DELETE", "Delete pet listing")
-
         return responseHandler.success({
             res,
             statusCode: Enum.HTTP_CODES.OK,
@@ -291,8 +296,6 @@ async function updatePetListing(req,res,next) {
         if (!updatedListing) {
             return responseHandler.error({res, statusCode: Enum.HTTP_CODES.NOT_FOUND, message: "Pet listing not found"})
         }
-
-        Auditlog.info(req.user?.userName, "PetListing", "PUT", "Update pet listing")
 
         responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "succesfuly update the listing", data: updatedListing })
     } catch (error) {
@@ -325,8 +328,6 @@ async function addPetListingBookmarks(req, res, next) {
         await user.save({ session });
 
         await session.commitTransaction();
-
-        Auditlog.info(req.user?.userName, "PetListing", "PUT", "add pet listing bookmarks")
 
         return responseHandler.success({
             res,
