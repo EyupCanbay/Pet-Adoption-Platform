@@ -68,7 +68,7 @@ export function Sidebar() {
             )}
 
             <Drawer open={isDrawerOpen} onClose={toggleDrawer} placement="left" className="z-50">
-                <Card color="transparent" shadow={false} className="h-full w-full p-4 ">
+                <Card color="transparent" shadow={false} className="h-full w-full p-4 overflow-y-auto ">
                     <div className="flex justify-between items-center mb-4">
                         <Typography variant="h5">Tüm Kategoriler</Typography>
                         <IconButton variant="text" onClick={toggleDrawer} aria-label="Close">
@@ -106,7 +106,7 @@ export function Sidebar() {
                                                         pathname: `/${category._id}/${slugify(category.name, { lower: true })}`,
                                                         query: { name: slugify(sub.breed, { lower: true }) },
                                                     }}
-                                                    className="text-sm text-blue-600 hover:underline"
+                                                    className="text-sm text-gray-600 hover:scale-110 transition-transform duration-200 hover:text-black"
                                                 >
                                                     {sub.breed}
                                                 </Link>

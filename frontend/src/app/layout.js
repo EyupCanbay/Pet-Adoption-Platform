@@ -7,7 +7,6 @@ import LayoutWrapper from '../components/LayoutWrapper';
 import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 import Loading from '../components/Loading';
-import ThemeProviderWrapper from '../components/ThemeProviderWrapper';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -37,13 +36,11 @@ export default async function RootLayout({ children }) {
             </head>
             <body className="flex flex-col h-screen">
                 <Suspense fallback={<Loading />}>
-                    <ThemeProviderWrapper>
-                        <UserProvider user={user}>
-                            <LayoutWrapper>
-                                {children}
-                            </LayoutWrapper>
-                        </UserProvider>
-                    </ThemeProviderWrapper>
+                    <UserProvider user={user}>
+                        <LayoutWrapper>
+                            {children}
+                        </LayoutWrapper>
+                    </UserProvider>
                 </Suspense>
             </body>
         </html>

@@ -10,7 +10,7 @@ const validatePetListing = (req, res, next) => {
         age: true,
         gender: true,
         description: true,
-        images: true,
+        //images: true,
         status: true,
         additionalInfo: {
             color: true,

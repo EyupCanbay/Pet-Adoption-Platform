@@ -1,7 +1,7 @@
 const Enum = require("../config/enum.js")
 const responseHandler = require("../utils/responseHandler.js")
 const Auditlog  = require('../utils/auditlog_save.js');
-const { PetListing, Comment, ReplyComment } = require('../models/index.js')
+const { PetListing, Comment, ReplyComment, Notification} = require('../models/index.js')
 const { validateObjectId } = require('../validators/object_validate.js')
 const mongoose = require("mongoose");
 
@@ -14,7 +14,6 @@ async function createPetListingComment(req, res, next) {
     try {
         const userId = validateObjectId(req.user._id);
         const listingId = validateObjectId(req.params.listing_id);
-        
         if (!userId || !listingId || !req.body.content) {
             return responseHandler.error({
                 res,
@@ -40,11 +39,21 @@ async function createPetListingComment(req, res, next) {
             { session }
         );
         
+        const resipent = await PetListing.find({_id : listingId}) 
+
+ 
+        const notification = await Notification.create({
+            recipient_id: resipent[0].user_id,
+            initiator_id: userId,
+            petListing_id: listingId,
+            type: "comment",
+            message: petListingComment[0].content
+        })
         await session.commitTransaction();
         session.endSession();
         
         Auditlog.info(req.user?.userName, "Comment", "Post", "Create a comment for pet listing");
-        
+
         return responseHandler.success({
             res,
             statusCode: Enum.HTTP_CODES.OK,
@@ -114,6 +123,7 @@ async function getAllPetListingComments(req, res, next) {
             { $skip: skip },
             { $limit: limit }
         ]);
+        Auditlog.info(req.user?.userName, "PetListingComment", "GET", "Get all comment")
 
         return responseHandler.success({
             res,
@@ -177,6 +187,8 @@ async function deletePetListingComment(req, res, next) {
                 ]
             });
 
+            Auditlog.info(req.user?.userName, "PetListingComment", "DELETE", "Delete comment")
+
             return responseHandler.success({
                 res,
                 statusCode: Enum.HTTP_CODES.OK,
@@ -239,6 +251,8 @@ async function updatePetListingComment(req, res, next) {
         comment.content = content;
         await comment.save();
 
+        Auditlog.info(req.user?.userName, "PetListingComment", "PUT", "Update comment")
+
         return responseHandler.success({
             res,
             statusCode: Enum.HTTP_CODES.OK,
@@ -298,6 +312,16 @@ async function createReplyComment(req, res, next) {
             { $push: { reply_comment_id: replyComment[0]._id } },
             { session }
         );
+
+        const resipent = await PetListing.find({_id : listingId}) 
+
+        const notification = await Notification.create({
+            recipient_id: resipent[0].user_id,
+            initiator_id: userId,
+            petListing_id: listingId,
+            type: "reply",
+            message: replyComment[0].content
+        })
 
         await session.commitTransaction();
         session.endSession();
@@ -370,6 +394,8 @@ async function getAllSubComments(req, res, next) {
             { $limit: limit } 
         ]);
 
+        Auditlog.info(req.user?.userName, "PetListingSubComment", "GET", "Get all sub comment")
+
         return responseHandler.success({
             res,
             statusCode: Enum.HTTP_CODES.OK,
@@ -427,6 +453,8 @@ async function deleteSubComment(req, res, next) {
             req.user.role === "ADMIN" 
         ) {
             await ReplyComment.findByIdAndDelete({ _id: subCommentId }); 
+
+            Auditlog.info(req.user?.userName, "PetListingSubComment", "DELETE", "Delete sub comment")
 
             return responseHandler.success({
                 res,
@@ -526,7 +554,6 @@ async function updatePetListingSubComment(req, res, next) {
         // match comment owner with user id on local
         // if authenticate is admin
         // if listing owner and local user id match 
-        console.log(subComment)
 
         const isAuthorized =
             subComment[0].user_id.toString() === userId.toString() || 
@@ -534,7 +561,6 @@ async function updatePetListingSubComment(req, res, next) {
             commentDetails.user_id.toString() === userId.toString() ||
             adoptionListingDetails.user_id.toString() === userId.toString();
 
-console.log(isAuthorized)
         if (!isAuthorized) {
             return responseHandler.error({
                 res,
@@ -543,10 +569,9 @@ console.log(isAuthorized)
             });
         }
 
-        console.log(subCommentId)
-
 
         const updatedSubComment = await ReplyComment.findByIdAndUpdate(subCommentId, { content }, { new: true });
+        Auditlog.info(req.user?.userName, "PetListingSubComment", "PUT", "Update comment")
 
         return responseHandler.success({
             res,

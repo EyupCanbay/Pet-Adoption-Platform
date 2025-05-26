@@ -10,7 +10,7 @@ const validateLostPetListing = (req, res, next) => {
         age: true,
         gender: true,
         description: true,
-        images: true,
+       // images: true,
         additionalInfo: {
             color: true,
             eyeColor: true,
