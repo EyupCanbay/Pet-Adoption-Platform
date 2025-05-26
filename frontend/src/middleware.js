@@ -8,7 +8,7 @@ export async function middleware(req) {
     //! SCOPE MANTIĞI VAR TRY İÇERİSİNDE CONST USER YAPINCA DIŞARDAKİ USER NULL OLUR
     //TODO NEXT ÖZELİNDE RETURN USER YAPILDIĞINDA HATA VERİYOR NEDENİ İSE RESPONSE İÇİNDEKİ USER NULL OLDUĞU İÇİN
     //TODO BUNU ÇÖZMEK İÇİN TRY İÇERİSİNDEKİ USER'IN NULL OLMAMASI GEREKİYOR
-    
+
     let user = null;
     if (token) {
         try {
@@ -31,6 +31,13 @@ export async function middleware(req) {
         }
         return NextResponse.next();
     }
+
+    if (pathname.startsWith('/create-advert')) {
+        if (!token) {
+            return NextResponse.redirect(new URL('/login', req.url));
+        }
+        return NextResponse.next();
+    }
     return NextResponse.next();
 }
 
@@ -41,5 +48,6 @@ export const config = {
         '/admin',
         '/login',
         '/register',
+        '/create-advert/:path*',
     ],
 }
