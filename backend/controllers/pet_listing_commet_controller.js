@@ -14,6 +14,7 @@ async function createPetListingComment(req, res, next) {
     try {
         const userId = validateObjectId(req.user._id);
         const listingId = validateObjectId(req.params.listing_id);
+        
         if (!userId || !listingId || !req.body.content) {
             return responseHandler.error({
                 res,
