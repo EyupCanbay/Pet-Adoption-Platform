@@ -38,6 +38,8 @@ async function updateRole(req,res,next) {
             }
         }, {new: true})
 
+        Auditlog.info(req.user?.userName,"Auditlog","PUT","Update user role")
+
         return responseHandler.success({ res, statusCode: Enum.HTTP_CODES.OK, message: "successfuly changing user role"})
     } catch(error ) {
         return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "face an error updateing user role", error})
