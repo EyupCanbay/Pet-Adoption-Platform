@@ -212,6 +212,7 @@ async function getAllPetListing(req, res, next) {
             { $limit: limit }
         ]);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -220,6 +221,10 @@ async function getAllPetListing(req, res, next) {
         Auditlog.info(req.user?.userName, "PetListing", "GET", "All pet listing")
 >>>>>>> parent of aceff58 (Add sensiment analizer midleware and sensiment train model and sensiment prediction model)
 >>>>>>> 24ba8da61b279b2047c5f843c77f7567a442eab7
+=======
+  
+        Auditlog.info(req.user?.userName, "PetListing", "GET", "All pet listing")
+>>>>>>> parent of aceff58 (Add sensiment analizer midleware and sensiment train model and sensiment prediction model)
 
         return responseHandler.success({
             res,
