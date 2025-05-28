@@ -123,6 +123,7 @@ async function getAllPetListingComments(req, res, next) {
             { $skip: skip },
             { $limit: limit }
         ]);
+        Auditlog.info(req.user?.userName, "PetListingComment", "GET", "Get all comment")
 
         return responseHandler.success({
             res,
@@ -186,6 +187,8 @@ async function deletePetListingComment(req, res, next) {
                 ]
             });
 
+            Auditlog.info(req.user?.userName, "PetListingComment", "DELETE", "Delete comment")
+
             return responseHandler.success({
                 res,
                 statusCode: Enum.HTTP_CODES.OK,
@@ -247,6 +250,8 @@ async function updatePetListingComment(req, res, next) {
 
         comment.content = content;
         await comment.save();
+
+        Auditlog.info(req.user?.userName, "PetListingComment", "PUT", "Update comment")
 
         return responseHandler.success({
             res,
@@ -389,6 +394,8 @@ async function getAllSubComments(req, res, next) {
             { $limit: limit } 
         ]);
 
+        Auditlog.info(req.user?.userName, "PetListingSubComment", "GET", "Get all sub comment")
+
         return responseHandler.success({
             res,
             statusCode: Enum.HTTP_CODES.OK,
@@ -446,6 +453,8 @@ async function deleteSubComment(req, res, next) {
             req.user.role === "ADMIN" 
         ) {
             await ReplyComment.findByIdAndDelete({ _id: subCommentId }); 
+
+            Auditlog.info(req.user?.userName, "PetListingSubComment", "DELETE", "Delete sub comment")
 
             return responseHandler.success({
                 res,
@@ -545,7 +554,6 @@ async function updatePetListingSubComment(req, res, next) {
         // match comment owner with user id on local
         // if authenticate is admin
         // if listing owner and local user id match 
-        console.log(subComment)
 
         const isAuthorized =
             subComment[0].user_id.toString() === userId.toString() || 
@@ -553,7 +561,6 @@ async function updatePetListingSubComment(req, res, next) {
             commentDetails.user_id.toString() === userId.toString() ||
             adoptionListingDetails.user_id.toString() === userId.toString();
 
-console.log(isAuthorized)
         if (!isAuthorized) {
             return responseHandler.error({
                 res,
@@ -562,10 +569,9 @@ console.log(isAuthorized)
             });
         }
 
-        console.log(subCommentId)
-
 
         const updatedSubComment = await ReplyComment.findByIdAndUpdate(subCommentId, { content }, { new: true });
+        Auditlog.info(req.user?.userName, "PetListingSubComment", "PUT", "Update comment")
 
         return responseHandler.success({
             res,
