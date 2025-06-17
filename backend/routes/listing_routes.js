@@ -5,9 +5,10 @@ const petListingCommentController = require('../controllers/pet_listing_commet_c
 const { checkUser } = require('../middleware/auth_middleware')
 const { sentimentAnalyzerMiddleware } = require('../middleware/sentimentAnalyzer')
 const { validatePetListing } = require('../validators/pet_listing_validator')
+const imageValidator = require('../middleware/image_detector')
+const uploadToCloudinary = require('../middleware/upload_to_cloudinary')
 
-
-router.post('/',checkUser , petListingController.createLostListing)
+router.post('/',checkUser , imageValidator, uploadToCloudinary, petListingController.createLostListing)
 router.get('/', petListingController.getAllPetListing)
 router.get('/:listing_id', petListingController.getPetListing)
 router.delete('/:listing_id', checkUser, petListingController.deletePetListing)

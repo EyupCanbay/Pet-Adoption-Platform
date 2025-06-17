@@ -5,8 +5,10 @@ const commentController = require('../controllers/lost_lisitng_comment_controlle
 const { checkUser } = require('../middleware/auth_middleware')
 const { sentimentAnalyzerMiddleware } = require('../middleware/sentimentAnalyzer')
 const { validateLostPetListing } = require('../validators/lost_listing_validator')
+const imageValidator = require('../middleware/image_detector')
+const uploadToCloudinary = require('../middleware/upload_to_cloudinary')
 
-router.post('/',checkUser , listingController.createLostListing)
+router.post('/',checkUser , imageValidator, uploadToCloudinary, listingController.createLostListing)
 router.get('/' , listingController.getAllLostListing)
 router.get('/:listing_id', listingController.getLostListing)
 router.delete('/:listing_id', checkUser, listingController.deleteLostListing)
