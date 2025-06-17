@@ -13,6 +13,11 @@ async function getNotifications(req,res,next) {
 
         const notifications = await Notification.find({recipient_id: userId})
 
+<<<<<<< HEAD
+=======
+        Auditlog.info(req.user?.userName, "Notification", "GET", "Get notification")
+        
+>>>>>>> backend
         responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Succesfuly fetch all notifications", data: notifications})
     } catch (error) {
         responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "do not fetch notifications", error})
@@ -26,6 +31,11 @@ async function deleteNotifications(req,res,next) {
     try {   
         await Notification.deleteOne({_id: notificationId})
 
+<<<<<<< HEAD
+=======
+        Auditlog.info(req.user?.userName, "Notification", "DELETE", "Delete notification")
+
+>>>>>>> backend
         responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Succesfuly delete the notification"})
     } catch (error) {
         responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "do not delete notification", error})

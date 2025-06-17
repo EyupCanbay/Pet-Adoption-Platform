@@ -9,6 +9,7 @@ async function createLostListing(req, res, next) {
     session.startTransaction();
 
     try {
+<<<<<<< HEAD
         
         let newListing = new PetListing({
             user_id: req.user._id, 
@@ -36,6 +37,35 @@ async function createLostListing(req, res, next) {
         });
 
         
+=======
+
+        let newListing = new PetListing({
+            user_id: req.user._id,
+            category_name: req.body.category_name,
+            sub_category_name: req.body.sub_category_name,
+            petName: req.body.petName,
+            age: req.body.age,
+            gender: req.body.gender,
+            description: req.body.description,
+            images: req.body.images,
+            status: req.body.status,
+            additionalInfo: {
+                color: req.body.additionalInfo.color,
+                eyeColor: req.body.additionalInfo.eyeColor,
+                furType: req.body.additionalInfo.furType,
+                size: req.body.additionalInfo.size,
+                weight: req.body.additionalInfo.weight,
+                vaccinated: req.body.additionalInfo.vaccinated,
+                neutered: req.body.additionalInfo.neutered,
+                trainability: req.body.additionalInfo.trainability,
+                playfulness: req.body.additionalInfo.playfulness,
+                sociality: req.body.additionalInfo.sociality,
+            },
+            createdAt: Date.now()
+        });
+
+
+>>>>>>> backend
         await newListing.save({ session });
         await session.commitTransaction();
         session.endSession();
@@ -60,7 +90,11 @@ async function createLostListing(req, res, next) {
 
 async function getPetListing(req, res, next) {
     try {
+<<<<<<< HEAD
         const listingId = validateObjectId(req.params.listing_id); 
+=======
+        const listingId = validateObjectId(req.params.listing_id);
+>>>>>>> backend
         const listing = await PetListing.aggregate([
             {
                 $match: { _id: listingId }
@@ -128,15 +162,22 @@ async function getPetListing(req, res, next) {
             }
         ]);
 
+<<<<<<< HEAD
 
         if (!listing[0]) return responseHandler.error({
+=======
+        if (!listing) return responseHandler.error({
+>>>>>>> backend
             res,
             statusCode: Enum.HTTP_CODES.NOT_FOUND,
             message: "Listing not found"
         });
 
+<<<<<<< HEAD
         Auditlog.info(req.user?.userName, "PetListing", "GET", "pet listing")
 
+=======
+>>>>>>> backend
         return responseHandler.success({
             res,
             statusCode: Enum.HTTP_CODES.OK,
@@ -157,9 +198,15 @@ async function getPetListing(req, res, next) {
 async function getAllPetListing(req, res, next) {
     try {
         const page = Number(req.query.page) || 1;
+<<<<<<< HEAD
         const limit = Number(req.query.limit) || 1000;
         const skip = (page - 1) * limit;
   
+=======
+        const limit = Number(req.query.limit) || 1000000000000;
+        const skip = (page - 1) * limit;
+
+>>>>>>> backend
         const petListings = await PetListing.aggregate([
             {
                 $lookup: {
@@ -170,6 +217,10 @@ async function getAllPetListing(req, res, next) {
                 }
             },
             { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } }, // Eğer kullanıcı yoksa `null` bırakır burası
+<<<<<<< HEAD
+=======
+
+>>>>>>> backend
             {
                 $lookup: {
                     from: "addresses",
@@ -179,6 +230,10 @@ async function getAllPetListing(req, res, next) {
                 }
             },
             { $unwind: { path: "$userAddress", preserveNullAndEmptyArrays: true } },
+<<<<<<< HEAD
+=======
+
+>>>>>>> backend
             {
                 $project: {
                     "_id": 1,
@@ -193,6 +248,10 @@ async function getAllPetListing(req, res, next) {
                     "createdAt": 1,
                     "updatedAt": 1,
                     "user_id": 1,
+<<<<<<< HEAD
+=======
+
+>>>>>>> backend
                     "user": {
                         "_id": { $ifNull: ["$user._id", null] }, // if user did not have,  doing null on this feild
                         "userName": { $ifNull: ["$user.userName", null] },
@@ -206,10 +265,15 @@ async function getAllPetListing(req, res, next) {
                     }
                 }
             },
+<<<<<<< HEAD
+=======
+
+>>>>>>> backend
             { $sort: { createdAt: -1 } },
             { $skip: skip },
             { $limit: limit }
         ]);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -220,23 +284,38 @@ async function getAllPetListing(req, res, next) {
 =======
   
 >>>>>>> parent of 20f3b27 (Add auditlog for every enspoints)
+=======
+
+>>>>>>> backend
         return responseHandler.success({
             res,
             statusCode: Enum.HTTP_CODES.OK,
             message: "Successfully fetched pet listings",
             data: petListings
         });
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> backend
     } catch (error) {
         return responseHandler.error({
             res,
             statusCode: Enum.HTTP_CODES.BAD_REQUEST,
+<<<<<<< HEAD
             message:"Did not fetch pet listings",
+=======
+            message: "Did not fetch pet listings",
+>>>>>>> backend
             error
         });
     }
 }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> backend
 async function deletePetListing(req, res, next) {
     try {
         const listingId = validateObjectId(req.params.listing_id);
@@ -283,12 +362,17 @@ async function deletePetListing(req, res, next) {
     }
 }
 
+<<<<<<< HEAD
 async function updatePetListing(req,res,next) {
+=======
+async function updatePetListing(req, res, next) {
+>>>>>>> backend
     const listingId = validateObjectId(req.params.listing_id);
     const updateData = req.body;
 
     try {
         const updatedListing = await PetListing.findByIdAndUpdate(
+<<<<<<< HEAD
             listingId, 
             updateData, 
             { new: true, runValidators: true } 
@@ -300,11 +384,28 @@ async function updatePetListing(req,res,next) {
         responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "succesfuly update the listing", data: updatedListing })
     } catch (error) {
         return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "database error", error})
+=======
+            listingId,
+            updateData,
+            { new: true, runValidators: true }
+        );
+        if (!updatedListing) {
+            return responseHandler.error({ res, statusCode: Enum.HTTP_CODES.NOT_FOUND, message: "Pet listing not found" })
+        }
+
+        responseHandler.success({ res, statusCode: Enum.HTTP_CODES.OK, message: "succesfuly update the listing", data: updatedListing })
+    } catch (error) {
+        return responseHandler.error({ res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "database error", error })
+>>>>>>> backend
     }
 }
 
 async function addPetListingBookmarks(req, res, next) {
+<<<<<<< HEAD
     const listingId = validateObjectId(req.params.listing_id); 
+=======
+    const listingId = validateObjectId(req.params.listing_id);
+>>>>>>> backend
     const userId = validateObjectId(req.user._id);
 
     const session = await mongoose.startSession();
@@ -348,6 +449,11 @@ async function addPetListingBookmarks(req, res, next) {
     }
 }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> backend
 module.exports = {
     createLostListing,
     getPetListing,

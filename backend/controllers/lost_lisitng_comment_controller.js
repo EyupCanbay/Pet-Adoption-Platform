@@ -116,6 +116,11 @@ async function getAllComments(req,res,next) {
             { $limit: limit }
         ])
 
+<<<<<<< HEAD
+=======
+        Auditlog.info(req.user?.userName, "LostListingComment", "DELDETETE", "Get all comment")
+
+>>>>>>> backend
         return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly fetched comments ", data: comments})
     } catch (error) {
         return responseHandler.error({res, statusCode: Enum.HTTP_CODES.INT_SERVER_ERROR, message: "Was not fetched comments", error})
@@ -150,15 +155,30 @@ async function deleteComment(req,res,next) {
 
         if(comment.user_id.toString() === userId.toString()){
             await Comment.findByIdAndDelete({ _id: commentId })
+<<<<<<< HEAD
+=======
+            Auditlog.info(req.user?.userName, "LostListingComment", "DELETE", "Delete comment")
+
+>>>>>>> backend
             return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly updated comments "})      
           }
         else if(comment.lostListings.user_id.toString() !== userId.toString()){
             await Comment.findByIdAndDelete({_id: commentId})
+<<<<<<< HEAD
+=======
+            Auditlog.info(req.user?.userName, "LostListingComment", "DELETE", "Delete comment")
+
+>>>>>>> backend
             return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly updated comments "}) 
         }
         else if("ADMIN" !== req.user.role){
             await Comment.findByIdAndDelete({_id: commentId})
 
+<<<<<<< HEAD
+=======
+            Auditlog.info(req.user?.userName, "LostListingComment", "DELETE", "Delete comment")
+
+>>>>>>> backend
             return responseHandler.success({res, statusCode: Enum.HTTP_CODES.OK, message: "Successfuly updated comments "})       
          }
         else {
@@ -210,6 +230,11 @@ async function updateLostListingComment(req, res, next) {
         comment.content = content;
         await comment.save();
 
+<<<<<<< HEAD
+=======
+        Auditlog.info(req.user?.userName, "LostListingComment", "PUT", "Update comment")
+
+>>>>>>> backend
         return responseHandler.success({
             res,
             statusCode: Enum.HTTP_CODES.OK,
@@ -265,7 +290,10 @@ async function createReplyComment(req, res, next) {
 
         const resipent = await LostPetListing.find({_id : lostListing}) 
     
+<<<<<<< HEAD
         console.log(resipent[0].user_id)
+=======
+>>>>>>> backend
         const notification = await Notification.create({
             recipient_id: resipent[0].user_id,
             initiator_id: userId,
@@ -274,9 +302,12 @@ async function createReplyComment(req, res, next) {
             message: replyComment[0].content
         })
 
+<<<<<<< HEAD
         console.log(notification)
        
 
+=======
+>>>>>>> backend
         await session.commitTransaction();
         session.endSession();
 
@@ -342,6 +373,12 @@ async function getAllSubComments(req, res, next) {
             { $limit: limit } 
         ]);
 
+<<<<<<< HEAD
+=======
+        Auditlog.info(req.user?.userName, "LostListingSubComment", "GET", "Get all sub comment")
+
+
+>>>>>>> backend
         return responseHandler.success({
             res,
             statusCode: Enum.HTTP_CODES.OK,
@@ -406,6 +443,11 @@ async function deleteSubComment(req, res, next) {
         ) {
             await ReplyComment.findByIdAndDelete({ _id: subCommentId }); // Alt yorumu sil
 
+<<<<<<< HEAD
+=======
+            Auditlog.info(req.user?.userName, "LostListingSubComment", "DELETE", "Delete sub comment")
+
+>>>>>>> backend
             return responseHandler.success({
                 res,
                 statusCode: Enum.HTTP_CODES.OK,
@@ -514,6 +556,10 @@ async function updateLostListingSubComment(req, res, next) {
 
         
         const updatedSubComment = await ReplyComment.findByIdAndUpdate(subCommentId, { content }, { new: true });
+<<<<<<< HEAD
+=======
+        Auditlog.info(req.user?.userName, "LostListingSubComment", "PUT", "Update sub comment")
+>>>>>>> backend
 
         return responseHandler.success({
             res,

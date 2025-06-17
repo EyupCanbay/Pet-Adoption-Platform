@@ -55,7 +55,7 @@ async function login(req, res) {
       sameSite: 'lax'
     })
 
-    Auditlog.info(null,"Auth","Get","Fetch a user")
+    Auditlog.info(req.user?.userName,"Auth","Get","Fetch a user")
     return responseHandler.success({res, statusCode:200, message:"Kullanıcı başarıyla giriş yaptı", data:{user,token}});
   } catch (error) {
     return responseHandler.error({res, statusCode:500, message:"Kullanıcı giriş işlemi sırasında hata oluştu", error}); 
@@ -75,7 +75,11 @@ async function logout(req, res) {
     return responseHandler.success({ res, statusCode: 200, message: "Kullanıcı çıkışı başarıyla yapıldı", data:req.cookies });
   } catch (error) {
     return responseHandler.error({ res, statusCode: 500, message: "Kullanıcı çıkış işlemi sırasında hata oluştu", error });
+<<<<<<< HEAD
   }
+=======
+  }
+>>>>>>> backend
 }
 
 
