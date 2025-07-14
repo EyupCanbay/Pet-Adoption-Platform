@@ -4,6 +4,9 @@
 
 The Pet Adoption Platform is a backend service designed to facilitate pet adoption and help find lost pets. It allows users to register, create listings for pets available for adoption or report lost pets, browse and search for listings, interact through comments and replies, bookmark favorite listings, and receive notifications. The platform also includes an admin panel for user management, role assignments, and viewing audit logs. A sentiment analysis feature is integrated to moderate comments for potentially inappropriate content related to financial transactions, and an image validation feature ensures uploaded images contain pets and reject indecent frames.
 
+For a more detailed overview of the system architecture, you can review the **[Architectural Design Report (PDF)](./assets/Architectural-Design-Report.pdf)**.
+
+
 ## Features
 
 *   **User Management**: Registration, login, logout, profile management (view, update).
@@ -80,6 +83,28 @@ The Pet Adoption Platform is a backend service designed to facilitate pet adopti
     npm start
     ```
     The server will start on `http://localhost:5000`
+
+
+## Database Schema Overview
+
+The application uses MongoDB, and the main data models are:
+
+![Database Schema Diagram](./assets/PetPlatAdoptionDatabaseSchemas.jpg)
+
+
+*   **User**: Stores user information, credentials, roles, blocked users, bookmarks, notifications, etc.
+*   **Address**: Stores address details linked to a user.
+*   **Category**: Defines main categories for pets (e.g., Dog, Cat).
+*   **SubCategory**: Defines breeds or sub-types within a category.
+*   **PetListing**: Represents pets available for adoption, including details, images, status, and associated comments.
+*   **LostPetListing**: Represents lost pets, with similar details to `PetListing`.
+*   **Comment**: Stores comments made by users on listings (both adoption and lost). Can be linked to `PetListing` or `LostPetListing`.
+*   **ReplyComment**: Stores replies to existing comments.
+*   **Notification**: Stores notifications for users regarding various events (new comments, replies, etc.).
+*   **Report**: Stores reports made by users against other users or listings.
+*   **AuditLogs**: Stores logs of significant actions performed in the system for auditing purposes.
+
+Each model has fields for timestamps (`createdAt`, `updatedAt`) and appropriate indexing for efficient querying. Relationships between models are managed using `ObjectId` references.
 
 ## API Endpoints
 
@@ -365,24 +390,6 @@ The Pet Adoption Platform is a backend service designed to facilitate pet adopti
 *   **Mechanism**: Images are uploaded to Cloudinary using the `uploadToCloudinary` middleware (`middleware/upload_to_cloudinary.js`).
 *   **Purpose**: Stores uploaded images in a cloud-based storage solution for better scalability and accessibility.
 *   **Process**: After successful upload, the temporary local file is deleted.
-
-## Database Schema Overview
-
-The application uses MongoDB, and the main data models are:
-
-*   **User**: Stores user information, credentials, roles, blocked users, bookmarks, notifications, etc.
-*   **Address**: Stores address details linked to a user.
-*   **Category**: Defines main categories for pets (e.g., Dog, Cat).
-*   **SubCategory**: Defines breeds or sub-types within a category.
-*   **PetListing**: Represents pets available for adoption, including details, images, status, and associated comments.
-*   **LostPetListing**: Represents lost pets, with similar details to `PetListing`.
-*   **Comment**: Stores comments made by users on listings (both adoption and lost). Can be linked to `PetListing` or `LostPetListing`.
-*   **ReplyComment**: Stores replies to existing comments.
-*   **Notification**: Stores notifications for users regarding various events (new comments, replies, etc.).
-*   **Report**: Stores reports made by users against other users or listings.
-*   **AuditLogs**: Stores logs of significant actions performed in the system for auditing purposes.
-
-Each model has fields for timestamps (`createdAt`, `updatedAt`) and appropriate indexing for efficient querying. Relationships between models are managed using `ObjectId` references.
 
 ## Validators
 
