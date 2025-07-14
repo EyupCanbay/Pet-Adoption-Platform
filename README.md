@@ -89,7 +89,7 @@ For a more detailed overview of the system architecture, you can review the **[A
 
 The application uses MongoDB, and the main data models are:
 
-![Database Schema Diagram](./assets/PetPlatAdoptionDatabaseSchemas.jpg)
+![Database Schema Diagram](./assets/PetPlatAdoptionDatabaseSchemas.png)
 
 
 *   **User**: Stores user information, credentials, roles, blocked users, bookmarks, notifications, etc.
